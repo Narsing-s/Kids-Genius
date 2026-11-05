@@ -5,11 +5,11 @@ import { gradeLevels, subjects, getQuestions } from "@kids-genius/learning";
 export default function Home() {
   const [language, setLanguage] = useState<"en" | "te">("en");
   const [ageId, setAgeId] = useState("class-1");
-  const [questionIndex, setQuestionIndex] = useState(0);
+  const [questionIndex, setQuestionIndex] = useState(0);\n  const [subjectId, setSubjectId] = useState("math");
   const [answer, setAnswer] = useState<number | null>(null);
   const [stars, setStars] = useState(0);
   const activeAge = gradeLevels.find((a) => a.id === ageId) ?? gradeLevels[3];
-  const questions = getQuestions(activeAge.ageBandId);
+  const questions = getQuestions(activeAge.ageBandId, subjectId);
   const question = questions[questionIndex % questions.length];
   const labels = language === "en"
     ? { tagline: "A little learning. A lot of wonder.", hero: "Big dreams begin with curious minds.", intro: "A joyful world of stories, games and discoveries.", levels: "Choose your adventure", subjects: "Explore learning worlds", quiz: "Quick brain boost", next: "Next question", correct: "Brilliant! You got it! 🌟", wrong: "Good try! Keep growing!", parents: "A safe space for little learners" }
@@ -24,7 +24,7 @@ export default function Home() {
       <Text style={s.heading}>{labels.levels}</Text><Text style={s.subheading}>Choose your school level from Nursery to Class 10.</Text>
       <View style={s.ageGrid}>{gradeLevels.map((a) => <Pressable key={a.id} onPress={() => { setAgeId(a.id); setQuestionIndex(0); setAnswer(null); }} style={[s.ageCard, ageId === a.id && s.selected]}><Text style={s.emoji}>{a.emoji}</Text><Text style={s.ageRange}>{a.label} · AGES {a.minAge}–{a.maxAge}</Text><Text style={s.cardTitle}>{a.name}</Text><Text style={s.small}>{a.description}</Text></Pressable>)}</View>
       <Text style={s.selectedNote}>✨ Your path: {activeAge.label}</Text>
-      <Text style={s.heading}>{labels.subjects}</Text><View style={s.subjectGrid}>{subjects.map((a) => <View key={a.id} style={s.subjectCard}><Text style={s.subjectEmoji}>{a.emoji}</Text><View style={{flex:1}}><Text style={s.subjectTitle}>{a.name[language]}</Text><Text style={s.small}>{a.description}</Text></View><Text style={s.arrow}>↗</Text></View>)}</View>
+      <Text style={s.heading}>{labels.subjects}</Text><View style={s.subjectGrid}>{subjects.map((a) => <Pressable key={a.id} accessibilityRole="button" accessibilityState={{selected: subjectId === a.id}} onPress={() => { setSubjectId(a.id); setQuestionIndex(0); setAnswer(null); }} style={[s.subjectCard, subjectId === a.id && s.subjectSelected]}><Text style={s.subjectEmoji}>{a.emoji}</Text><View style={{flex:1}}><Text style={s.subjectTitle}>{a.name[language]}</Text><Text style={s.small}>{a.description}</Text></View><Text style={s.arrow}>{subjectId === a.id ? "✓" : "↗"}</Text></Pressable>)}</View>
       <View style={s.quiz}><Text style={s.kicker}>READY, SET, THINK!</Text><Text style={s.heading}>{labels.quiz}</Text><Text style={s.question}>{question.prompt[language]}</Text>{question.choices.map((choice, index) => <Pressable key={index} disabled={answer !== null} onPress={() => { setAnswer(index); if (index === question.correctChoiceIndex) setStars((v) => v + 1); }} style={[s.option, answer === index && (isCorrect ? s.correct : s.incorrect), answer !== null && index === question.correctChoiceIndex && s.correct]}><Text style={s.optionLetter}>{String.fromCharCode(65 + index)}</Text><Text style={s.optionText}>{choice[language]}</Text><Text style={s.arrow}>→</Text></Pressable>)}{answer !== null && <Text style={[s.feedback, {color:isCorrect ? "#299b69" : "#bd7a42"}]}>{isCorrect ? labels.correct : labels.wrong}</Text>}<Pressable disabled={answer === null} onPress={() => { setQuestionIndex((v) => v + 1); setAnswer(null); }} style={[s.next, answer === null && {opacity:0.4}]}><Text style={s.nextText}>{labels.next} →</Text></Pressable></View>
       <View style={s.parent}><Text style={s.parentIcon}>🛡️</Text><Text style={s.parentTitle}>{labels.parents}</Text><Text style={s.small}>Parent-managed profiles · No public chat · No behavioural ads</Text></View>
       <Text style={s.footer}>Made with curiosity 💜 Kids Genius</Text>
@@ -54,7 +54,7 @@ const s = StyleSheet.create({
   emoji:{fontSize:29},ageRange:{fontSize:8,fontWeight:"900",letterSpacing:1,color:"#8588a0",marginTop:8},
   cardTitle:{fontSize:14,fontWeight:"900",color:"#202447",marginTop:4},small:{fontSize:10,lineHeight:15,color:"#8588a0",marginTop:4},
   selectedNote:{fontSize:11,color:"#6857e8",fontWeight:"800",marginTop:12},
-  subjectGrid:{gap:9,marginTop:12},subjectCard:{flexDirection:"row",alignItems:"center",gap:12,backgroundColor:"white",padding:13,borderRadius:15,borderWidth:1,borderColor:"#efedf7"},
+  subjectGrid:{gap:9,marginTop:12},subjectCard:{flexDirection:"row",alignItems:"center",gap:12,backgroundColor:"white",padding:13,borderRadius:15,borderWidth:1,borderColor:"#efedf7"},subjectSelected:{borderColor:"#6857e8",backgroundColor:"#f5f2ff"},
   subjectEmoji:{fontSize:25,width:42,textAlign:"center"},subjectTitle:{fontSize:12,fontWeight:"900",color:"#202447"},arrow:{fontSize:16,color:"#aaa4d9"},
   quiz:{backgroundColor:"#eaf8f3",padding:18,borderRadius:20,marginTop:30},
   question:{fontSize:19,fontWeight:"900",color:"#202447",marginVertical:18},
