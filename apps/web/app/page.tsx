@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ageBands, subjects, getQuestions } from "@kids-genius/learning";
+import { gradeLevels, subjects, getQuestions } from "@kids-genius/learning";
 
 type Lang = "en" | "te";
 
@@ -36,15 +36,15 @@ const copy = {
 
 export default function Home() {
   const [lang, setLang] = useState<Lang>("en");
-  const [ageId, setAgeId] = useState<string>("little-learners");
+  const [ageId, setAgeId] = useState<string>("class-1");
   const [subjectId, setSubjectId] = useState<string>("math");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answer, setAnswer] = useState<number | null>(null);
   const [stars, setStars] = useState(0);
   const t = copy[lang];
-  const activeAge = ageBands.find((a) => a.id === ageId) ?? ageBands[1];
+  const activeAge = gradeLevels.find((a) => a.id === ageId) ?? gradeLevels[3];
   const activeSubject = subjects.find((s) => s.id === subjectId) ?? subjects[1];
-  const questions = getQuestions(ageId, subjectId);
+  const questions = getQuestions(activeAge.ageBandId, subjectId);
   const questionText = questions[questionIndex % questions.length];
   const isRight = answer === questionText.correctChoiceIndex;
 
@@ -75,7 +75,7 @@ export default function Home() {
           <h1>{t.hero} <span className="headline-spark">✦</span></h1>
           <p>{t.intro}</p>
           <div className="hero-buttons"><a className="primary-button" href="#adventures">{t.start} <span>→</span></a><a className="text-button" href="#quick-quiz">Try a mini quiz <span>↗</span></a></div>
-          <div className="hero-proof"><div className="avatar-stack"><span>🦊</span><span>🐼</span><span>🐸</span></div><span>Made for curious kids <b>ages 1–10</b></span></div>
+          <div className="hero-proof"><div className="avatar-stack"><span>🦊</span><span>🐼</span><span>🐸</span></div><span>Made for learners <b>Nursery–Class 10</b></span></div>
         </div>
         <div className="hero-art" aria-label="Illustration of a happy learning planet">
           <div className="orbit orbit-one" /><div className="orbit orbit-two" />
@@ -89,19 +89,19 @@ export default function Home() {
       </section>
 
       <section className="section-block" id="adventures">
-        <div className="section-heading"><div><span className="section-kicker">MADE FOR EVERY LITTLE LEARNER</span><h2>{t.levels}</h2><p>Every age has a new world to discover.</p></div><span className="heading-doodle">✳</span></div>
-        <div className="age-grid">{ageBands.map((age, index) => <button key={age.id} className={`age-card age-${index} ${ageId === age.id ? "selected" : ""}`} onClick={() => { setAgeId(age.id); setQuestionIndex(0); setAnswer(null); }}><span className="age-emoji">{age.emoji}</span><span className="age-range">AGES {age.minAge}–{age.maxAge}</span><b>{age.name}</b><small>{age.description}</small><span className="age-arrow">↗</span></button>)}</div>
+        <div className="section-heading"><div><span className="section-kicker">FROM NURSERY TO CLASS 10</span><h2>{t.levels}</h2><p>A learning path for every school year, from first steps to board-exam foundations.</p></div><span className="heading-doodle">✳</span></div>
+        <div className="age-grid">{gradeLevels.map((age, index) => <button key={age.id} className={`age-card age-${index} ${ageId === age.id ? "selected" : ""}`} onClick={() => { setAgeId(age.id); setQuestionIndex(0); setAnswer(null); }}><span className="age-emoji">{age.emoji}</span><span className="age-range">{age.label} · AGES {age.minAge}–{age.maxAge}</span><b>{age.name}</b><small>{age.description}</small><span className="age-arrow">↗</span></button>)}</div>
         <div className="selected-note"><span>✨</span> Your path: <b>{activeAge.name}</b> <span>·</span> {activeAge.description}</div>
       </section>
 
       <section className="section-block subjects-section" id="subjects">
-        <div className="section-heading"><div><span className="section-kicker">A UNIVERSE OF IDEAS</span><h2>{t.subjects}</h2><p>Choose what makes you curious today.</p></div><a className="view-all" href="#quick-quiz">Jump into a quiz ↗</a></div>
+        <div className="section-heading"><div><span className="section-kicker">A UNIVERSE OF IDEAS</span><h2>{t.subjects}</h2><p>Explore school subjects, skills and creative worlds.</p></div><a className="view-all" href="#quick-quiz">Jump into a quiz ↗</a></div>
         <div className="subject-grid">{subjects.map((subject, index) => <button key={subject.id} onClick={() => { setSubjectId(subject.id); setQuestionIndex(0); setAnswer(null); }} className={`subject-card subject-${index} ${subjectId === subject.id ? "subject-active" : ""}`}><span className="subject-emoji">{subject.emoji}</span><span><b>{subject.name[lang]}</b><small>{subject.description}</small></span><span className="subject-arrow">↗</span></button>)}</div>
       </section>
 
       <section className="play-section" id="quick-quiz">
         <div className="play-intro"><span className="section-kicker">READY, SET, THINK!</span><h2>{t.quiz}</h2><p>{t.choose}</p><div className="quiz-meta"><span>🧠 {activeSubject.name[lang]}</span><span>⏱ No rush</span></div><div className="progress-label"><span>Little steps make big progress</span><b>{stars} ⭐</b></div><div className="progress-track"><span style={{width: `${Math.min(100, stars * 12)}%`}} /></div></div>
-        <div className="quiz-card"><div className="quiz-top"><span>QUESTION {questionIndex + 1}</span><span className="quiz-points">⭐ +1 star</span></div><div className="quiz-step-track" aria-label={`Question ${questionIndex + 1}`}><span style={{width: `${((questionIndex % 5) + 1) * 20}%`}} /></div>{ageId === "tiny-explorers" && <div className="parent-play-note">🤝 Parent & little explorer: enjoy this together. No timer, no pressure.</div>}<div className="quiz-question">{questionText.prompt[lang]}</div><div className="quiz-options">{questionText.choices.map((choice, index) => <button key={index} disabled={answer !== null} onClick={() => chooseAnswer(index)} className={`quiz-option ${answer === index ? (isRight ? "answer-correct" : "answer-wrong") : ""} ${answer !== null && index === questionText.correctChoiceIndex ? "answer-reveal" : ""}`}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{choice[lang]}<span className="option-check">{answer !== null && index === questionText.correctChoiceIndex ? "✓" : "→"}</span></button>)}</div>{answer !== null && <div className={`answer-feedback ${isRight ? "feedback-good" : "feedback-try"}`}>{isRight ? t.correct : t.wrong}<small className="answer-explanation">{questionText.explanation[lang]}</small></div>}<div className="quiz-bottom"><span>🌱 Learning grows with practice</span><button onClick={nextQuestion} disabled={answer === null}>{t.next} →</button></div></div>
+        <div className="quiz-card"><div className="quiz-top"><span>QUESTION {questionIndex + 1}</span><span className="quiz-points">⭐ +1 star</span></div><div className="quiz-step-track" aria-label={`Question ${questionIndex + 1}`}><span style={{width: `${((questionIndex % 5) + 1) * 20}%`}} /></div>{activeAge.ageBandId === "tiny-explorers" && <div className="parent-play-note">🤝 Parent & little explorer: enjoy this together. No timer, no pressure.</div>}<div className="quiz-question">{questionText.prompt[lang]}</div><div className="quiz-options">{questionText.choices.map((choice, index) => <button key={index} disabled={answer !== null} onClick={() => chooseAnswer(index)} className={`quiz-option ${answer === index ? (isRight ? "answer-correct" : "answer-wrong") : ""} ${answer !== null && index === questionText.correctChoiceIndex ? "answer-reveal" : ""}`}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{choice[lang]}<span className="option-check">{answer !== null && index === questionText.correctChoiceIndex ? "✓" : "→"}</span></button>)}</div>{answer !== null && <div className={`answer-feedback ${isRight ? "feedback-good" : "feedback-try"}`}>{isRight ? t.correct : t.wrong}<small className="answer-explanation">{questionText.explanation[lang]}</small></div>}<div className="quiz-bottom"><span>🌱 Learning grows with practice</span><button onClick={nextQuestion} disabled={answer === null}>{t.next} →</button></div></div>
       </section>
 
       <section className="stats-section"><div><span className="section-kicker">SMALL WINS, BIG SMILES</span><h2>{t.progress}</h2><p>Celebrate every step, at every pace.</p></div><div className="stat-card"><span>🔥</span><b>0</b><small>{t.streak}</small></div><div className="stat-card"><span>⭐</span><b>{stars}</b><small>{t.stars}</small></div><div className="stat-card"><span>🌈</span><b>{subjects.length}</b><small>{t.topics}</small></div></section>
