@@ -1,15 +1,13 @@
 import { useState } from "react";
 import { ScrollView, Text, View, StyleSheet, Pressable } from "react-native";
-import { ageBands, subjects, sampleQuestions } from "@kids-genius/learning";
+import { ageBands, subjects, getQuestions } from "@kids-genius/learning";
 
 export default function Home() {
   const [language, setLanguage] = useState<"en" | "te">("en");
   const [ageId, setAgeId] = useState("little-learners");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answer, setAnswer] = useState<number | null>(null);
-  const [stars, setStars] = useState(0);
-  const question = sampleQuestions[questionIndex % sampleQuestions.length];
-  const activeAge = ageBands.find((a) => a.id === ageId) ?? ageBands[1];
+  const [stars, setStars] = useState(0);\n  const activeAge = ageBands.find((a) => a.id === ageId) ?? ageBands[1];\n  const questions = getQuestions(ageId);\n  const question = questions[questionIndex % questions.length];
   const labels = language === "en"
     ? { tagline: "A little learning. A lot of wonder.", hero: "Big dreams begin with curious minds.", intro: "A joyful world of stories, games and discoveries.", levels: "Choose your adventure", subjects: "Explore learning worlds", quiz: "Quick brain boost", next: "Next question", correct: "Brilliant! You got it! 🌟", wrong: "Good try! Keep growing!", parents: "A safe space for little learners" }
     : { tagline: "చిన్న పాఠాలు. ఎన్నో అద్భుతాలు.", hero: "ఆసక్తితో నేర్చుకుంటే కలలు నిజమవుతాయి.", intro: "కథలు, ఆటలు మరియు కొత్త విషయాలతో ఆనంద ప్రపంచం.", levels: "మీ సాహసాన్ని ఎంచుకోండి", subjects: "అభ్యాస ప్రపంచాలు", quiz: "చిన్న మెదడు వ్యాయామం", next: "తదుపరి ప్రశ్న", correct: "అద్భుతం! సరైన సమాధానం! 🌟", wrong: "మంచి ప్రయత్నం! కొనసాగించండి!", parents: "పిల్లల కోసం సురక్షిత ప్రపంచం" };
@@ -21,7 +19,7 @@ export default function Home() {
       <View style={s.hero}><Text style={s.eyebrow}>✦ {labels.tagline}</Text><Text style={s.heroTitle}>{labels.hero}</Text><Text style={s.body}>{labels.intro}</Text><Text style={s.planet}>🌎</Text><View style={s.heroPill}><Text style={s.heroPillText}>🌈 Learn · Play · Grow</Text></View></View>
       <View style={s.mission}><Text style={s.missionIcon}>🎯</Text><View style={{flex:1}}><Text style={s.kicker}>TODAY'S LITTLE MISSION</Text><Text style={s.missionText}>One fun question. One bright new star!</Text></View><Text style={s.star}>⭐ {stars}</Text></View>
       <Text style={s.heading}>{labels.levels}</Text><Text style={s.subheading}>Pick the path that feels just right.</Text>
-      <View style={s.ageGrid}>{ageBands.map((a) => <Pressable key={a.id} onPress={() => setAgeId(a.id)} style={[s.ageCard, ageId === a.id && s.selected]}><Text style={s.emoji}>{a.emoji}</Text><Text style={s.ageRange}>AGES {a.minAge}–{a.maxAge}</Text><Text style={s.cardTitle}>{a.name}</Text><Text style={s.small}>{a.description}</Text></Pressable>)}</View>
+      <View style={s.ageGrid}>{ageBands.map((a) => <Pressable key={a.id} onPress={() => { setAgeId(a.id); setQuestionIndex(0); setAnswer(null); }} style={[s.ageCard, ageId === a.id && s.selected]}><Text style={s.emoji}>{a.emoji}</Text><Text style={s.ageRange}>AGES {a.minAge}–{a.maxAge}</Text><Text style={s.cardTitle}>{a.name}</Text><Text style={s.small}>{a.description}</Text></Pressable>)}</View>
       <Text style={s.selectedNote}>✨ Your path: {activeAge.name}</Text>
       <Text style={s.heading}>{labels.subjects}</Text><View style={s.subjectGrid}>{subjects.map((a) => <View key={a.id} style={s.subjectCard}><Text style={s.subjectEmoji}>{a.emoji}</Text><View style={{flex:1}}><Text style={s.subjectTitle}>{a.name[language]}</Text><Text style={s.small}>{a.description}</Text></View><Text style={s.arrow}>↗</Text></View>)}</View>
       <View style={s.quiz}><Text style={s.kicker}>READY, SET, THINK!</Text><Text style={s.heading}>{labels.quiz}</Text><Text style={s.question}>{question.prompt[language]}</Text>{question.choices.map((choice, index) => <Pressable key={index} disabled={answer !== null} onPress={() => { setAnswer(index); if (index === question.correctChoiceIndex) setStars((v) => v + 1); }} style={[s.option, answer === index && (isCorrect ? s.correct : s.incorrect), answer !== null && index === question.correctChoiceIndex && s.correct]}><Text style={s.optionLetter}>{String.fromCharCode(65 + index)}</Text><Text style={s.optionText}>{choice[language]}</Text><Text style={s.arrow}>→</Text></Pressable>)}{answer !== null && <Text style={[s.feedback, {color:isCorrect ? "#299b69" : "#bd7a42"}]}>{isCorrect ? labels.correct : labels.wrong}</Text>}<Pressable disabled={answer === null} onPress={() => { setQuestionIndex((v) => v + 1); setAnswer(null); }} style={[s.next, answer === null && {opacity:0.4}]}><Text style={s.nextText}>{labels.next} →</Text></Pressable></View>
