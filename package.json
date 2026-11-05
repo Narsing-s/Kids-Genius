@@ -1,0 +1,1 @@
+{"name":"kids-genius","private":true,"version":"0.1.0","workspaces":["apps/*","packages/*"],"scripts":{"dev:web":"npm --workspace @kids-genius/web run dev","dev:mobile":"npm --workspace @kids-genius/mobile run start"}}
