@@ -120,7 +120,6 @@ export default function Home() {
   function chooseAnswer(index: number) {
     if (answer !== null) return;
     recordStudyDay();
-    if (answer !== null) return;
     setAnswer(index);
     if (index === questionText.correctChoiceIndex) setStars((value) => value + 1);
   }
