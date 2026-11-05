@@ -12,5 +12,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install
+      # Install only the web and shared-learning workspaces. The Expo mobile
+      # workspace intentionally uses React 18 while the web app uses React 19.
+      - run: npm install --workspace @kids-genius/web --include-workspace-root=false
       - run: npm run build:web
