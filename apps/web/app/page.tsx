@@ -40,7 +40,13 @@ export default function Home() {
   const [subjectId, setSubjectId] = useState<string>("math");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answer, setAnswer] = useState<number | null>(null);
-  const [stars, setStars] = useState(0);\n  const t = copy[lang];\n  const activeAge = ageBands.find((a) => a.id === ageId) ?? ageBands[1];\n  const activeSubject = subjects.find((s) => s.id === subjectId) ?? subjects[1];\n  const questions = getQuestions(ageId, subjectId);\n  const questionText = questions[questionIndex % questions.length];\n  const isRight = answer === questionText.correctChoiceIndex;
+  const [stars, setStars] = useState(0);
+  const t = copy[lang];
+  const activeAge = ageBands.find((a) => a.id === ageId) ?? ageBands[1];
+  const activeSubject = subjects.find((s) => s.id === subjectId) ?? subjects[1];
+  const questions = getQuestions(ageId, subjectId);
+  const questionText = questions[questionIndex % questions.length];
+  const isRight = answer === questionText.correctChoiceIndex;
 
   function chooseAnswer(index: number) {
     if (answer !== null) return;
@@ -95,7 +101,7 @@ export default function Home() {
 
       <section className="play-section" id="quick-quiz">
         <div className="play-intro"><span className="section-kicker">READY, SET, THINK!</span><h2>{t.quiz}</h2><p>{t.choose}</p><div className="quiz-meta"><span>🧠 {activeSubject.name[lang]}</span><span>⏱ No rush</span></div><div className="progress-label"><span>Little steps make big progress</span><b>{stars} ⭐</b></div><div className="progress-track"><span style={{width: `${Math.min(100, stars * 12)}%`}} /></div></div>
-        <div className="quiz-card"><div className="quiz-top"><span>QUESTION {questionIndex + 1}</span><span className="quiz-points">⭐ +1 star</span></div><div className="quiz-question">{questionText.prompt[lang]}</div><div className="quiz-options">{questionText.choices.map((choice, index) => <button key={index} disabled={answer !== null} onClick={() => chooseAnswer(index)} className={`quiz-option ${answer === index ? (isRight ? "answer-correct" : "answer-wrong") : ""} ${answer !== null && index === question.correctChoiceIndex ? "answer-reveal" : ""}`}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{choice[lang]}<span className="option-check">{answer !== null && index === question.correctChoiceIndex ? "✓" : "→"}</span></button>)}</div>{answer !== null && <div className={`answer-feedback ${isRight ? "feedback-good" : "feedback-try"}`}>{isRight ? t.correct : t.wrong}</div>}<div className="quiz-bottom"><span>🌱 Learning grows with practice</span><button onClick={nextQuestion} disabled={answer === null}>{t.next} →</button></div></div>
+        <div className="quiz-card"><div className="quiz-top"><span>QUESTION {questionIndex + 1}</span><span className="quiz-points">⭐ +1 star</span></div><div className="quiz-step-track" aria-label={`Question ${questionIndex + 1}`}><span style={{width: `${((questionIndex % 5) + 1) * 20}%`}} /></div>{ageId === "tiny-explorers" && <div className="parent-play-note">🤝 Parent & little explorer: enjoy this together. No timer, no pressure.</div>}<div className="quiz-question">{questionText.prompt[lang]}</div><div className="quiz-options">{questionText.choices.map((choice, index) => <button key={index} disabled={answer !== null} onClick={() => chooseAnswer(index)} className={`quiz-option ${answer === index ? (isRight ? "answer-correct" : "answer-wrong") : ""} ${answer !== null && index === questionText.correctChoiceIndex ? "answer-reveal" : ""}`}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{choice[lang]}<span className="option-check">{answer !== null && index === questionText.correctChoiceIndex ? "✓" : "→"}</span></button>)}</div>{answer !== null && <div className={`answer-feedback ${isRight ? "feedback-good" : "feedback-try"}`}>{isRight ? t.correct : t.wrong}<small className="answer-explanation">{questionText.explanation[lang]}</small></div>}<div className="quiz-bottom"><span>🌱 Learning grows with practice</span><button onClick={nextQuestion} disabled={answer === null}>{t.next} →</button></div></div>
       </section>
 
       <section className="stats-section"><div><span className="section-kicker">SMALL WINS, BIG SMILES</span><h2>{t.progress}</h2><p>Celebrate every step, at every pace.</p></div><div className="stat-card"><span>🔥</span><b>0</b><small>{t.streak}</small></div><div className="stat-card"><span>⭐</span><b>{stars}</b><small>{t.stars}</small></div><div className="stat-card"><span>🌈</span><b>{subjects.length}</b><small>{t.topics}</small></div></section>
