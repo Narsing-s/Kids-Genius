@@ -1,6 +1,13 @@
 export type Language = "en" | "te";
 export type BilingualText = { en: string; te: string };
 
+export const gradeLevels = [
+ {id:"nursery",label:"Nursery",minAge:3,maxAge:3,ageBandId:"little-learners",emoji:"🧸",description:"Play, pictures, sounds and first words"},
+ {id:"lkg",label:"LKG",minAge:4,maxAge:4,ageBandId:"little-learners",emoji:"🌈",description:"Letters, numbers, colours and discovery"},
+ {id:"ukg",label:"UKG",minAge:5,maxAge:5,ageBandId:"junior-stars",emoji:"⭐",description:"Early reading, writing and number sense"},
+ ...Array.from({length:10},(_,i)=>({id:`class-${i+1}`,label:`Class ${i+1}`,minAge:i+6,maxAge:i+6,ageBandId:i<2?"junior-stars":i<4?"smart-kids":"young-champions",emoji:["🚀","🧠","🔭","🏅","🎓"][i%5],description:["Build strong foundations","Practice and explore","Think deeper and solve"][i<2?0:i<5?1:2]}))
+] as const;
+
 export const ageBands = [
  {id:"tiny-explorers",name:"Tiny Explorers",minAge:1,maxAge:2,emoji:"🐣",description:"Parent-assisted sounds, pictures and recognition"},
  {id:"little-learners",name:"Little Learners",minAge:3,maxAge:4,emoji:"🧸",description:"First words, colors, shapes and counting"},
@@ -15,7 +22,20 @@ export const subjects = [
  {id:"science",name:{en:"Science",te:"విజ్ఞాన శాస్త్రం"},emoji:"🔬",description:"Nature, animals, plants, body and space"},
  {id:"social",name:{en:"Social Studies & GK",te:"సామాజిక శాస్త్రం & సాధారణ జ్ఞానం"},emoji:"🌍",description:"India, geography, history and the world"},
  {id:"life-skills",name:{en:"Life Skills",te:"జీవన నైపుణ్యాలు"},emoji:"🧼",description:"Hygiene, safety, kindness and habits"},
- {id:"creative",name:{en:"Art & Creativity",te:"కళలు & సృజనాత్మకత"},emoji:"🎨",description:"Colors, music, drawing and imagination"}
+ {id:"creative",name:{en:"Art & Creativity",te:"కళలు & సృజనాత్మకత"},emoji:"🎨",description:"Colors, music, drawing and imagination"},
+
+ {id:"hindi",name:{en:"Hindi",te:"హిందీ"},emoji:"📝",description:"Hindi reading, writing and grammar"},
+ {id:"physics",name:{en:"Physics",te:"భౌతిక శాస్త్రం"},emoji:"⚡",description:"Motion, energy, forces and the universe"},
+ {id:"chemistry",name:{en:"Chemistry",te:"రసాయన శాస్త్రం"},emoji:"🧪",description:"Matter, elements, reactions and materials"},
+ {id:"biology",name:{en:"Biology",te:"జీవ శాస్త్రం"},emoji:"🧬",description:"Living things, cells, plants and the human body"},
+ {id:"history",name:{en:"History",te:"చరిత్ర"},emoji:"🏛️",description:"People, timelines, civilizations and heritage"},
+ {id:"geography",name:{en:"Geography",te:"భూగోళ శాస్త్రం"},emoji:"🗺️",description:"Earth, maps, climate and places"},
+ {id:"civics",name:{en:"Civics & Political Science",te:"పౌరశాస్త్రం & రాజకీయ శాస్త్రం"},emoji:"🏛️",description:"Constitution, democracy, rights and citizenship"},
+ {id:"economics",name:{en:"Economics",te:"ఆర్థిక శాస్త్రం"},emoji:"📈",description:"Money, markets, resources and choices"},
+ {id:"computer",name:{en:"Computer Science",te:"కంప్యూటర్ సైన్స్"},emoji:"💻",description:"Digital skills, coding and computational thinking"},
+ {id:"environment",name:{en:"Environmental Studies",te:"పర్యావరణ అధ్యయనం"},emoji:"🌱",description:"Ecology, sustainability and our planet"},
+ {id:"physical",name:{en:"Physical Education & Health",te:"శారీరక విద్య & ఆరోగ్యం"},emoji:"⚽",description:"Movement, fitness, wellbeing and healthy habits"},
+ {id:"commerce",name:{en:"Commerce & Business Basics",te:"వాణిజ్యం & వ్యాపార మౌలికాలు"},emoji:"💼",description:"Business, accounting and entrepreneurship"},
 ] as const;
 
 export type LearningQuestion = {
