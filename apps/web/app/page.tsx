@@ -60,7 +60,8 @@ export default function Home() {
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
   const [activeLesson, setActiveLesson] = useState(0);
   const [missionAnswer, setMissionAnswer] = useState<number | null>(null);
-  const [progressLoaded, setProgressLoaded] = useState(false);\n  const [studyDays, setStudyDays] = useState<string[]>([]);
+  const [progressLoaded, setProgressLoaded] = useState(false);
+  const [studyDays, setStudyDays] = useState<string[]>([]);
 
   useEffect(() => {
     try {
@@ -68,7 +69,8 @@ export default function Home() {
       if (saved) {
         const progress = JSON.parse(saved) as { stars?: number; completedLessons?: string[]; studyDays?: string[] };
         if (typeof progress.stars === "number" && Number.isFinite(progress.stars)) setStars(Math.max(0, progress.stars));
-        if (Array.isArray(progress.completedLessons)) setCompletedLessons(progress.completedLessons.filter((item): item is string => typeof item === "string"));\n        if (Array.isArray(progress.studyDays)) setStudyDays(progress.studyDays.filter((item): item is string => /^\\d{4}-\\d{2}-\\d{2}$/.test(item)));
+        if (Array.isArray(progress.completedLessons)) setCompletedLessons(progress.completedLessons.filter((item): item is string => typeof item === "string"));
+        if (Array.isArray(progress.studyDays)) setStudyDays(progress.studyDays.filter((item): item is string => /^\\d{4}-\\d{2}-\\d{2}$/.test(item)));
       }
     } catch {
       // Ignore unavailable or invalid local progress; learning remains usable.
