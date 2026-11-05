@@ -5,6 +5,13 @@ import { gradeLevels, subjects, getQuestions } from "@kids-genius/learning";
 
 type Lang = "en" | "te";
 
+function localDayKey(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 const lessonIdeas: Record<string, {en:string;te:string;detailEn:string;detailTe:string}[]> = {
  math:[{en:"Number patterns",te:"సంఖ్యల క్రమాలు",detailEn:"Spot patterns and build number sense.",detailTe:"క్రమాలను గుర్తించి సంఖ్యలపై అవగాహన పెంచుకోండి."},{en:"Everyday maths",te:"రోజువారీ గణితం",detailEn:"Use maths to solve real-life puzzles.",detailTe:"నిజ జీవిత సమస్యలను గణితంతో పరిష్కరించండి."},{en:"Think like a mathematician",te:"గణితవేత్తలా ఆలోచించండి",detailEn:"Try a challenge and explain your thinking.",detailTe:"సవాలును ప్రయత్నించి మీ ఆలోచనను వివరించండి."}],
  science:[{en:"Curious discoveries",te:"ఆసక్తికర ఆవిష్కరణలు",detailEn:"Ask questions about the world around you.",detailTe:"మీ చుట్టూ ఉన్న ప్రపంచం గురించి ప్రశ్నలు అడగండి."},{en:"Living world",te:"జీవ ప్రపంచం",detailEn:"Explore plants, animals and habitats.",detailTe:"మొక్కలు, జంతువులు, ఆవాసాలను తెలుసుకోండి."},{en:"Science in action",te:"ఆచరణలో విజ్ఞానం",detailEn:"Connect scientific ideas to daily life.",detailTe:"విజ్ఞాన భావనలను రోజువారీ జీవితంతో అనుసంధానించండి."}],
@@ -53,15 +60,15 @@ export default function Home() {
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
   const [activeLesson, setActiveLesson] = useState(0);
   const [missionAnswer, setMissionAnswer] = useState<number | null>(null);
-  const [progressLoaded, setProgressLoaded] = useState(false);
+  const [progressLoaded, setProgressLoaded] = useState(false);\n  const [studyDays, setStudyDays] = useState<string[]>([]);
 
   useEffect(() => {
     try {
       const saved = window.localStorage.getItem("kids-genius-progress-v1");
       if (saved) {
-        const progress = JSON.parse(saved) as { stars?: number; completedLessons?: string[] };
+        const progress = JSON.parse(saved) as { stars?: number; completedLessons?: string[]; studyDays?: string[] };
         if (typeof progress.stars === "number" && Number.isFinite(progress.stars)) setStars(Math.max(0, progress.stars));
-        if (Array.isArray(progress.completedLessons)) setCompletedLessons(progress.completedLessons.filter((item): item is string => typeof item === "string"));
+        if (Array.isArray(progress.completedLessons)) setCompletedLessons(progress.completedLessons.filter((item): item is string => typeof item === "string"));\n        if (Array.isArray(progress.studyDays)) setStudyDays(progress.studyDays.filter((item): item is string => /^\\d{4}-\\d{2}-\\d{2}$/.test(item)));
       }
     } catch {
       // Ignore unavailable or invalid local progress; learning remains usable.
@@ -72,11 +79,11 @@ export default function Home() {
   useEffect(() => {
     if (!progressLoaded) return;
     try {
-      window.localStorage.setItem("kids-genius-progress-v1", JSON.stringify({ stars, completedLessons }));
+      window.localStorage.setItem("kids-genius-progress-v1", JSON.stringify({ stars, completedLessons, studyDays }));
     } catch {
       // Private browsing or storage limits should never block learning.
     }
-  }, [stars, completedLessons, progressLoaded]);
+  }, [stars, completedLessons, studyDays, progressLoaded]);
   const t = copy[lang];
   const activeAge = gradeLevels.find((a) => a.id === ageId) ?? gradeLevels[3];
   const activeSubject = subjects.find((s) => s.id === subjectId) ?? subjects[1];
@@ -86,7 +93,33 @@ export default function Home() {
   const lessonSet = lessonIdeas[subjectId] ?? defaultLessons;
   const lessons = lessonSet.map((lesson, index) => ({...lesson, id: `${activeAge.id}-${subjectId}-${index}`}));
 
+  function recordStudyDay() {
+    const today = localDayKey();
+    setStudyDays((days) => days.includes(today) ? days : [...days, today].sort());
+  }
+
+  const studyStreak = (() => {
+    const days = new Set(studyDays);
+    const cursor = new Date();
+    if (!days.has(localDayKey(cursor))) cursor.setDate(cursor.getDate() - 1);
+    let count = 0;
+    while (days.has(localDayKey(cursor))) {
+      count += 1;
+      cursor.setDate(cursor.getDate() - 1);
+    }
+    return count;
+  })();
+
+  const unlockedBadges = [
+    { id: "first-star", icon: "🌟", title: lang === "en" ? "First Spark" : "మొదటి మెరుపు", detail: lang === "en" ? "Earn your first star" : "మొదటి నక్షత్రం పొందండి", unlocked: stars >= 1 },
+    { id: "five-stars", icon: "🏅", title: lang === "en" ? "Bright Thinker" : "తెలివైన ఆలోచన", detail: lang === "en" ? "Collect 5 stars" : "5 నక్షత్రాలు సంపాదించండి", unlocked: stars >= 5 },
+    { id: "mission-explorer", icon: "🧭", title: lang === "en" ? "Explorer" : "అన్వేషకుడు", detail: lang === "en" ? "Explore 3 missions" : "3 లక్ష్యాలను అన్వేషించండి", unlocked: completedLessons.length >= 3 },
+    { id: "three-day-streak", icon: "🔥", title: lang === "en" ? "On a Roll" : "కొనసాగింపు", detail: lang === "en" ? "Learn 3 days in a row" : "వరుసగా 3 రోజులు నేర్చుకోండి", unlocked: studyStreak >= 3 },
+  ];
+
   function chooseAnswer(index: number) {
+    if (answer !== null) return;
+    recordStudyDay();
     if (answer !== null) return;
     setAnswer(index);
     if (index === questionText.correctChoiceIndex) setStars((value) => value + 1);
@@ -141,7 +174,7 @@ export default function Home() {
       <section className="lesson-studio" id="lessons">
         <div className="lesson-heading"><div><span className="section-kicker">YOUR NEXT DISCOVERY</span><h2>{lang === "en" ? "Learning missions" : "అభ్యాస లక్ష్యాలు"}</h2><p>{lang === "en" ? `A gentle learning path for ${activeAge.label} · ${activeSubject.name.en}` : `${activeAge.label} · ${activeSubject.name.te} కోసం అభ్యాస మార్గం`}</p></div><div className="lesson-count">✨ {completedLessons.length} {lang === "en" ? "missions explored" : "లక్ష్యాలు పూర్తి"}</div></div>
         <div className="lesson-grid">{lessons.map((lesson,index)=><button key={lesson.id} className={`lesson-card ${activeLesson===index?"lesson-active":""}`} onClick={()=>{setActiveLesson(index);setMissionAnswer(null);}}><span className="lesson-number">MISSION 0{index+1}</span><span className="lesson-icon">{["🧩","🔎","🚀"][index]}</span><b>{lang==="en"?lesson.en:lesson.te}</b><small>{lang==="en"?lesson.detailEn:lesson.detailTe}</small><span className="lesson-open">{completedLessons.includes(lesson.id)?"✓ Explored":"Explore mission →"}</span></button>)}</div>
-        <div className="lesson-detail"><div className="mission-detail-copy"><span className="section-kicker">MISSION PREVIEW · {activeAge.label}</span><h3>{lang==="en"?lessons[activeLesson].en:lessons[activeLesson].te}</h3><p>{lang==="en"?lessons[activeLesson].detailEn:lessons[activeLesson].detailTe}</p><div className="mission-challenge"><b>{lang==="en"?"⚡ Try a quick challenge":"⚡ చిన్న సవాలును ప్రయత్నించండి"}</b><p>{questionText.prompt[lang]}</p><div className="mission-options">{questionText.choices.map((choice,index)=><button key={index} disabled={missionAnswer!==null} className={missionAnswer===index?(index===questionText.correctChoiceIndex?"mission-right":"mission-wrong"):""} onClick={()=>{setMissionAnswer(index);if(index===questionText.correctChoiceIndex){setStars(v=>v+1);}}}>{choice[lang]}</button>)}</div>{missionAnswer!==null&&<small className={missionAnswer===questionText.correctChoiceIndex?"mission-success":"mission-retry"}>{missionAnswer===questionText.correctChoiceIndex?(lang==="en"?"Correct! You earned a star. 🌟":"సరైన సమాధానం! ఒక నక్షత్రం పొందారు. 🌟"):(lang==="en"?"Good try. Read the hint and try the next question.":"మంచి ప్రయత్నం. సూచనను చదివి తదుపరి ప్రశ్న ప్రయత్నించండి.")} {questionText.explanation[lang]}</small>}</div></div><button className="mission-complete" onClick={()=>setCompletedLessons(old=>old.includes(lessons[activeLesson].id)?old:[...old,lessons[activeLesson].id])}>{completedLessons.includes(lessons[activeLesson].id)?"Mission explored ✓":"Mark as explored ✨"}</button></div>
+        <div className="lesson-detail"><div className="mission-detail-copy"><span className="section-kicker">MISSION PREVIEW · {activeAge.label}</span><h3>{lang==="en"?lessons[activeLesson].en:lessons[activeLesson].te}</h3><p>{lang==="en"?lessons[activeLesson].detailEn:lessons[activeLesson].detailTe}</p><div className="mission-challenge"><b>{lang==="en"?"⚡ Try a quick challenge":"⚡ చిన్న సవాలును ప్రయత్నించండి"}</b><p>{questionText.prompt[lang]}</p><div className="mission-options">{questionText.choices.map((choice,index)=><button key={index} disabled={missionAnswer!==null} className={missionAnswer===index?(index===questionText.correctChoiceIndex?"mission-right":"mission-wrong"):""} onClick={()=>{setMissionAnswer(index);recordStudyDay();if(index===questionText.correctChoiceIndex){setStars(v=>v+1);}}}>{choice[lang]}</button>)}</div>{missionAnswer!==null&&<small className={missionAnswer===questionText.correctChoiceIndex?"mission-success":"mission-retry"}>{missionAnswer===questionText.correctChoiceIndex?(lang==="en"?"Correct! You earned a star. 🌟":"సరైన సమాధానం! ఒక నక్షత్రం పొందారు. 🌟"):(lang==="en"?"Good try. Read the hint and try the next question.":"మంచి ప్రయత్నం. సూచనను చదివి తదుపరి ప్రశ్న ప్రయత్నించండి.")} {questionText.explanation[lang]}</small>}</div></div><button className="mission-complete" onClick={()=>setCompletedLessons(old=>old.includes(lessons[activeLesson].id)?old:[...old,lessons[activeLesson].id])}>{completedLessons.includes(lessons[activeLesson].id)?"Mission explored ✓":"Mark as explored ✨"}</button></div>
       </section>
 
       <section className="play-section" id="quick-quiz">
@@ -149,7 +182,12 @@ export default function Home() {
         <div className="quiz-card"><div className="quiz-top"><span>QUESTION {questionIndex + 1}</span><span className="quiz-points">⭐ +1 star</span></div><div className="quiz-step-track" aria-label={`Question ${questionIndex + 1}`}><span style={{width: `${((questionIndex % 5) + 1) * 20}%`}} /></div>{activeAge.ageBandId === "tiny-explorers" && <div className="parent-play-note">🤝 Parent & little explorer: enjoy this together. No timer, no pressure.</div>}<div className="quiz-question">{questionText.prompt[lang]}</div><div className="quiz-options">{questionText.choices.map((choice, index) => <button key={index} disabled={answer !== null} onClick={() => chooseAnswer(index)} className={`quiz-option ${answer === index ? (isRight ? "answer-correct" : "answer-wrong") : ""} ${answer !== null && index === questionText.correctChoiceIndex ? "answer-reveal" : ""}`}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{choice[lang]}<span className="option-check">{answer !== null && index === questionText.correctChoiceIndex ? "✓" : "→"}</span></button>)}</div>{answer !== null && <div className={`answer-feedback ${isRight ? "feedback-good" : "feedback-try"}`}>{isRight ? t.correct : t.wrong}<small className="answer-explanation">{questionText.explanation[lang]}</small></div>}<div className="quiz-bottom"><span>🌱 Learning grows with practice</span><button onClick={nextQuestion} disabled={answer === null}>{t.next} →</button></div></div>
       </section>
 
-      <section className="stats-section"><div><span className="section-kicker">SMALL WINS, BIG SMILES</span><h2>{t.progress}</h2><p>Celebrate every step, at every pace.</p></div><div className="stat-card"><span>🔥</span><b>0</b><small>{t.streak}</small></div><div className="stat-card"><span>⭐</span><b>{stars}</b><small>{t.stars}</small></div><div className="stat-card"><span>🌈</span><b>{subjects.length}</b><small>{t.topics}</small></div></section>
+      <section className="stats-section"><div><span className="section-kicker">SMALL WINS, BIG SMILES</span><h2>{t.progress}</h2><p>Celebrate every step, at every pace.</p></div><div className="stat-card"><span>🔥</span><b>{studyStreak}</b><small>{t.streak}</small></div><div className="stat-card"><span>⭐</span><b>{stars}</b><small>{t.stars}</small></div><div className="stat-card"><span>🌈</span><b>{subjects.length}</b><small>{t.topics}</small></div></section>
+
+      <section className="achievement-section" aria-labelledby="achievement-title">
+        <div className="achievement-heading"><div><span className="section-kicker">{lang === "en" ? "CELEBRATE YOUR PROGRESS" : "మీ విజయాలను జరుపుకోండి"}</span><h2 id="achievement-title">{lang === "en" ? "Your badge collection" : "మీ బ్యాడ్జ్‌ల సేకరణ"}</h2><p>{lang === "en" ? "Every small step deserves a little celebration." : "ప్రతి చిన్న ప్రయత్నం ఒక చిన్న వేడుకకు అర్హమైనది."}</p></div><span className="achievement-total">🏆 {unlockedBadges.filter((badge) => badge.unlocked).length}/4</span></div>
+        <div className="achievement-grid">{unlockedBadges.map((badge) => <div key={badge.id} className={`achievement-card ${badge.unlocked ? "badge-unlocked" : "badge-locked"}`}><span>{badge.icon}</span><b>{badge.title}</b><small>{badge.unlocked ? (lang === "en" ? "Unlocked!" : "సాధించారు!") : badge.detail}</small></div>)}</div>
+      </section>
 
       <section className="parent-section" id="parents"><div className="parent-illustration">🧑‍🚀<span>🛡️</span></div><div><span className="section-kicker">A LITTLE PEACE OF MIND</span><h2>{t.parent}</h2><p>{t.parentText}</p><span className="parent-button">Parent dashboard · coming soon</span></div><div className="parent-badge">🛡️ <b>Kid-first</b><small>Always</small></div></section>
 
