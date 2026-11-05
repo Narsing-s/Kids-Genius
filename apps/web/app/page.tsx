@@ -5,6 +5,15 @@ import { gradeLevels, subjects, getQuestions } from "@kids-genius/learning";
 
 type Lang = "en" | "te";
 
+const lessonIdeas: Record<string, {en:string;te:string;detailEn:string;detailTe:string}[]> = {
+ math:[{en:"Number patterns",te:"సంఖ్యల క్రమాలు",detailEn:"Spot patterns and build number sense.",detailTe:"క్రమాలను గుర్తించి సంఖ్యలపై అవగాహన పెంచుకోండి."},{en:"Everyday maths",te:"రోజువారీ గణితం",detailEn:"Use maths to solve real-life puzzles.",detailTe:"నిజ జీవిత సమస్యలను గణితంతో పరిష్కరించండి."},{en:"Think like a mathematician",te:"గణితవేత్తలా ఆలోచించండి",detailEn:"Try a challenge and explain your thinking.",detailTe:"సవాలును ప్రయత్నించి మీ ఆలోచనను వివరించండి."}],
+ science:[{en:"Curious discoveries",te:"ఆసక్తికర ఆవిష్కరణలు",detailEn:"Ask questions about the world around you.",detailTe:"మీ చుట్టూ ఉన్న ప్రపంచం గురించి ప్రశ్నలు అడగండి."},{en:"Living world",te:"జీవ ప్రపంచం",detailEn:"Explore plants, animals and habitats.",detailTe:"మొక్కలు, జంతువులు, ఆవాసాలను తెలుసుకోండి."},{en:"Science in action",te:"ఆచరణలో విజ్ఞానం",detailEn:"Connect scientific ideas to daily life.",detailTe:"విజ్ఞాన భావనలను రోజువారీ జీవితంతో అనుసంధానించండి."}],
+ language:[{en:"Words and meanings",te:"పదాలు మరియు అర్థాలు",detailEn:"Grow your vocabulary in both languages.",detailTe:"రెండు భాషల్లో పదజాలాన్ని పెంచుకోండి."},{en:"Read with confidence",te:"ఆత్మవిశ్వాసంతో చదవండి",detailEn:"Practice reading and understanding.",detailTe:"చదవడం, అర్థం చేసుకోవడం సాధన చేయండి."},{en:"Grammar studio",te:"వ్యాకరణ శాల",detailEn:"Build clear sentences step by step.",detailTe:"దశలవారీగా సరైన వాక్యాలు నిర్మించండి."}],
+ computer:[{en:"Digital explorers",te:"డిజిటల్ అన్వేషకులు",detailEn:"Understand devices and digital safety.",detailTe:"పరికరాలు, డిజిటల్ భద్రత తెలుసుకోండి."},{en:"Coding logic",te:"కోడింగ్ తర్కం",detailEn:"Solve problems with step-by-step thinking.",detailTe:"దశలవారీ ఆలోచనతో సమస్యలు పరిష్కరించండి."},{en:"Create with technology",te:"సాంకేతికతతో సృష్టించండి",detailEn:"Plan a small creative project.",detailTe:"చిన్న సృజనాత్మక ప్రాజెక్ట్ రూపొందించండి."}]
+};
+const defaultLessons = [{en:"Discover the basics",te:"మౌలిక అంశాలను తెలుసుకోండి",detailEn:"Build understanding one idea at a time.",detailTe:"ఒక్కో భావనను అర్థం చేసుకుంటూ ముందుకు సాగండి."},{en:"Practice and apply",te:"సాధన చేసి అన్వయించండి",detailEn:"Use what you learn in a new situation.",detailTe:"నేర్చుకున్నదాన్ని కొత్త సందర్భంలో ఉపయోగించండి."},{en:"Challenge yourself",te:"మీకు మీరే సవాలు",detailEn:"Try a deeper question and explain why.",detailTe:"లోతైన ప్రశ్నను ప్రయత్నించి కారణం వివరించండి."}];
+
+
 const copy = {
   en: {
     tagline: "A little learning. A lot of wonder.",
@@ -40,13 +49,13 @@ export default function Home() {
   const [subjectId, setSubjectId] = useState<string>("math");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answer, setAnswer] = useState<number | null>(null);
-  const [stars, setStars] = useState(0);
+  const [stars, setStars] = useState(0);\n  const [completedLessons, setCompletedLessons] = useState<string[]>([]);\n  const [activeLesson, setActiveLesson] = useState(0);
   const t = copy[lang];
   const activeAge = gradeLevels.find((a) => a.id === ageId) ?? gradeLevels[3];
   const activeSubject = subjects.find((s) => s.id === subjectId) ?? subjects[1];
   const questions = getQuestions(activeAge.ageBandId, subjectId);
   const questionText = questions[questionIndex % questions.length];
-  const isRight = answer === questionText.correctChoiceIndex;
+  const isRight = answer === questionText.correctChoiceIndex;\n  const lessonSet = lessonIdeas[subjectId] ?? defaultLessons;\n  const lessons = lessonSet.map((lesson, index) => ({...lesson, id: `${activeAge.id}-${subjectId}-${index}`}));
 
   function chooseAnswer(index: number) {
     if (answer !== null) return;
@@ -99,7 +108,13 @@ export default function Home() {
         <div className="subject-grid">{subjects.map((subject, index) => <button key={subject.id} onClick={() => { setSubjectId(subject.id); setQuestionIndex(0); setAnswer(null); }} className={`subject-card subject-${index} ${subjectId === subject.id ? "subject-active" : ""}`}><span className="subject-emoji">{subject.emoji}</span><span><b>{subject.name[lang]}</b><small>{subject.description}</small></span><span className="subject-arrow">↗</span></button>)}</div>
       </section>
 
-      <section className="play-section" id="quick-quiz">
+
+      <section className="lesson-studio" id="lessons">
+        <div className="lesson-heading"><div><span className="section-kicker">YOUR NEXT DISCOVERY</span><h2>{lang === "en" ? "Learning missions" : "అభ్యాస లక్ష్యాలు"}</h2><p>{lang === "en" ? `A gentle learning path for ${activeAge.label} · ${activeSubject.name.en}` : `${activeAge.label} · ${activeSubject.name.te} కోసం అభ్యాస మార్గం`}</p></div><div className="lesson-count">✨ {completedLessons.length} {lang === "en" ? "missions explored" : "లక్ష్యాలు పూర్తి"}</div></div>
+        <div className="lesson-grid">{lessons.map((lesson,index)=><button key={lesson.id} className={`lesson-card ${activeLesson===index?"lesson-active":""}`} onClick={()=>setActiveLesson(index)}><span className="lesson-number">MISSION 0{index+1}</span><span className="lesson-icon">{["🧩","🔎","🚀"][index]}</span><b>{lang==="en"?lesson.en:lesson.te}</b><small>{lang==="en"?lesson.detailEn:lesson.detailTe}</small><span className="lesson-open">{completedLessons.includes(lesson.id)?"✓ Explored":"Explore mission →"}</span></button>)}</div>
+        <div className="lesson-detail"><div><span className="section-kicker">MISSION PREVIEW</span><h3>{lang==="en"?lessons[activeLesson].en:lessons[activeLesson].te}</h3><p>{lang==="en"?lessons[activeLesson].detailEn:lessons[activeLesson].detailTe}</p></div><button onClick={()=>setCompletedLessons(old=>old.includes(lessons[activeLesson].id)?old:[...old,lessons[activeLesson].id])}>{completedLessons.includes(lessons[activeLesson].id)?"Mission explored ✓":"Mark as explored ✨"}</button></div>
+      </section>
+\n      <section className="play-section" id="quick-quiz">
         <div className="play-intro"><span className="section-kicker">READY, SET, THINK!</span><h2>{t.quiz}</h2><p>{t.choose}</p><div className="quiz-meta"><span>🧠 {activeSubject.name[lang]}</span><span>⏱ No rush</span></div><div className="progress-label"><span>Little steps make big progress</span><b>{stars} ⭐</b></div><div className="progress-track"><span style={{width: `${Math.min(100, stars * 12)}%`}} /></div></div>
         <div className="quiz-card"><div className="quiz-top"><span>QUESTION {questionIndex + 1}</span><span className="quiz-points">⭐ +1 star</span></div><div className="quiz-step-track" aria-label={`Question ${questionIndex + 1}`}><span style={{width: `${((questionIndex % 5) + 1) * 20}%`}} /></div>{activeAge.ageBandId === "tiny-explorers" && <div className="parent-play-note">🤝 Parent & little explorer: enjoy this together. No timer, no pressure.</div>}<div className="quiz-question">{questionText.prompt[lang]}</div><div className="quiz-options">{questionText.choices.map((choice, index) => <button key={index} disabled={answer !== null} onClick={() => chooseAnswer(index)} className={`quiz-option ${answer === index ? (isRight ? "answer-correct" : "answer-wrong") : ""} ${answer !== null && index === questionText.correctChoiceIndex ? "answer-reveal" : ""}`}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{choice[lang]}<span className="option-check">{answer !== null && index === questionText.correctChoiceIndex ? "✓" : "→"}</span></button>)}</div>{answer !== null && <div className={`answer-feedback ${isRight ? "feedback-good" : "feedback-try"}`}>{isRight ? t.correct : t.wrong}<small className="answer-explanation">{questionText.explanation[lang]}</small></div>}<div className="quiz-bottom"><span>🌱 Learning grows with practice</span><button onClick={nextQuestion} disabled={answer === null}>{t.next} →</button></div></div>
       </section>
