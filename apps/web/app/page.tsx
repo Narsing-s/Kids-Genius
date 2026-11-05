@@ -70,7 +70,7 @@ export default function Home() {
         const progress = JSON.parse(saved) as { stars?: number; completedLessons?: string[]; studyDays?: string[] };
         if (typeof progress.stars === "number" && Number.isFinite(progress.stars)) setStars(Math.max(0, progress.stars));
         if (Array.isArray(progress.completedLessons)) setCompletedLessons(progress.completedLessons.filter((item): item is string => typeof item === "string"));
-        if (Array.isArray(progress.studyDays)) setStudyDays(progress.studyDays.filter((item): item is string => /^\\d{4}-\\d{2}-\\d{2}$/.test(item)));
+        if (Array.isArray(progress.studyDays)) setStudyDays(progress.studyDays.filter((item): item is string => item.length === 10 && item[4] === "-" && item[7] === "-"));
       }
     } catch {
       // Ignore unavailable or invalid local progress; learning remains usable.
