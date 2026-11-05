@@ -160,8 +160,8 @@ export default function Home() {
 
       <section className="section-block" id="adventures">
         <div className="section-heading"><div><span className="section-kicker">FROM NURSERY TO CLASS 10</span><h2>{t.levels}</h2><p>A learning path for every school year, from first steps to board-exam foundations.</p></div><span className="heading-doodle">✳</span></div>
-        <div className="age-grid">{gradeLevels.map((age, index) => <button key={age.id} className={`age-card age-${index} ${ageId === age.id ? "selected" : ""}`} onClick={() => { setAgeId(age.id); setQuestionIndex(0); setAnswer(null); }}><span className="age-emoji">{age.emoji}</span><span className="age-range">{age.label} · AGES {age.minAge}–{age.maxAge}</span><b>{age.name}</b><small>{age.description}</small><span className="age-arrow">↗</span></button>)}</div>
-        <div className="selected-note"><span>✨</span> Your path: <b>{activeAge.name}</b> <span>·</span> {activeAge.description}</div>
+        <div className="age-grid">{gradeLevels.map((age, index) => <button key={age.id} className={`age-card age-${index} ${ageId === age.id ? "selected" : ""}`} onClick={() => { setAgeId(age.id); setQuestionIndex(0); setAnswer(null); }}><span className="age-emoji">{age.emoji}</span><span className="age-range">{age.label} · AGES {age.minAge}–{age.maxAge}</span><b>{age.label}</b><small>{age.description}</small><span className="age-arrow">↗</span></button>)}</div>
+        <div className="selected-note"><span>✨</span> Your path: <b>{activeAge.label}</b> <span>·</span> {activeAge.description}</div>
       </section>
 
       <section className="section-block subjects-section" id="subjects">
