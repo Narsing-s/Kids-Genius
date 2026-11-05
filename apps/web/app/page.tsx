@@ -49,13 +49,17 @@ export default function Home() {
   const [subjectId, setSubjectId] = useState<string>("math");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answer, setAnswer] = useState<number | null>(null);
-  const [stars, setStars] = useState(0);\n  const [completedLessons, setCompletedLessons] = useState<string[]>([]);\n  const [activeLesson, setActiveLesson] = useState(0);
+  const [stars, setStars] = useState(0);
+  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+  const [activeLesson, setActiveLesson] = useState(0);
   const t = copy[lang];
   const activeAge = gradeLevels.find((a) => a.id === ageId) ?? gradeLevels[3];
   const activeSubject = subjects.find((s) => s.id === subjectId) ?? subjects[1];
   const questions = getQuestions(activeAge.ageBandId, subjectId);
   const questionText = questions[questionIndex % questions.length];
-  const isRight = answer === questionText.correctChoiceIndex;\n  const lessonSet = lessonIdeas[subjectId] ?? defaultLessons;\n  const lessons = lessonSet.map((lesson, index) => ({...lesson, id: `${activeAge.id}-${subjectId}-${index}`}));
+  const isRight = answer === questionText.correctChoiceIndex;
+  const lessonSet = lessonIdeas[subjectId] ?? defaultLessons;
+  const lessons = lessonSet.map((lesson, index) => ({...lesson, id: `${activeAge.id}-${subjectId}-${index}`}));
 
   function chooseAnswer(index: number) {
     if (answer !== null) return;
@@ -114,7 +118,8 @@ export default function Home() {
         <div className="lesson-grid">{lessons.map((lesson,index)=><button key={lesson.id} className={`lesson-card ${activeLesson===index?"lesson-active":""}`} onClick={()=>setActiveLesson(index)}><span className="lesson-number">MISSION 0{index+1}</span><span className="lesson-icon">{["🧩","🔎","🚀"][index]}</span><b>{lang==="en"?lesson.en:lesson.te}</b><small>{lang==="en"?lesson.detailEn:lesson.detailTe}</small><span className="lesson-open">{completedLessons.includes(lesson.id)?"✓ Explored":"Explore mission →"}</span></button>)}</div>
         <div className="lesson-detail"><div><span className="section-kicker">MISSION PREVIEW</span><h3>{lang==="en"?lessons[activeLesson].en:lessons[activeLesson].te}</h3><p>{lang==="en"?lessons[activeLesson].detailEn:lessons[activeLesson].detailTe}</p></div><button onClick={()=>setCompletedLessons(old=>old.includes(lessons[activeLesson].id)?old:[...old,lessons[activeLesson].id])}>{completedLessons.includes(lessons[activeLesson].id)?"Mission explored ✓":"Mark as explored ✨"}</button></div>
       </section>
-\n      <section className="play-section" id="quick-quiz">
+
+      <section className="play-section" id="quick-quiz">
         <div className="play-intro"><span className="section-kicker">READY, SET, THINK!</span><h2>{t.quiz}</h2><p>{t.choose}</p><div className="quiz-meta"><span>🧠 {activeSubject.name[lang]}</span><span>⏱ No rush</span></div><div className="progress-label"><span>Little steps make big progress</span><b>{stars} ⭐</b></div><div className="progress-track"><span style={{width: `${Math.min(100, stars * 12)}%`}} /></div></div>
         <div className="quiz-card"><div className="quiz-top"><span>QUESTION {questionIndex + 1}</span><span className="quiz-points">⭐ +1 star</span></div><div className="quiz-step-track" aria-label={`Question ${questionIndex + 1}`}><span style={{width: `${((questionIndex % 5) + 1) * 20}%`}} /></div>{activeAge.ageBandId === "tiny-explorers" && <div className="parent-play-note">🤝 Parent & little explorer: enjoy this together. No timer, no pressure.</div>}<div className="quiz-question">{questionText.prompt[lang]}</div><div className="quiz-options">{questionText.choices.map((choice, index) => <button key={index} disabled={answer !== null} onClick={() => chooseAnswer(index)} className={`quiz-option ${answer === index ? (isRight ? "answer-correct" : "answer-wrong") : ""} ${answer !== null && index === questionText.correctChoiceIndex ? "answer-reveal" : ""}`}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{choice[lang]}<span className="option-check">{answer !== null && index === questionText.correctChoiceIndex ? "✓" : "→"}</span></button>)}</div>{answer !== null && <div className={`answer-feedback ${isRight ? "feedback-good" : "feedback-try"}`}>{isRight ? t.correct : t.wrong}<small className="answer-explanation">{questionText.explanation[lang]}</small></div>}<div className="quiz-bottom"><span>🌱 Learning grows with practice</span><button onClick={nextQuestion} disabled={answer === null}>{t.next} →</button></div></div>
       </section>
