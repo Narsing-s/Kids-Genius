@@ -63,3 +63,10 @@
 .achievement-card.badge-locked>span{filter:grayscale(1);opacity:.55}
 .achievement-card.badge-unlocked{border-color:#c5b9f5;box-shadow:0 8px 20px #6857e812}
 @media(max-width:700px){.achievement-section{padding:22px 16px;margin-bottom:50px}.achievement-heading{align-items:flex-start}.achievement-heading h2{font-size:25px}.achievement-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.achievement-card{min-height:125px}}
+
+
+/* Mission retry and completion states */
+.mission-feedback{display:grid;gap:9px;margin-top:10px}
+.mission-retry-button{justify-self:start;border:1px solid #e8c77b;background:#fff8e6;color:#946b1e;padding:8px 12px;border-radius:9px;font-size:11px;font-weight:800}
+.mission-complete:disabled{opacity:.55;cursor:not-allowed;filter:grayscale(.2)}
+.mission-retry-button:focus-visible,.mission-complete:focus-visible{outline:3px solid #8b7df3;outline-offset:3px}
