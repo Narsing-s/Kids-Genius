@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { gradeLevels, subjects, getQuestions } from "@kids-genius/learning";
 
 type Lang = "en" | "te";
@@ -53,6 +53,30 @@ export default function Home() {
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
   const [activeLesson, setActiveLesson] = useState(0);
   const [missionAnswer, setMissionAnswer] = useState<number | null>(null);
+  const [progressLoaded, setProgressLoaded] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem("kids-genius-progress-v1");
+      if (saved) {
+        const progress = JSON.parse(saved) as { stars?: number; completedLessons?: string[] };
+        if (typeof progress.stars === "number" && Number.isFinite(progress.stars)) setStars(Math.max(0, progress.stars));
+        if (Array.isArray(progress.completedLessons)) setCompletedLessons(progress.completedLessons.filter((item): item is string => typeof item === "string"));
+      }
+    } catch {
+      // Ignore unavailable or invalid local progress; learning remains usable.
+    }
+    setProgressLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (!progressLoaded) return;
+    try {
+      window.localStorage.setItem("kids-genius-progress-v1", JSON.stringify({ stars, completedLessons }));
+    } catch {
+      // Private browsing or storage limits should never block learning.
+    }
+  }, [stars, completedLessons, progressLoaded]);
   const t = copy[lang];
   const activeAge = gradeLevels.find((a) => a.id === ageId) ?? gradeLevels[3];
   const activeSubject = subjects.find((s) => s.id === subjectId) ?? subjects[1];
