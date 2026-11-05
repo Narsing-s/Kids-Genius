@@ -5,7 +5,8 @@ import { gradeLevels, subjects, getQuestions } from "@kids-genius/learning";
 export default function Home() {
   const [language, setLanguage] = useState<"en" | "te">("en");
   const [ageId, setAgeId] = useState("class-1");
-  const [questionIndex, setQuestionIndex] = useState(0);\n  const [subjectId, setSubjectId] = useState("math");
+  const [questionIndex, setQuestionIndex] = useState(0);
+  const [subjectId, setSubjectId] = useState("math");
   const [answer, setAnswer] = useState<number | null>(null);
   const [stars, setStars] = useState(0);
   const activeAge = gradeLevels.find((a) => a.id === ageId) ?? gradeLevels[3];
