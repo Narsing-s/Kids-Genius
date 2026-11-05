@@ -10,5 +10,8 @@
     "dev:web": "npm --workspace @kids-genius/web run dev",
     "build:web": "npm --workspace @kids-genius/web run build",
     "dev:mobile": "npm --workspace @kids-genius/mobile run start"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
   }
 }
