@@ -1,30 +1,38 @@
 # Kids Genius 🌈
 
-Bilingual (English + Telugu) learning and quiz platform for children aged 1–10.
+A bilingual English + Telugu learning playground for children aged 1–10, designed around curiosity, confidence and safe play.
 
-## Platforms
-- Responsive web app (Next.js)
-- Android app (Expo / React Native)
-- Shared learning engine and bilingual question bank
-- Supabase backend for parent accounts, child profiles, progress and parental controls
+## Product experience
+- Colourful, responsive learning home for web and Android.
+- Five age paths from parent-assisted early discovery (1–2) to deeper problem-solving (9–10).
+- Six learning worlds: English & Telugu, Maths, Science, Social Studies & GK, Life Skills, and Art & Creativity.
+- English/Telugu interface toggle.
+- Interactive sample quiz with answer feedback and star rewards.
+- Parent-first safety principles: no public chat, public child profiles, behavioural advertising or location tracking.
+- Reduced-motion support and responsive layouts for phones, tablets and desktop.
 
-## Age groups
-1. Tiny Explorers (1–2): parent-assisted picture, sound and recognition activities.
-2. Little Learners (3–4): letters, words, colors, shapes and counting.
-3. Junior Stars (5–6): early reading, writing, maths and science.
-4. Smart Kids (7–8): core subjects, reasoning and discovery.
-5. Young Champions (9–10): deeper concepts, problem solving and general knowledge.
+## Technology
+- Web: Next.js, React and TypeScript (apps/web).
+- Android: Expo + React Native (apps/mobile).
+- Shared age bands, subjects and quiz data (packages/learning).
+- Supabase schema foundation and row-level security migration (supabase/migrations).
 
-## Subjects
-English and Telugu, Mathematics, Science, Social Studies and General Knowledge, Life Skills, Art and Creativity.
+## Run locally
+Requirements: Node.js 20+ and npm.
 
-## Child safety
-- Parent-managed child profiles.
-- No public chat or public child profiles.
-- No behavioural advertising or location tracking.
-- Collect minimum personal data; use nicknames.
-- Parent consent, privacy notices and legal review required before production launch.
-- Ages 1–2 are not exposed to timed or competitive quizzes.
+    npm install
+    npm run dev:web
 
-## Development
-See the app and package directories for the starter implementation. Never expose Supabase service-role credentials in client apps. Apply and test database row-level security before enabling real child accounts.
+For Android development:
+
+    npm run dev:mobile
+
+## Build the web app
+
+    npm run build:web
+
+## Important launch status
+
+This repository is an actively developed MVP foundation, not yet a production-ready child learning service. The current quiz is a demonstration using sample questions. Parent registration and verified consent, real child profiles, a full question bank, audio, persistence, progress syncing, reward validation, parental dashboard, moderation/content review and production security testing still need to be implemented before public launch.
+
+Never expose Supabase service-role credentials in client apps. Apply and test database row-level security before enabling real child accounts. Obtain appropriate parental consent and complete privacy/legal review before collecting children's data.
