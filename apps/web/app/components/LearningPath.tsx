@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Language } from "@kids-genius/learning";
 
 type Chapter = { title: { en: string; te: string }; icon: string; topics: { en: string; te: string }[] };
@@ -35,6 +35,24 @@ const fallback: Chapter[] = [
 export default function LearningPath({ language, grade, subject }: { language: Language; grade: string; subject: string }) {
   const [chapterIndex, setChapterIndex] = useState(0);
   const [done, setDone] = useState<string[]>([]);
+  const [loadedFor, setLoadedFor] = useState<string | null>(null);
+  const storageKey = `kids-genius-path-v1:${subject}:${grade}`;
+  useEffect(() => {
+    setLoadedFor(null);
+    setChapterIndex(0);
+    try {
+      const saved = window.localStorage.getItem(storageKey);
+      const parsed: unknown = saved ? JSON.parse(saved) : [];
+      setDone(Array.isArray(parsed) ? parsed.filter((item): item is string => typeof item === "string") : []);
+    } catch {
+      setDone([]);
+    }
+    setLoadedFor(storageKey);
+  }, [storageKey]);
+  useEffect(() => {
+    if (loadedFor !== storageKey) return;
+    try { window.localStorage.setItem(storageKey, JSON.stringify(done)); } catch { /* Progress remains available for this session. */ }
+  }, [done, loadedFor, storageKey]);
   const chapters = useMemo(() => paths[subject] ?? fallback, [subject]);
   const chapter = chapters[chapterIndex] ?? chapters[0];
   const total = chapters.reduce((sum, item) => sum + item.topics.length, 0);
