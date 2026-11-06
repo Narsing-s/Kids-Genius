@@ -101,11 +101,25 @@ export default function Home() {
   const t = copy[lang];
   if (!authReady) return <main className="site-shell"><section className="account-section"><p>Loading your learning space…</p></section></main>;
   if (!authenticated) return (
-    <main className="site-shell">
-      <header className="nav"><a className="brand" href="#" aria-label="Kids Genius"><span className="brand-mark">✦</span><span>kids<span className="brand-accent">genius</span></span></a><button className="language-toggle" onClick={() => setLang(lang === "en" ? "te" : "en")}>{lang === "en" ? "తెలుగు" : "English"}</button></header>
-      <section className="hero auth-hero"><div className="hero-copy"><div className="eyebrow"><span className="live-dot" /> {lang === "en" ? "WELCOME TO KIDS GENIUS" : "కిడ్స్ జీనియస్‌కు స్వాగతం"}</div><h1>{lang === "en" ? "Your learning adventure starts here." : "మీ అభ్యాస సాహసం ఇక్కడ ప్రారంభమవుతుంది."}</h1><p>{lang === "en" ? "Sign in as a parent or create an account to enter a joyful world of lessons, quizzes and games." : "పాఠాలు, క్విజ్‌లు మరియు ఆటల ప్రపంచంలోకి వెళ్లడానికి తల్లిదండ్రులుగా లాగిన్ అవ్వండి లేదా ఖాతా సృష్టించండి."}</p><div className="hero-proof"><div className="avatar-stack"><span>🦊</span><span>🐼</span><span>🐸</span></div><span>{lang === "en" ? "Nursery to Class 10 · English + Telugu" : "నర్సరీ నుండి 10వ తరగతి వరకు · తెలుగు + ఇంగ్లీష్"}</span></div></div><div className="hero-art"><div className="orbit orbit-one" /><div className="orbit orbit-two" /><div className="planet">🌎</div><div className="hero-creature creature-fox">🦊</div><div className="hero-creature creature-panda">🐼</div><div className="hero-creature creature-frog">🐸</div><div className="float-card card-star">⭐ <b>Shine bright!</b></div><div className="float-card card-book">📚 <b>Explore</b></div><div className="float-card card-rocket">🚀</div></div></section>
-      <AccountPanel language={lang} grade="Class 1" subject="math" stars={0} completedLessons={0} studyDays={[]} onAuthenticated={() => setAuthenticated(true)} />
-      <footer className="footer"><p>{lang === "en" ? "A parent-managed space for growing minds." : "పిల్లల అభ్యాసం కోసం తల్లిదండ్రుల నిర్వహణలోని స్థలం."}</p></footer>
+    <main className="auth-screen">
+      <header className="auth-nav">
+        <a className="brand" href="#" aria-label="Kids Genius"><span className="brand-mark">✦</span><span>kids<span className="brand-accent">genius</span></span></a>
+        <button className="language-toggle" onClick={() => setLang(lang === "en" ? "te" : "en")}>{lang === "en" ? "తెలుగు" : "English"}</button>
+      </header>
+      <section className="auth-stage">
+        <div className="auth-welcome">
+          <span className="eyebrow"><span className="live-dot" /> {lang === "en" ? "WELCOME TO KIDS GENIUS" : "కిడ్స్ జీనియస్‌కు స్వాగతం"}</span>
+          <h1>{lang === "en" ? "A brighter world of learning is waiting." : "నేర్చుకునే అద్భుత ప్రపంచం మీ కోసం వేచి ఉంది."}</h1>
+          <p>{lang === "en" ? "Sign in first. Then explore lessons, quizzes and playful discoveries from Nursery to Class 10." : "ముందుగా లాగిన్ అవ్వండి. ఆపై నర్సరీ నుండి 10వ తరగతి వరకు పాఠాలు, క్విజ్‌లు మరియు ఆటలను అన్వేషించండి."}</p>
+          <div className="auth-feature-list"><span>📚 {lang === "en" ? "Class-wise lessons" : "తరగతి వారీ పాఠాలు"}</span><span>🎯 {lang === "en" ? "Fun quizzes & challenges" : "సరదా క్విజ్‌లు"}</span><span>🌈 {lang === "en" ? "English + Telugu" : "ఇంగ్లీష్ + తెలుగు"}</span></div>
+          <div className="auth-floating-world" aria-hidden="true"><span className="auth-orbit auth-orbit-a"/><span className="auth-orbit auth-orbit-b"/><span className="auth-world">🌎</span><span className="auth-friend auth-friend-a">🦊</span><span className="auth-friend auth-friend-b">🐼</span><span className="auth-friend auth-friend-c">🐸</span><span className="auth-spark auth-spark-a">✦</span><span className="auth-spark auth-spark-b">✧</span></div>
+        </div>
+        <div className="auth-form-wrap">
+          <div className="auth-form-heading"><span className="section-kicker">{lang === "en" ? "YOUR JOURNEY STARTS HERE" : "మీ ప్రయాణం ఇక్కడ మొదలవుతుంది"}</span><h2>{lang === "en" ? "Parent sign in" : "తల్లిదండ్రుల లాగిన్"}</h2><p>{lang === "en" ? "Sign in or create a parent account to continue." : "కొనసాగించడానికి లాగిన్ అవ్వండి లేదా ఖాతా సృష్టించండి."}</p></div>
+          <AccountPanel language={lang} grade="Class 1" subject="math" stars={0} completedLessons={0} studyDays={[]} onAuthenticated={() => setAuthenticated(true)} />
+          <p className="auth-secure-note">🔒 {lang === "en" ? "A parent-managed learning space for children." : "పిల్లల కోసం తల్లిదండ్రుల నిర్వహణలోని అభ్యాస స్థలం."}</p>
+        </div>
+      </section>
     </main>
   );
   const activeAge = gradeLevels.find((a) => a.id === ageId) ?? gradeLevels[3];
@@ -194,7 +208,7 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="hero">
+      <section className="hero dashboard-flow">
         <div className="hero-copy">
           <div className="eyebrow"><span className="live-dot" /> {t.tagline}</div>
           <h1>{t.hero} <span className="headline-spark">✦</span></h1>
