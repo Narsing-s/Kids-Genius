@@ -154,6 +154,41 @@ const extraMathByGrade: Record<string, GradeMathSeed[]> = {
 };
 Object.entries(extraMathByGrade).forEach(([gradeId,seeds]) => gradeMathSeeds[gradeId].push(...seeds));
 
+
+function generatedMathPractice(gradeId:string, gradeIndex:number):GradeMathSeed[] {
+ const rows:GradeMathSeed[]=[];
+ const base=Math.max(1,gradeIndex+1);
+ for(let n=0;n<95;n++){
+  const kind=n%5, round=Math.floor(n/5)+1;
+  let promptEn="",promptTe="",answer=0,whyEn="",whyTe="";
+  if(gradeIndex<=2){
+   const a=base+round+(kind%2), b=1+(round%4);
+   if(kind===0){answer=a+b;promptEn=`Count and add: ${a} objects + ${b} objects = ?`;promptTe=`లెక్కించి కలపండి: ${a} + ${b} = ?`;whyEn=`${a} + ${b} = ${answer}.`;whyTe=`${a} + ${b} = ${answer}.`;}
+   else if(kind===1){answer=a;promptEn=`Which number comes after ${a-1}?`;promptTe=`${a-1} తర్వాత వచ్చే సంఖ్య ఏది?`;whyEn=`The next number after ${a-1} is ${a}.`;whyTe=`${a-1} తర్వాత ${a} వస్తుంది.`;}
+   else if(kind===2){answer=Math.max(0,a-b);promptEn=`You have ${a} toys and give away ${b}. How many remain?`;promptTe=`మీ దగ్గర ${a} బొమ్మలు ఉన్నాయి; ${b} ఇచ్చారు. ఎన్ని మిగిలాయి?`;whyEn=`${a} − ${b} = ${answer}.`;whyTe=`${a} − ${b} = ${answer}.`;}
+   else if(kind===3){answer=round%2===0?4:3;promptEn="How many sides does a square have?";promptTe="చతురస్రానికి ఎన్ని భుజాలు ఉంటాయి?";whyEn="A square has four sides.";whyTe="చతురస్రానికి నాలుగు భుజాలు ఉంటాయి.";}
+   else {answer=round%2===0?3:5;promptEn="How many vowels are there in the English alphabet?";promptTe="ఆంగ్ల అక్షరమాలలో అచ్చులు ఎన్ని?";whyEn="The five vowels are A, E, I, O and U.";whyTe="A, E, I, O, U అనే ఐదు అచ్చులు ఉన్నాయి.";}
+  } else {
+   const a=base*3+round+2,b=base+1+(round%7);
+   if(kind===0){answer=a+b;promptEn=`Calculate: ${a} + ${b}.`;promptTe=`లెక్కించండి: ${a} + ${b}.`;whyEn=`${a} + ${b} = ${answer}.`;whyTe=`${a} + ${b} = ${answer}.`;}
+   else if(kind===1){answer=a*b;promptEn=`Calculate: ${a} × ${b}.`;promptTe=`లెక్కించండి: ${a} × ${b}.`;whyEn=`${a} groups of ${b} make ${answer}.`;whyTe=`${a} × ${b} = ${answer}.`;}
+   else if(kind===2){const product=a*b;answer=a;promptEn=`Solve: ${product} ÷ ${b}.`;promptTe=`పరిష్కరించండి: ${product} ÷ ${b}.`;whyEn=`${product} divided by ${b} equals ${a}.`;whyTe=`${product} ను ${b} తో భాగిస్తే ${a}.`;}
+   else if(kind===3){answer=a-b;promptEn=`Calculate: ${a} − ${b}.`;promptTe=`లెక్కించండి: ${a} − ${b}.`;whyEn=`${a} − ${b} = ${answer}.`;whyTe=`${a} − ${b} = ${answer}.`;}
+   else {answer=(round+base)*10;promptEn=`What is ${round+base} × 10?`;promptTe=`${round+base} × 10 ఎంత?`;whyEn="Multiplying a whole number by 10 shifts its digits one place left.";whyTe="పూర్ణ సంఖ్యను 10 తో గుణిస్తే దాని అంకెలు ఒక స్థానం ఎడమకు మారతాయి.";}
+  }
+  const candidates=[answer,answer+1,Math.max(0,answer-1)];
+  const shift=n%3, ordered=[candidates[shift],candidates[(shift+1)%3],candidates[(shift+2)%3]];
+  const correct=ordered.indexOf(answer);
+  rows.push({prompt:{en:promptEn,te:promptTe},choices:ordered.map(v=>({en:String(v),te:String(v)})),answer:correct,explanation:{en:whyEn,te:whyTe}});
+ }
+ return rows;
+}
+for(const [gradeIndex,grade] of gradeLevels.entries()){
+ const seeds=gradeMathSeeds[grade.id] ?? (gradeMathSeeds[grade.id]=[]);
+ const generated=generatedMathPractice(grade.id,gradeIndex);
+ seeds.push(...generated);
+}
+
 export const gradeQuestionBank: LearningQuestion[] = Object.entries(gradeMathSeeds).flatMap(([gradeId, seeds]) =>
  seeds.map((seed, index) => ({ id: `${gradeId}-math-${index+1}`, gradeId, subjectId: "math", ageBandId: gradeLevels.find((grade) => grade.id === gradeId)?.ageBandId ?? "young-champions", prompt: seed.prompt, choices: seed.choices, correctChoiceIndex: seed.answer, explanation: seed.explanation }))
 );
