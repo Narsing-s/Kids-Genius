@@ -64,6 +64,79 @@ export const questionBank: LearningQuestion[] = [
  {id:"creative-002",subjectId:"creative",ageBandId:"junior-stars",prompt:{en:"Which shape has three sides?",te:"మూడు భుజాలు ఉన్న ఆకారం ఏది?"},choices:[{en:"Circle",te:"వృత్తం"},{en:"Triangle",te:"త్రిభుజం"},{en:"Square",te:"చతురస్రం"}],correctChoiceIndex:1,explanation:{en:"A triangle has three sides.",te:"త్రిభుజానికి మూడు భుజాలు ఉంటాయి."}}
 ];
 
+
+type GradeMathSeed = { prompt: BilingualText; choices: BilingualText[]; answer: number; explanation: BilingualText };
+const gradeMathSeeds: Record<string, GradeMathSeed[]> = {
+ nursery: [
+  {prompt:{en:"Count the stars: ⭐ ⭐ ⭐",te:"నక్షత్రాలను లెక్కించండి: ⭐ ⭐ ⭐"},choices:[{en:"2",te:"2"},{en:"3",te:"3"},{en:"4",te:"4"}],answer:1,explanation:{en:"There are three stars.",te:"మూడు నక్షత్రాలు ఉన్నాయి."}},
+  {prompt:{en:"Which number comes after 1?",te:"1 తర్వాత వచ్చే సంఖ్య ఏది?"},choices:[{en:"2",te:"2"},{en:"3",te:"3"},{en:"1",te:"1"}],answer:0,explanation:{en:"The number after one is two.",te:"ఒకటి తర్వాత రెండు వస్తుంది."}},
+  {prompt:{en:"Which group has more: 🍎 or 🍎🍎?",te:"ఏ గుంపులో ఎక్కువ ఆపిల్స్ ఉన్నాయి: 🍎 లేదా 🍎🍎?"},choices:[{en:"One apple",te:"ఒక ఆపిల్"},{en:"Two apples",te:"రెండు ఆపిల్స్"},{en:"Same",te:"సమానం"}],answer:1,explanation:{en:"Two is more than one.",te:"రెండు అనేది ఒకటి కంటే ఎక్కువ."}}
+ ],
+ lkg: [
+  {prompt:{en:"What is 2 + 1?",te:"2 + 1 ఎంత?"},choices:[{en:"2",te:"2"},{en:"3",te:"3"},{en:"4",te:"4"}],answer:1,explanation:{en:"Two plus one equals three.",te:"రెండుకు ఒకటి కలిపితే మూడు."}},
+  {prompt:{en:"Which shape has no corners?",te:"మూలలు లేని ఆకారం ఏది?"},choices:[{en:"Circle",te:"వృత్తం"},{en:"Square",te:"చతురస్రం"},{en:"Triangle",te:"త్రిభుజం"}],answer:0,explanation:{en:"A circle has no corners.",te:"వృత్తానికి మూలలు ఉండవు."}},
+  {prompt:{en:"Which number is bigger: 4 or 2?",te:"4, 2 లో పెద్ద సంఖ్య ఏది?"},choices:[{en:"2",te:"2"},{en:"4",te:"4"},{en:"Both equal",te:"రెండూ సమానం"}],answer:1,explanation:{en:"Four is greater than two.",te:"నాలుగు అనేది రెండు కంటే పెద్దది."}}
+ ],
+ ukg: [
+  {prompt:{en:"What is 5 + 4?",te:"5 + 4 ఎంత?"},choices:[{en:"8",te:"8"},{en:"9",te:"9"},{en:"10",te:"10"}],answer:1,explanation:{en:"Five plus four equals nine.",te:"ఐదుకు నాలుగు కలిపితే తొమ్మిది."}},
+  {prompt:{en:"What is 10 − 3?",te:"10 − 3 ఎంత?"},choices:[{en:"6",te:"6"},{en:"7",te:"7"},{en:"8",te:"8"}],answer:1,explanation:{en:"Ten take away three leaves seven.",te:"పది నుంచి మూడు తీసేస్తే ఏడు మిగులుతుంది."}},
+  {prompt:{en:"How many sides does a square have?",te:"చతురస్రానికి ఎన్ని భుజాలు ఉంటాయి?"},choices:[{en:"3",te:"3"},{en:"4",te:"4"},{en:"5",te:"5"}],answer:1,explanation:{en:"A square has four equal sides.",te:"చతురస్రానికి నాలుగు సమాన భుజాలు ఉంటాయి."}}
+ ],
+ "class-1": [
+  {prompt:{en:"What is 8 + 7?",te:"8 + 7 ఎంత?"},choices:[{en:"14",te:"14"},{en:"15",te:"15"},{en:"16",te:"16"}],answer:1,explanation:{en:"8 + 7 = 15.",te:"8 + 7 = 15."}},
+  {prompt:{en:"What is 16 − 9?",te:"16 − 9 ఎంత?"},choices:[{en:"6",te:"6"},{en:"7",te:"7"},{en:"8",te:"8"}],answer:1,explanation:{en:"16 − 9 = 7.",te:"16 − 9 = 7."}},
+  {prompt:{en:"Which number is even?",te:"సరి సంఖ్య ఏది?"},choices:[{en:"13",te:"13"},{en:"18",te:"18"},{en:"21",te:"21"}],answer:1,explanation:{en:"18 is divisible by 2.",te:"18 ను 2 తో భాగించవచ్చు."}}
+ ],
+ "class-2": [
+  {prompt:{en:"What is 6 × 4?",te:"6 × 4 ఎంత?"},choices:[{en:"20",te:"20"},{en:"24",te:"24"},{en:"28",te:"28"}],answer:1,explanation:{en:"Six groups of four make 24.",te:"నాలుగును ఆరు సార్లు కలిపితే 24."}},
+  {prompt:{en:"What is the value of 5 in 352?",te:"352 లో 5 యొక్క స్థాన విలువ ఎంత?"},choices:[{en:"5",te:"5"},{en:"50",te:"50"},{en:"500",te:"500"}],answer:1,explanation:{en:"The 5 is in the tens place, so its value is 50.",te:"5 పదుల స్థానంలో ఉంది; దాని విలువ 50."}},
+  {prompt:{en:"What is 45 ÷ 5?",te:"45 ÷ 5 ఎంత?"},choices:[{en:"8",te:"8"},{en:"9",te:"9"},{en:"10",te:"10"}],answer:1,explanation:{en:"45 divided by 5 equals 9.",te:"45 ను 5 తో భాగిస్తే 9."}}
+ ],
+ "class-3": [
+  {prompt:{en:"What is 125 + 238?",te:"125 + 238 ఎంత?"},choices:[{en:"353",te:"353"},{en:"363",te:"363"},{en:"373",te:"373"}],answer:1,explanation:{en:"125 + 238 = 363.",te:"125 + 238 = 363."}},
+  {prompt:{en:"What is 9 × 7?",te:"9 × 7 ఎంత?"},choices:[{en:"56",te:"56"},{en:"63",te:"63"},{en:"72",te:"72"}],answer:1,explanation:{en:"Nine times seven is 63.",te:"తొమ్మిది సార్లు ఏడు 63."}},
+  {prompt:{en:"A quarter means which fraction?",te:"పావు భాగాన్ని ఏ భిన్నం సూచిస్తుంది?"},choices:[{en:"1/2",te:"1/2"},{en:"1/3",te:"1/3"},{en:"1/4",te:"1/4"}],answer:2,explanation:{en:"One quarter is one of four equal parts.",te:"నాలుగు సమాన భాగాల్లో ఒక భాగం పావు."}}
+ ],
+ "class-4": [
+  {prompt:{en:"What is 36 × 12?",te:"36 × 12 ఎంత?"},choices:[{en:"422",te:"422"},{en:"432",te:"432"},{en:"442",te:"442"}],answer:1,explanation:{en:"36 × 12 = 432.",te:"36 × 12 = 432."}},
+  {prompt:{en:"Which fraction is equal to 1/2?",te:"1/2 కు సమానమైన భిన్నం ఏది?"},choices:[{en:"2/4",te:"2/4"},{en:"1/3",te:"1/3"},{en:"3/4",te:"3/4"}],answer:0,explanation:{en:"Two quarters make one half.",te:"రెండు పావులు కలిపితే సగం."}},
+  {prompt:{en:"How many centimetres are in 2 metres?",te:"2 మీటర్లలో ఎన్ని సెంటీమీటర్లు?"},choices:[{en:"20",te:"20"},{en:"200",te:"200"},{en:"2000",te:"2000"}],answer:1,explanation:{en:"1 metre is 100 centimetres, so 2 metres is 200.",te:"1 మీటరు 100 సెంటీమీటర్లు; 2 మీటర్లు 200."}}
+ ],
+ "class-5": [
+  {prompt:{en:"What is 3/5 + 1/5?",te:"3/5 + 1/5 ఎంత?"},choices:[{en:"4/5",te:"4/5"},{en:"4/10",te:"4/10"},{en:"3/10",te:"3/10"}],answer:0,explanation:{en:"Add the numerators: 3/5 + 1/5 = 4/5.",te:"లవాలను కలపండి: 3/5 + 1/5 = 4/5."}},
+  {prompt:{en:"What is 2.5 + 1.75?",te:"2.5 + 1.75 ఎంత?"},choices:[{en:"4.15",te:"4.15"},{en:"4.25",te:"4.25"},{en:"4.5",te:"4.5"}],answer:1,explanation:{en:"Align decimal points: the sum is 4.25.",te:"దశాంశ స్థానాలను సరిపెడితే మొత్తం 4.25."}},
+  {prompt:{en:"What is the perimeter of a 6 cm square?",te:"6 సెం.మీ. భుజం ఉన్న చతురస్రం చుట్టుకొలత ఎంత?"},choices:[{en:"12 cm",te:"12 సెం.మీ."},{en:"18 cm",te:"18 సెం.మీ."},{en:"24 cm",te:"24 సెం.మీ."}],answer:2,explanation:{en:"Perimeter = 4 × side = 24 cm.",te:"చుట్టుకొలత = 4 × భుజం = 24 సెం.మీ."}}
+ ],
+ "class-6": [
+  {prompt:{en:"What is 3/4 of 20?",te:"20 లో 3/4 ఎంత?"},choices:[{en:"12",te:"12"},{en:"15",te:"15"},{en:"16",te:"16"}],answer:1,explanation:{en:"20 ÷ 4 × 3 = 15.",te:"20 ÷ 4 × 3 = 15."}},
+  {prompt:{en:"What is −4 + 9?",te:"−4 + 9 ఎంత?"},choices:[{en:"5",te:"5"},{en:"−5",te:"−5"},{en:"13",te:"13"}],answer:0,explanation:{en:"Starting at −4 and moving 9 steps right gives 5.",te:"−4 నుంచి 9 అడుగులు కుడివైపు వెళ్తే 5."}},
+  {prompt:{en:"Solve: x + 8 = 15.",te:"పరిష్కరించండి: x + 8 = 15."},choices:[{en:"6",te:"6"},{en:"7",te:"7"},{en:"8",te:"8"}],answer:1,explanation:{en:"Subtract 8 from both sides: x = 7.",te:"రెండు వైపులా 8 తీసేస్తే x = 7."}}
+ ],
+ "class-7": [
+  {prompt:{en:"What is 2/3 of 27?",te:"27 లో 2/3 ఎంత?"},choices:[{en:"16",te:"16"},{en:"18",te:"18"},{en:"20",te:"20"}],answer:1,explanation:{en:"27 ÷ 3 × 2 = 18.",te:"27 ÷ 3 × 2 = 18."}},
+  {prompt:{en:"Simplify: 3a + 2a.",te:"సరళీకరించండి: 3a + 2a."},choices:[{en:"5a",te:"5a"},{en:"6a",te:"6a"},{en:"5a²",te:"5a²"}],answer:0,explanation:{en:"Like terms add: 3a + 2a = 5a.",te:"సమాన పదాలను కలిపితే 3a + 2a = 5a."}},
+  {prompt:{en:"What is the complement of 35°?",te:"35° కు పూరక కోణం ఎంత?"},choices:[{en:"55°",te:"55°"},{en:"145°",te:"145°"},{en:"65°",te:"65°"}],answer:0,explanation:{en:"Complementary angles add to 90°; 90 − 35 = 55°.",te:"పూరక కోణాల మొత్తం 90°; 90 − 35 = 55°."}}
+ ],
+ "class-8": [
+  {prompt:{en:"Solve: 3x − 5 = 16.",te:"పరిష్కరించండి: 3x − 5 = 16."},choices:[{en:"x = 5",te:"x = 5"},{en:"x = 7",te:"x = 7"},{en:"x = 9",te:"x = 9"}],answer:1,explanation:{en:"3x = 21, so x = 7.",te:"3x = 21, కాబట్టి x = 7."}},
+  {prompt:{en:"What is the square root of 196?",te:"196 యొక్క వర్గమూలం ఎంత?"},choices:[{en:"12",te:"12"},{en:"14",te:"14"},{en:"16",te:"16"}],answer:1,explanation:{en:"14 × 14 = 196.",te:"14 × 14 = 196."}},
+  {prompt:{en:"Expand (a + b)².",te:"(a + b)² ను విస్తరించండి."},choices:[{en:"a² + b²",te:"a² + b²"},{en:"a² + 2ab + b²",te:"a² + 2ab + b²"},{en:"a² − 2ab + b²",te:"a² − 2ab + b²"}],answer:1,explanation:{en:"The identity is a² + 2ab + b².",te:"సూత్రం a² + 2ab + b²."}}
+ ],
+ "class-9": [
+  {prompt:{en:"If 2x + 3 = 13, what is x?",te:"2x + 3 = 13 అయితే x విలువ ఎంత?"},choices:[{en:"4",te:"4"},{en:"5",te:"5"},{en:"6",te:"6"}],answer:1,explanation:{en:"2x = 10, therefore x = 5.",te:"2x = 10, కాబట్టి x = 5."}},
+  {prompt:{en:"What is the distance between (0,0) and (3,4)?",te:"(0,0), (3,4) మధ్య దూరం ఎంత?"},choices:[{en:"4",te:"4"},{en:"5",te:"5"},{en:"7",te:"7"}],answer:1,explanation:{en:"Distance = √(3² + 4²) = 5.",te:"దూరం = √(3² + 4²) = 5."}},
+  {prompt:{en:"The sum of angles in a triangle is…",te:"త్రిభుజంలోని కోణాల మొత్తం ఎంత?"},choices:[{en:"90°",te:"90°"},{en:"180°",te:"180°"},{en:"360°",te:"360°"}],answer:1,explanation:{en:"The interior angles of every triangle total 180°.",te:"ప్రతి త్రిభుజం అంతర్గత కోణాల మొత్తం 180°."}}
+ ],
+ "class-10": [
+  {prompt:{en:"What are the roots of x² − 5x + 6 = 0?",te:"x² − 5x + 6 = 0 యొక్క మూలాలు ఏమిటి?"},choices:[{en:"2 and 3",te:"2 మరియు 3"},{en:"1 and 6",te:"1 మరియు 6"},{en:"−2 and −3",te:"−2 మరియు −3"}],answer:0,explanation:{en:"Factor: (x − 2)(x − 3) = 0.",te:"విభజిస్తే: (x − 2)(x − 3) = 0."}},
+  {prompt:{en:"What is sin 30°?",te:"sin 30° విలువ ఎంత?"},choices:[{en:"1",te:"1"},{en:"1/2",te:"1/2"},{en:"√3/2",te:"√3/2"}],answer:1,explanation:{en:"A standard trigonometric value: sin 30° = 1/2.",te:"ప్రామాణిక త్రికోణమితి విలువ: sin 30° = 1/2."}},
+  {prompt:{en:"Find the 10th term of the AP 2, 5, 8, …",te:"2, 5, 8, … సమాంతర శ్రేఢిలో 10వ పదం కనుగొనండి."},choices:[{en:"27",te:"27"},{en:"29",te:"29"},{en:"30",te:"30"}],answer:1,explanation:{en:"aₙ = a + (n−1)d = 2 + 9×3 = 29.",te:"aₙ = a + (n−1)d = 2 + 9×3 = 29."}}
+ ]
+};
+export const gradeQuestionBank: LearningQuestion[] = Object.entries(gradeMathSeeds).flatMap(([gradeId, seeds]) =>
+ seeds.map((seed, index) => ({ id: `${gradeId}-math-${index+1}`, gradeId, subjectId: "math", ageBandId: gradeLevels.find((grade) => grade.id === gradeId)?.ageBandId ?? "young-champions", prompt: seed.prompt, choices: seed.choices, correctChoiceIndex: seed.answer, explanation: seed.explanation }))
+);
+
 export const sampleQuestions = questionBank;
 export function getQuestions(ageBandId:string, subjectId?:string):LearningQuestion[] {
  const exact = questionBank.filter(q => q.ageBandId === ageBandId && (!subjectId || q.subjectId === subjectId));
