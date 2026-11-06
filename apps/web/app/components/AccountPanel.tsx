@@ -36,14 +36,19 @@ export default function AccountPanel({ language, grade, subject, stars, complete
   useEffect(() => {
     if (!client || !user) { setChildren([]); setChildId(""); return; }
     let active = true;
-    client.from("parent_accounts").upsert({ id: user.id, display_name: user.email?.split("@")[0] ?? "Parent" }).then(() => {});
-    client.from("child_profiles").select("id,nickname").order("created_at", { ascending: true }).then(({ data, error }) => {
+    (async () => {
+      const { error: parentError } = await client.from("parent_accounts")
+        .upsert({ id: user.id, display_name: user.email?.split("@")[0] ?? "Parent" });
+      if (!active) return;
+      if (parentError) { setMessage(parentError.message); return; }
+      const { data, error } = await client.from("child_profiles")
+        .select("id,nickname").order("created_at", { ascending: true });
       if (!active) return;
       if (error) { setMessage(error.message); return; }
       const profiles = (data ?? []) as Child[];
       setChildren(profiles);
       setChildId(current => profiles.some(child => child.id === current) ? current : profiles[0]?.id ?? "");
-    });
+    })();
     return () => { active = false; };
   }, [client, user]);
 
@@ -118,7 +123,7 @@ export default function AccountPanel({ language, grade, subject, stars, complete
         <div className="signed-in-top"><span className="account-avatar">👨‍👩‍👧</span><div><b>{te?"తల్లిదండ్రుల ఖాతా కనెక్ట్ అయింది":"Parent account connected"}</b><small>{user.email}</small></div><button className="signout" onClick={()=>client.auth.signOut()}>{te?"లాగ్ అవుట్":"Sign out"}</button></div>
         <div className="learner-picker"><label>{te?"విద్యార్థి ప్రొఫైల్":"Learner profile"}<select value={childId} onChange={e=>setChildId(e.target.value)}><option value="">{te?"ప్రొఫైల్ ఎంచుకోండి":"Choose a learner"}</option>{children.map(child=><option key={child.id} value={child.id}>{child.nickname}</option>)}</select></label></div>
         <form className="add-child-form" onSubmit={addChild}><label>{te?"పిల్లవాడి పేరు / ముద్దుపేరు":"Learner nickname"}<input value={nickname} maxLength={24} required onChange={e=>setNickname(e.target.value)} placeholder={te?"ఉదా: చిన్నారి":"e.g. Little Star"} /></label><button disabled={busy}>{te?"ప్రొఫైల్ సృష్టించండి":"Create learner profile"}</button></form>
-        {childId && <><div className="account-progress"><span>⭐ <b>{stars}</b><small>{te?"నక్షత్రాలు":"Current stars"}</small></span><span>📚 <b>{completedLessons}</b><small>{te?"పూర్తి చేసిన పాఠాలు":"Current lessons"}</small></span><span>🔥 <b>{studyDays.length}</b><small>{te?"అభ్యాస రోజులు":"Current study days"}</small></span></div><button className="account-submit save-progress" onClick={saveProgress} disabled={busy}>{busy?(te?"సేవ్ అవుతోంది…":"Saving…"):(te?"పురోగతిని ఖాతాలో సేవ్ చేయండి":"Save progress to learner account")}</button><div className="saved-progress"><b>{te?"ఖాతాలో సేవ్ చేసిన పురోగతి":"Saved account progress"} · {grade} · {subject}</b><span>{savedProgress ? `⭐ ${savedProgress.stars_earned} · 📚 ${savedProgress.lessons_completed} · 🔥 ${savedProgress.study_days?.length ?? 0}` : (te?"ఇంకా సేవ్ చేసిన పురోగతి లేదు":"No saved snapshot yet")}</span></div></>}
+        {childId && <><div className="account-progress"><span>⭐ <b>{savedProgress?.stars_earned ?? stars}</b><small>{te?"నక్షత్రాలు":"Saved stars"}</small></span><span>📚 <b>{savedProgress?.lessons_completed ?? completedLessons}</b><small>{te?"పూర్తి చేసిన పాఠాలు":"Saved lessons"}</small></span><span>🔥 <b>{savedProgress?.study_days?.length ?? studyDays.length}</b><small>{te?"అభ్యాస రోజులు":"Saved study days"}</small></span></div><button className="account-submit save-progress" onClick={saveProgress} disabled={busy}>{busy?(te?"సేవ్ అవుతోంది…":"Saving…"):(te?"పురోగతిని ఖాతాలో సేవ్ చేయండి":"Save progress to learner account")}</button><div className="saved-progress"><b>{te?"ఖాతాలో సేవ్ చేసిన పురోగతి":"Saved account progress"} · {grade} · {subject}</b><span>{savedProgress ? `⭐ ${savedProgress.stars_earned} · 📚 ${savedProgress.lessons_completed} · 🔥 ${savedProgress.study_days?.length ?? 0}` : (te?"ఇంకా సేవ్ చేసిన పురోగతి లేదు":"No saved snapshot yet")}</span></div></>}
         <p className="account-footnote">{te?"పురోగతిని సేవ్ చేసిన తర్వాత అదే తల్లిదండ్రుల ఖాతాతో ఇతర పరికరాల్లో చూడవచ్చు.":"Save progress to your account, then view that saved snapshot on another device with the same parent login."}</p>
       </div>}
       {message && <p className="account-status" role="status">{message}</p>}
