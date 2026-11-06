@@ -221,3 +221,9 @@
 @media(max-width:760px){.account-section{grid-template-columns:1fr;padding:20px}.account-privacy{grid-column:auto}.signed-in-top{flex-wrap:wrap}.add-child-form{grid-template-columns:1fr}}
 
 .saved-progress{display:grid;gap:5px;margin-top:10px;padding:12px;border-radius:12px;background:#f8f7ff;font-size:10px;color:var(--muted)}.saved-progress b{color:var(--ink)}.save-progress{width:100%;margin-top:12px}
+
+.progress-history{display:grid;gap:8px;margin-top:12px;padding:13px;border:1px solid #eeeaf8;border-radius:13px;background:#fff}
+.progress-history>b{font-size:11px;color:var(--ink);margin-bottom:2px}
+.progress-history>small{font-size:10px;color:var(--muted)}
+.progress-history-row{display:grid;grid-template-columns:1fr auto;gap:3px 8px;padding:8px 0;border-top:1px solid #f0eef6;font-size:10px}
+.progress-history-row span{color:var(--ink);text-transform:capitalize}.progress-history-row b{color:#6456b5}.progress-history-row small{grid-column:1/-1;color:var(--muted);font-size:9px}
