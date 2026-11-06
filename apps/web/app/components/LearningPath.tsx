@@ -34,7 +34,8 @@ const fallback: Chapter[] = [
 
 export default function LearningPath({ language, grade, subject }: { language: Language; grade: string; subject: string }) {
   const [chapterIndex, setChapterIndex] = useState(0);
-  const [activeTopic, setActiveTopic] = useState(-1);\n  const lessonPanelRef = useRef<HTMLDivElement | null>(null);
+  const [activeTopic, setActiveTopic] = useState(-1);
+  const lessonPanelRef = useRef<HTMLDivElement | null>(null);
   const [done, setDone] = useState<string[]>([]);
   const [loadedFor, setLoadedFor] = useState<string | null>(null);
   const storageKey = `kids-genius-path-v1:${subject}:${grade}`;
@@ -55,7 +56,11 @@ export default function LearningPath({ language, grade, subject }: { language: L
     if (loadedFor !== storageKey) return;
     try { window.localStorage.setItem(storageKey, JSON.stringify(done)); } catch { /* Progress remains available for this session. */ }
   }, [done, loadedFor, storageKey]);
-  useEffect(() => {\n    if (activeTopic < 0) return;\n    lessonPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });\n  }, [activeTopic, chapterIndex]);\n  const chapters = useMemo(() => paths[subject] ?? fallback, [subject]);
+  useEffect(() => {
+    if (activeTopic < 0) return;
+    lessonPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [activeTopic, chapterIndex]);
+  const chapters = useMemo(() => paths[subject] ?? fallback, [subject]);
   const chapter = chapters[chapterIndex] ?? chapters[0];
   const total = chapters.reduce((sum, item) => sum + item.topics.length, 0);
   const progress = done.filter(item => item.startsWith(`${subject}-${grade}-`)).length;
