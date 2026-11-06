@@ -55,6 +55,7 @@ const copy = {
 
 export default function Home() {
   const [lang, setLang] = useState<Lang>("en");
+  const [classroomOpen, setClassroomOpen] = useState(false);
   const [ageId, setAgeId] = useState<string>("class-1");
   const [subjectId, setSubjectId] = useState<string>("math");
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -133,6 +134,20 @@ export default function Home() {
     setAnswer(null);
   }
 
+  if (classroomOpen) {
+    return (
+      <main className="site-shell">
+        <header className="nav"><button className="brand brand-button" onClick={() => setClassroomOpen(false)}>✦ kids<span className="brand-accent">genius</span></button><span className="class-breadcrumb">Home › {activeAge.label}</span><button className="language-toggle" onClick={() => setLang(lang === "en" ? "te" : "en")}>{lang === "en" ? "తెలుగు" : "English"}</button></header>
+        <section className="class-dashboard">
+          <div className="class-welcome"><div><span className="section-kicker">YOUR CLASSROOM · {activeAge.label.toUpperCase()}</span><h1>{lang === "en" ? "Welcome to " + activeAge.label + "!" : activeAge.label + " తరగతికి స్వాగతం!"}</h1><p>{activeAge.description}. {lang === "en" ? "Choose a subject to enter its learning space. Explore chapters, lessons and quizzes for your class." : "మీ తరగతి కోసం విషయాన్ని ఎంచుకుని అధ్యాయాలు, పాఠాలు మరియు క్విజ్‌లను ప్రారంభించండి."}</p><div className="class-welcome-tags"><span>📚 {subjects.length} subjects</span><span>⭐ {stars} stars</span><span>🌐 English + తెలుగు</span></div></div><div className="class-mascot">🦊 🎒 📚</div></div>
+          <div className="class-subject-heading"><div><span className="section-kicker">YOUR LEARNING WORLDS</span><h2>{lang === "en" ? "Choose a subject" : "ఒక విషయాన్ని ఎంచుకోండి"}</h2><p>{lang === "en" ? "Open a subject to see its lessons and practice questions." : "పాఠాలు మరియు సాధన ప్రశ్నల కోసం విషయాన్ని తెరవండి."}</p></div></div>
+          <div className="class-subject-grid">{subjects.map((subject,index)=><button key={subject.id} className={"class-subject-card subject-"+index} onClick={()=>{setSubjectId(subject.id);setQuestionIndex(0);setAnswer(null);setActiveLesson(0);setClassroomOpen(false);document.getElementById("learning-path")?.scrollIntoView({behavior:"smooth",block:"start"});}}><span className="class-subject-icon">{subject.emoji}</span><span><b>{subject.name[lang]}</b><small>{subject.description}</small><em>{lang === "en" ? "Open lessons and quiz →" : "పాఠాలు, క్విజ్ తెరవండి →"}</em></span></button>)}</div>
+          <button className="secondary-button" onClick={() => setClassroomOpen(false)}>← {lang === "en" ? "Back to all classes" : "తరగతులకు తిరిగి"}</button>
+        </section>
+      </main>
+    );
+  }
+
   return (
     <main className="site-shell">
       <header className="nav">
@@ -165,7 +180,7 @@ export default function Home() {
 
       <section className="section-block" id="adventures">
         <div className="section-heading"><div><span className="section-kicker">FROM NURSERY TO CLASS 10</span><h2>{t.levels}</h2><p>A learning path for every school year, from first steps to board-exam foundations.</p></div><span className="heading-doodle">✳</span></div>
-        <div className="age-grid">{gradeLevels.map((age, index) => <button key={age.id} className={`age-card age-${index} ${ageId === age.id ? "selected" : ""}`} onClick={() => { setAgeId(age.id); setQuestionIndex(0); setAnswer(null); setMissionAnswer(null); setActiveLesson(0); document.getElementById("learning-path")?.scrollIntoView({behavior:"smooth",block:"start"}); }}><span className="age-emoji">{age.emoji}</span><span className="age-range">{age.label} · AGES {age.minAge}–{age.maxAge}</span><b>{age.label}</b><small>{age.description}</small><span className="age-arrow">↗</span></button>)}</div>
+        <div className="age-grid">{gradeLevels.map((age, index) => <button key={age.id} className={`age-card age-${index} ${ageId === age.id ? "selected" : ""}`} onClick={() => { setAgeId(age.id); setQuestionIndex(0); setAnswer(null); setMissionAnswer(null); setActiveLesson(0); setClassroomOpen(true); }}><span className="age-emoji">{age.emoji}</span><span className="age-range">{age.label} · AGES {age.minAge}–{age.maxAge}</span><b>{age.label}</b><small>{age.description}</small><span className="age-arrow">↗</span></button>)}</div>
         <div className="selected-note"><span>✨</span> Your path: <b>{activeAge.label}</b> <span>·</span> {activeAge.description} <a className="view-all" href="#lessons">Open this class's lessons ↓</a></div>
       </section>
 
