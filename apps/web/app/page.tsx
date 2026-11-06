@@ -54,7 +54,9 @@ const copy = {
 };
 
 export default function Home() {
-  const [lang, setLang] = useState<Lang>("en");\n  const [authReady, setAuthReady] = useState(false);\n  const [authenticated, setAuthenticated] = useState(false);
+  const [lang, setLang] = useState<Lang>("en");
+  const [authReady, setAuthReady] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
   const [classroomOpen, setClassroomOpen] = useState(false);
   const [subjectOpen, setSubjectOpen] = useState(false);
   const [ageId, setAgeId] = useState<string>("class-1");
@@ -67,6 +69,11 @@ export default function Home() {
   const [missionAnswer, setMissionAnswer] = useState<number | null>(null);
   const [progressLoaded, setProgressLoaded] = useState(false);
   const [studyDays, setStudyDays] = useState<string[]>([]);
+
+  useEffect(() => {
+    try { setAuthenticated(Boolean(window.localStorage.getItem("kids-genius-local-session-v1"))); } catch { setAuthenticated(false); }
+    setAuthReady(true);
+  }, []);
 
   useEffect(() => {
     try {
@@ -91,7 +98,16 @@ export default function Home() {
       // Private browsing or storage limits should never block learning.
     }
   }, [stars, completedLessons, studyDays, progressLoaded]);
-  const t = copy[lang];\n  if (!authReady) return <main className="site-shell"><section className="account-section"><p>Loading your learning space…</p></section></main>;\n  if (!authenticated) return (\n    <main className="site-shell">\n      <header className="nav"><a className="brand" href="#" aria-label="Kids Genius"><span className="brand-mark">✦</span><span>kids<span className="brand-accent">genius</span></span></a><button className="language-toggle" onClick={() => setLang(lang === "en" ? "te" : "en")}>{lang === "en" ? "తెలుగు" : "English"}</button></header>\n      <section className="hero"><div className="hero-copy"><div className="eyebrow"><span className="live-dot" /> {lang === "en" ? "WELCOME TO KIDS GENIUS" : "కిడ్స్ జీనియస్‌కు స్వాగతం"}</div><h1>{lang === "en" ? "Your learning adventure starts here." : "మీ అభ్యాస సాహసం ఇక్కడ ప్రారంభమవుతుంది."}</h1><p>{lang === "en" ? "Sign in as a parent or create an account to enter a joyful world of lessons, quizzes and games." : "పాఠాలు, క్విజ్‌లు మరియు ఆటల ప్రపంచంలోకి వెళ్లడానికి తల్లిదండ్రులుగా లాగిన్ అవ్వండి లేదా ఖాతా సృష్టించండి."}</p><div className="hero-proof"><div className="avatar-stack"><span>🦊</span><span>🐼</span><span>🐸</span></div><span>{lang === "en" ? "Nursery to Class 10 · English + Telugu" : "నర్సరీ నుండి 10వ తరగతి వరకు · తెలుగు + ఇంగ్లీష్"}</span></div></div><div className="hero-art"><div className="orbit orbit-one" /><div className="orbit orbit-two" /><div className="planet">🌎</div><div className="hero-creature creature-fox">🦊</div><div className="hero-creature creature-panda">🐼</div><div className="hero-creature creature-frog">🐸</div><div className="float-card card-star">⭐ <b>Shine bright!</b></div><div className="float-card card-book">📚 <b>Explore</b></div><div className="float-card card-rocket">🚀</div></div></section>\n      <AccountPanel language={lang} grade="Class 1" subject="math" stars={0} completedLessons={0} studyDays={[]} onAuthenticated={() => setAuthenticated(true)} />\n      <footer className="footer"><p>{lang === "en" ? "A parent-managed space for growing minds." : "పిల్లల అభ్యాసం కోసం తల్లిదండ్రుల నిర్వహణలోని స్థలం."}</p></footer>\n    </main>\n  );
+  const t = copy[lang];
+  if (!authReady) return <main className="site-shell"><section className="account-section"><p>Loading your learning space…</p></section></main>;
+  if (!authenticated) return (
+    <main className="site-shell">
+      <header className="nav"><a className="brand" href="#" aria-label="Kids Genius"><span className="brand-mark">✦</span><span>kids<span className="brand-accent">genius</span></span></a><button className="language-toggle" onClick={() => setLang(lang === "en" ? "te" : "en")}>{lang === "en" ? "తెలుగు" : "English"}</button></header>
+      <section className="hero"><div className="hero-copy"><div className="eyebrow"><span className="live-dot" /> {lang === "en" ? "WELCOME TO KIDS GENIUS" : "కిడ్స్ జీనియస్‌కు స్వాగతం"}</div><h1>{lang === "en" ? "Your learning adventure starts here." : "మీ అభ్యాస సాహసం ఇక్కడ ప్రారంభమవుతుంది."}</h1><p>{lang === "en" ? "Sign in as a parent or create an account to enter a joyful world of lessons, quizzes and games." : "పాఠాలు, క్విజ్‌లు మరియు ఆటల ప్రపంచంలోకి వెళ్లడానికి తల్లిదండ్రులుగా లాగిన్ అవ్వండి లేదా ఖాతా సృష్టించండి."}</p><div className="hero-proof"><div className="avatar-stack"><span>🦊</span><span>🐼</span><span>🐸</span></div><span>{lang === "en" ? "Nursery to Class 10 · English + Telugu" : "నర్సరీ నుండి 10వ తరగతి వరకు · తెలుగు + ఇంగ్లీష్"}</span></div></div><div className="hero-art"><div className="orbit orbit-one" /><div className="orbit orbit-two" /><div className="planet">🌎</div><div className="hero-creature creature-fox">🦊</div><div className="hero-creature creature-panda">🐼</div><div className="hero-creature creature-frog">🐸</div><div className="float-card card-star">⭐ <b>Shine bright!</b></div><div className="float-card card-book">📚 <b>Explore</b></div><div className="float-card card-rocket">🚀</div></div></section>
+      <AccountPanel language={lang} grade="Class 1" subject="math" stars={0} completedLessons={0} studyDays={[]} onAuthenticated={() => setAuthenticated(true)} />
+      <footer className="footer"><p>{lang === "en" ? "A parent-managed space for growing minds." : "పిల్లల అభ్యాసం కోసం తల్లిదండ్రుల నిర్వహణలోని స్థలం."}</p></footer>
+    </main>
+  );
   const activeAge = gradeLevels.find((a) => a.id === ageId) ?? gradeLevels[3];
   const activeSubject = subjects.find((s) => s.id === subjectId) ?? subjects[1];
   const questions = getQuestions(activeAge.ageBandId, subjectId, activeAge.id);
