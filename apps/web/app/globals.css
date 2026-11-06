@@ -141,3 +141,22 @@
 .selected-note .view-all:hover{text-decoration:underline}
 .subject-card[aria-pressed="true"]{outline:2px solid #7968df;outline-offset:2px}
 .lesson-card:focus-visible,.mission-options button:focus-visible,.mission-complete:focus-visible,.quiz-option:focus-visible{outline:3px solid #7666df;outline-offset:3px}
+
+/* Interactive lesson player opened directly from each Learning Map topic */
+.topic-row[aria-current="step"]{border-color:#8a7be8;background:#f1efff;box-shadow:0 5px 16px #4d3a9b12}
+.opened-lesson{margin-top:17px;padding:18px;border:1px solid #e7e2f5;border-radius:17px;background:linear-gradient(145deg,#fbfaff,#f4f8ff)}
+.opened-lesson-top{display:flex;align-items:center;gap:11px}
+.opened-lesson-top>span:first-child{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:#ebe7ff;font-size:21px}
+.opened-lesson-top>div{flex:1;min-width:0}
+.opened-lesson-top small{color:#8075bb;font-size:9px;font-weight:900;letter-spacing:1px}
+.opened-lesson-top h4{margin:3px 0 0;color:#302b50;font:900 16px 'Nunito',sans-serif}
+.lesson-step{padding:6px 9px;border-radius:20px;background:#fff;color:#77718f;font-size:10px;font-weight:900}
+.opened-lesson>p{margin:13px 0;color:#68657e;font-size:11px;line-height:1.7}
+.lesson-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.lesson-steps>div{padding:11px;border:1px solid #ebe8f4;border-radius:12px;background:#fff}
+.lesson-steps b,.lesson-steps span{display:block}
+.lesson-steps b{margin-bottom:6px;color:#5c50a4;font-size:9px;letter-spacing:.5px}
+.lesson-steps span{color:#77748b;font-size:10px;line-height:1.5}
+.lesson-complete-button{margin-top:13px;padding:10px 15px;border:0;border-radius:10px;background:#7465d7;color:white;font-size:10px;font-weight:900;cursor:pointer}
+.lesson-complete-button.is-complete{background:#e4f5eb;color:#277b4d}
+@media(max-width:600px){.lesson-steps{grid-template-columns:1fr}.opened-lesson{padding:14px}.opened-lesson-top h4{font-size:14px}}
