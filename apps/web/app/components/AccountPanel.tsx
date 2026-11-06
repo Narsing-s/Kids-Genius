@@ -87,7 +87,7 @@ export default function AccountPanel({ language, grade, subject, stars, complete
 
   async function addChild(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!client || !nickname.trim()) return;
+    if (!client || !user || !nickname.trim()) return;
     setBusy(true); setMessage("");
     const { data, error } = await client.from("child_profiles").insert({ parent_id: user.id, nickname: nickname.trim() }).select("id,nickname").single();
     setBusy(false);
