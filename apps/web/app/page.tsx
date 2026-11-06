@@ -54,7 +54,7 @@ const copy = {
 };
 
 export default function Home() {
-  const [lang, setLang] = useState<Lang>("en");
+  const [lang, setLang] = useState<Lang>("en");\n  const [authReady, setAuthReady] = useState(false);\n  const [authenticated, setAuthenticated] = useState(false);
   const [classroomOpen, setClassroomOpen] = useState(false);
   const [subjectOpen, setSubjectOpen] = useState(false);
   const [ageId, setAgeId] = useState<string>("class-1");
@@ -91,7 +91,7 @@ export default function Home() {
       // Private browsing or storage limits should never block learning.
     }
   }, [stars, completedLessons, studyDays, progressLoaded]);
-  const t = copy[lang];
+  const t = copy[lang];\n  if (!authReady) return <main className="site-shell"><section className="account-section"><p>Loading your learning space…</p></section></main>;\n  if (!authenticated) return (\n    <main className="site-shell">\n      <header className="nav"><a className="brand" href="#" aria-label="Kids Genius"><span className="brand-mark">✦</span><span>kids<span className="brand-accent">genius</span></span></a><button className="language-toggle" onClick={() => setLang(lang === "en" ? "te" : "en")}>{lang === "en" ? "తెలుగు" : "English"}</button></header>\n      <section className="hero"><div className="hero-copy"><div className="eyebrow"><span className="live-dot" /> {lang === "en" ? "WELCOME TO KIDS GENIUS" : "కిడ్స్ జీనియస్‌కు స్వాగతం"}</div><h1>{lang === "en" ? "Your learning adventure starts here." : "మీ అభ్యాస సాహసం ఇక్కడ ప్రారంభమవుతుంది."}</h1><p>{lang === "en" ? "Sign in as a parent or create an account to enter a joyful world of lessons, quizzes and games." : "పాఠాలు, క్విజ్‌లు మరియు ఆటల ప్రపంచంలోకి వెళ్లడానికి తల్లిదండ్రులుగా లాగిన్ అవ్వండి లేదా ఖాతా సృష్టించండి."}</p><div className="hero-proof"><div className="avatar-stack"><span>🦊</span><span>🐼</span><span>🐸</span></div><span>{lang === "en" ? "Nursery to Class 10 · English + Telugu" : "నర్సరీ నుండి 10వ తరగతి వరకు · తెలుగు + ఇంగ్లీష్"}</span></div></div><div className="hero-art"><div className="orbit orbit-one" /><div className="orbit orbit-two" /><div className="planet">🌎</div><div className="hero-creature creature-fox">🦊</div><div className="hero-creature creature-panda">🐼</div><div className="hero-creature creature-frog">🐸</div><div className="float-card card-star">⭐ <b>Shine bright!</b></div><div className="float-card card-book">📚 <b>Explore</b></div><div className="float-card card-rocket">🚀</div></div></section>\n      <AccountPanel language={lang} grade="Class 1" subject="math" stars={0} completedLessons={0} studyDays={[]} onAuthenticated={() => setAuthenticated(true)} />\n      <footer className="footer"><p>{lang === "en" ? "A parent-managed space for growing minds." : "పిల్లల అభ్యాసం కోసం తల్లిదండ్రుల నిర్వహణలోని స్థలం."}</p></footer>\n    </main>\n  );
   const activeAge = gradeLevels.find((a) => a.id === ageId) ?? gradeLevels[3];
   const activeSubject = subjects.find((s) => s.id === subjectId) ?? subjects[1];
   const questions = getQuestions(activeAge.ageBandId, subjectId, activeAge.id);
@@ -231,7 +231,7 @@ export default function Home() {
         <div className="achievement-grid">{unlockedBadges.map((badge) => <div key={badge.id} className={`achievement-card ${badge.unlocked ? "badge-unlocked" : "badge-locked"}`}><span>{badge.icon}</span><b>{badge.title}</b><small>{badge.unlocked ? (lang === "en" ? "Unlocked!" : "సాధించారు!") : badge.detail}</small></div>)}</div>
       </section>
 
-      <AccountPanel language={lang} grade={activeAge.label} subject={subjectId} stars={stars} completedLessons={completedLessons.length} studyDays={studyDays} />
+      <AccountPanel language={lang} grade={activeAge.label} subject={subjectId} stars={stars} completedLessons={completedLessons.length} studyDays={studyDays} onSignedOut={() => { setAuthenticated(false); setClassroomOpen(false); setSubjectOpen(false); }} />
 
       <section className="parent-section" id="parents"><div className="parent-illustration">🧑‍🚀<span>🛡️</span></div><div><span className="section-kicker">A LITTLE PEACE OF MIND</span><h2>{t.parent}</h2><p>{t.parentText}</p><div className="parent-preview"><b>{lang === "en" ? "Parent preview" : "తల్లిదండ్రుల వీక్షణ"}</b><p>{lang === "en" ? `This device currently records ${stars} stars, ${completedLessons.length} completed missions and a ${studyStreak}-day learning streak.` : `ఈ పరికరంలో ${stars} నక్షత్రాలు, ${completedLessons.length} పూర్తయిన లక్ష్యాలు, ${studyStreak} రోజుల అభ్యాస పరంపర నమోదు అయ్యాయి.`}</p><small>{lang === "en" ? "Parents can sign in, manage learner profiles and save progress snapshots by class and subject." : "తల్లిదండ్రులు లాగిన్ అయి విద్యార్థి ప్రొఫైల్‌లను నిర్వహించవచ్చు. తరగతి, విషయం వారీగా పురోగతిని సేవ్ చేయవచ్చు."}</small></div></div><div className="parent-badge">🛡️ <b>Kid-first</b><small>Always</small></div></section>
 
