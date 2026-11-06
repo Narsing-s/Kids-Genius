@@ -497,3 +497,46 @@ button{transition:background-color .18s ease,border-color .18s ease,box-shadow .
 .hub-source-note,.hub-empty{margin:13px 0 0;color:#9998ac;font-size:9px;line-height:1.6}
 @media(max-width:760px){.learning-hub{padding:22px 15px;margin-bottom:50px}.hub-heading{align-items:flex-start;flex-direction:column}.hub-heading h2{font-size:25px}.hub-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.hub-tab{justify-content:flex-start;font-size:10px}.hub-panel{padding:16px}.hub-panel-top h3{font-size:18px}.hub-question{font-size:17px}.hub-answer-grid{grid-template-columns:1fr}.stem-story-grid{grid-template-columns:1fr}.stem-story p{min-height:0}.memory-grid{gap:7px}.memory-tile{border-radius:12px;font-size:24px}.flashcard{min-height:170px;padding:18px}.flashcard strong{font-size:18px}}
 @media(prefers-reduced-motion:reduce){.hub-progress span{transition:none}}
+
+/* Advanced Study Studio */
+.study-studio{max-width:1120px;margin:54px auto 68px;padding:30px;border:1px solid #e9e6f4;border-radius:26px;background:linear-gradient(145deg,#fff 0%,#fbfaff 55%,#f5fbff 100%);box-shadow:0 18px 55px #31265b0a}
+.study-studio-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:22px}
+.study-studio-heading h2{margin:8px 0 7px;color:#292747;font:900 clamp(23px,3vw,32px) 'Nunito',sans-serif;letter-spacing:-.7px}
+.study-studio-heading p{margin:0;color:#77758f;font-size:12px;line-height:1.65}
+.study-stats{display:flex;gap:9px;flex-shrink:0}
+.study-stats span{display:flex;min-width:70px;flex-direction:column;align-items:center;gap:3px;padding:11px 13px;border:1px solid #ebe8f5;border-radius:14px;background:#fff}
+.study-stats b{color:#5d51bd;font:900 20px 'Nunito',sans-serif}
+.study-stats small{color:#8c89a2;font-size:9px;font-weight:800}
+.study-tabs{display:flex;flex-wrap:wrap;gap:8px;padding:6px;border:1px solid #eeebf6;border-radius:15px;background:#f7f5fc}
+.study-tabs button{display:flex;align-items:center;gap:7px;padding:10px 15px;border:0;border-radius:10px;background:transparent;color:#77738e;font:800 11px 'Nunito',sans-serif;cursor:pointer}
+.study-tabs button.active{background:#fff;color:#5145a8;box-shadow:0 3px 12px #342d5b0c}
+.study-tabs button span{display:inline-grid;min-width:19px;height:19px;place-items:center;border-radius:99px;background:#ece9fa;color:#5c50b5;font-size:9px}
+.study-question-panel,.study-notes-panel,.study-empty{margin-top:17px;padding:22px;border:1px solid #ece9f5;border-radius:18px;background:#fff}
+.study-question-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#8985a1;font-size:9px;font-weight:900;letter-spacing:1px}
+.study-bookmark{padding:8px 11px;border:1px solid #e9e5f4;border-radius:9px;background:#fff;color:#6f6991;font-size:10px;font-weight:800;letter-spacing:0;cursor:pointer}
+.study-bookmark.saved{border-color:#f1dfaa;background:#fff9e9;color:#8d6a18}
+.study-progress{height:6px;margin:17px 0 20px;overflow:hidden;border-radius:99px;background:#efedf6}
+.study-progress span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#8172dc,#69b9d4);transition:width .2s ease}
+.study-question-panel h3{margin:0 0 17px;color:#302d50;font:900 20px/1.5 'Nunito',sans-serif}
+.study-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.study-options button{display:flex;align-items:center;gap:11px;min-height:52px;padding:11px 13px;border:1px solid #e8e5f1;border-radius:12px;background:#fcfbff;color:#4c4967;text-align:left;font:800 12px 'Nunito',sans-serif;cursor:pointer;transition:border-color .15s,background .15s}
+.study-options button:hover:not(:disabled){border-color:#aaa0e4;background:#f8f6ff}
+.study-options button>span{display:grid;width:27px;height:27px;flex-shrink:0;place-items:center;border-radius:8px;background:#efedfa;color:#6659bd;font-size:10px}
+.study-options button.correct{border-color:#9bd8b5;background:#effaf3;color:#26754a}
+.study-options button.incorrect{border-color:#efb4b4;background:#fff3f2;color:#a34444}
+.study-options button:disabled{cursor:default}
+.study-feedback{margin-top:15px;padding:14px;border:1px solid #f0d7d4;border-radius:12px;background:#fff8f6;color:#8c4942;font-size:11px}
+.study-feedback.correct{border-color:#ccebd7;background:#f2fbf5;color:#26754a}
+.study-feedback p{margin:6px 0 11px;line-height:1.6}
+.study-feedback button,.study-empty button{padding:9px 12px;border:0;border-radius:9px;background:#6658c5;color:white;font-size:10px;font-weight:900;cursor:pointer}
+.study-question-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:17px;padding-top:13px;border-top:1px solid #f0eef6;color:#9692a8;font-size:9px}
+.study-question-footer button{padding:7px 10px;border:1px solid #eae7f3;border-radius:8px;background:#fff;color:#6c6689;font-size:9px;font-weight:800;cursor:pointer}
+.study-notes-panel label{display:block;margin-bottom:10px;color:#46425f;font-size:12px;font-weight:900}
+.study-notes-panel textarea{width:100%;min-height:160px;padding:14px;border:1px solid #e8e5f1;border-radius:12px;background:#fdfcff;color:#34314f;font:12px/1.7 'Nunito',sans-serif;resize:vertical;outline:none}
+.study-notes-panel textarea:focus{border-color:#a89ee2;box-shadow:0 0 0 3px #8172dc18}
+.study-notes-panel p{margin:8px 0 0;color:#9793a9;font-size:9px}
+.study-empty{text-align:center;padding:32px 18px}
+.study-empty>span{font-size:32px}
+.study-empty h3{margin:9px 0 6px;color:#3b3858;font:900 18px 'Nunito',sans-serif}
+.study-empty p{max-width:440px;margin:0 auto 14px;color:#89859d;font-size:11px;line-height:1.6}
+@media(max-width:700px){.study-studio{margin:35px 12px 48px;padding:18px 14px;border-radius:20px}.study-studio-heading{flex-direction:column}.study-stats{width:100%}.study-stats span{flex:1;min-width:0}.study-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.study-tabs button{justify-content:center;padding:10px 5px;font-size:9px}.study-question-panel,.study-notes-panel,.study-empty{padding:15px}.study-options{grid-template-columns:1fr}.study-question-panel h3{font-size:17px}.study-question-footer{align-items:flex-start;flex-direction:column}}
