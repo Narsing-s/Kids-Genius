@@ -158,7 +158,7 @@ Object.entries(extraMathByGrade).forEach(([gradeId,seeds]) => gradeMathSeeds[gra
 function generatedMathPractice(gradeId:string, gradeIndex:number):GradeMathSeed[] {
  const rows:GradeMathSeed[]=[];
  const base=Math.max(1,gradeIndex+1);
- for(let n=0;n<95;n++){
+ for(let n=0;n<120;n++){
   const kind=n%5, round=Math.floor(n/5)+1;
   let promptEn="",promptTe="",answer=0,whyEn="",whyTe="";
   if(gradeIndex<=2){
@@ -176,7 +176,7 @@ function generatedMathPractice(gradeId:string, gradeIndex:number):GradeMathSeed[
    else if(kind===3){answer=a-b;promptEn=`Calculate: ${a} − ${b}.`;promptTe=`లెక్కించండి: ${a} − ${b}.`;whyEn=`${a} − ${b} = ${answer}.`;whyTe=`${a} − ${b} = ${answer}.`;}
    else {answer=(round+base)*10;promptEn=`What is ${round+base} × 10?`;promptTe=`${round+base} × 10 ఎంత?`;whyEn="Multiplying a whole number by 10 shifts its digits one place left.";whyTe="పూర్ణ సంఖ్యను 10 తో గుణిస్తే దాని అంకెలు ఒక స్థానం ఎడమకు మారతాయి.";}
   }
-  const candidates=[answer,answer+1,Math.max(0,answer-1)];
+  const candidates=[answer,answer+1,answer+2];
   const shift=n%3, ordered=[candidates[shift],candidates[(shift+1)%3],candidates[(shift+2)%3]];
   const correct=ordered.indexOf(answer);
   rows.push({prompt:{en:promptEn,te:promptTe},choices:ordered.map(v=>({en:String(v),te:String(v)})),answer:correct,explanation:{en:whyEn,te:whyTe}});
