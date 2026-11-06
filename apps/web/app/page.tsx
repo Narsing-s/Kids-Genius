@@ -153,7 +153,7 @@ export default function Home() {
         </div>
         <div className="hero-art" aria-label="Illustration of a happy learning planet">
           <div className="orbit orbit-one" /><div className="orbit orbit-two" />
-          <div className="planet">🌎</div><div className="float-card card-star">⭐ <b>Shine bright!</b></div><div className="float-card card-book">📚 <b>Explore</b></div><div className="float-card card-rocket">🚀</div><div className="spark spark-a">✦</div><div className="spark spark-b">✧</div>
+          <div className="planet">🌎</div><div className="hero-creature creature-fox" aria-hidden="true">🦊</div><div className="hero-creature creature-panda" aria-hidden="true">🐼</div><div className="hero-creature creature-frog" aria-hidden="true">🐸</div><div className="float-card card-star">⭐ <b>Shine bright!</b></div><div className="float-card card-book">📚 <b>Explore</b></div><div className="float-card card-rocket">🚀</div><div className="spark spark-a">✦</div><div className="spark spark-b">✧</div>
         </div>
         <div className="hero-bottom"><span>✳ Learn at your own pace</span><span>✳ English + తెలుగు</span><span>✳ Playful and safe</span></div>
       </section>
@@ -164,13 +164,13 @@ export default function Home() {
 
       <section className="section-block" id="adventures">
         <div className="section-heading"><div><span className="section-kicker">FROM NURSERY TO CLASS 10</span><h2>{t.levels}</h2><p>A learning path for every school year, from first steps to board-exam foundations.</p></div><span className="heading-doodle">✳</span></div>
-        <div className="age-grid">{gradeLevels.map((age, index) => <button key={age.id} className={`age-card age-${index} ${ageId === age.id ? "selected" : ""}`} onClick={() => { setAgeId(age.id); setQuestionIndex(0); setAnswer(null); }}><span className="age-emoji">{age.emoji}</span><span className="age-range">{age.label} · AGES {age.minAge}–{age.maxAge}</span><b>{age.label}</b><small>{age.description}</small><span className="age-arrow">↗</span></button>)}</div>
+        <div className="age-grid">{gradeLevels.map((age, index) => <button key={age.id} className={`age-card age-${index} ${ageId === age.id ? "selected" : ""}`} onClick={() => { setAgeId(age.id); setQuestionIndex(0); setAnswer(null); setMissionAnswer(null); setActiveLesson(0); document.getElementById("learning-path")?.scrollIntoView({behavior:"smooth",block:"start"}); }}><span className="age-emoji">{age.emoji}</span><span className="age-range">{age.label} · AGES {age.minAge}–{age.maxAge}</span><b>{age.label}</b><small>{age.description}</small><span className="age-arrow">↗</span></button>)}</div>
         <div className="selected-note"><span>✨</span> Your path: <b>{activeAge.label}</b> <span>·</span> {activeAge.description} <a className="view-all" href="#lessons">Open this class's lessons ↓</a></div>
       </section>
 
       <section className="section-block subjects-section" id="subjects">
         <div className="section-heading"><div><span className="section-kicker">A UNIVERSE OF IDEAS</span><h2>{t.subjects}</h2><p>Explore school subjects, skills and creative worlds.</p></div><a className="view-all" href="#quick-quiz">Jump into a quiz ↗</a></div>
-        <div className="subject-grid">{subjects.map((subject, index) => <button key={subject.id} onClick={() => { setSubjectId(subject.id); setQuestionIndex(0); setAnswer(null); setMissionAnswer(null); }} className={`subject-card subject-${index} ${subjectId === subject.id ? "subject-active" : ""}`} aria-pressed={subjectId === subject.id}><span className="subject-emoji">{subject.emoji}</span><span><b>{subject.name[lang]}</b><small>{subject.description}</small></span><span className="subject-arrow">↗</span></button>)}</div><div className="selected-note"><span>📘</span> Selected subject: <b>{activeSubject.name[lang]}</b> <a className="view-all" href="#lessons">Open lessons ↓</a> <a className="view-all" href="#quick-quiz">Start quiz ↓</a></div>
+        <div className="subject-grid">{subjects.map((subject, index) => <button key={subject.id} onClick={() => { setSubjectId(subject.id); setQuestionIndex(0); setAnswer(null); setMissionAnswer(null); setActiveLesson(0); document.getElementById("learning-path")?.scrollIntoView({behavior:"smooth",block:"start"}); }} className={`subject-card subject-${index} ${subjectId === subject.id ? "subject-active" : ""}`} aria-pressed={subjectId === subject.id}><span className="subject-emoji">{subject.emoji}</span><span><b>{subject.name[lang]}</b><small>{subject.description}</small></span><span className="subject-arrow">↗</span></button>)}</div><div className="selected-note"><span>📘</span> Selected subject: <b>{activeSubject.name[lang]}</b> <a className="view-all" href="#lessons">Open lessons ↓</a> <a className="view-all" href="#quick-quiz">Start quiz ↓</a></div>
       </section>
 
 
