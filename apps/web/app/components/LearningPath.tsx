@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Language } from "@kids-genius/learning";
 
 type Chapter = { title: { en: string; te: string }; icon: string; topics: { en: string; te: string }[] };
@@ -34,14 +34,14 @@ const fallback: Chapter[] = [
 
 export default function LearningPath({ language, grade, subject }: { language: Language; grade: string; subject: string }) {
   const [chapterIndex, setChapterIndex] = useState(0);
-  const [activeTopic, setActiveTopic] = useState(0);
+  const [activeTopic, setActiveTopic] = useState(-1);\n  const lessonPanelRef = useRef<HTMLDivElement | null>(null);
   const [done, setDone] = useState<string[]>([]);
   const [loadedFor, setLoadedFor] = useState<string | null>(null);
   const storageKey = `kids-genius-path-v1:${subject}:${grade}`;
   useEffect(() => {
     setLoadedFor(null);
     setChapterIndex(0);
-    setActiveTopic(0);
+    setActiveTopic(-1);
     try {
       const saved = window.localStorage.getItem(storageKey);
       const parsed: unknown = saved ? JSON.parse(saved) : [];
@@ -55,7 +55,7 @@ export default function LearningPath({ language, grade, subject }: { language: L
     if (loadedFor !== storageKey) return;
     try { window.localStorage.setItem(storageKey, JSON.stringify(done)); } catch { /* Progress remains available for this session. */ }
   }, [done, loadedFor, storageKey]);
-  const chapters = useMemo(() => paths[subject] ?? fallback, [subject]);
+  useEffect(() => {\n    if (activeTopic < 0) return;\n    lessonPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });\n  }, [activeTopic, chapterIndex]);\n  const chapters = useMemo(() => paths[subject] ?? fallback, [subject]);
   const chapter = chapters[chapterIndex] ?? chapters[0];
   const total = chapters.reduce((sum, item) => sum + item.topics.length, 0);
   const progress = done.filter(item => item.startsWith(`${subject}-${grade}-`)).length;
@@ -67,8 +67,8 @@ export default function LearningPath({ language, grade, subject }: { language: L
       <div className="path-heading"><div><span className="section-kicker">{isTe ? "మీ అభ్యాస మ్యాప్" : "YOUR LEARNING MAP"}</span><h2>{isTe ? "ఒక్కో అడుగుతో ముందుకు!" : "A new adventure in every chapter"}</h2><p>{isTe ? `${grade} కోసం రూపొందించిన ప్రారంభ అభ్యాస మార్గం` : `A starter pathway for ${grade} · ${total} bite-sized topics to explore`}</p></div><div className="path-progress"><b>{progress}/{total}</b><small>{isTe ? "విషయాలు చూశారు" : "topics explored"}</small></div></div>
       <div className="path-progress-track"><span style={{width:`${progress/total*100}%`}} /></div>
       <div className="path-layout">
-        <div className="chapter-list">{chapters.map((item,index)=><button key={item.title.en} className={chapterIndex===index?"chapter-button chapter-active":"chapter-button"} onClick={()=>{setChapterIndex(index);setActiveTopic(0);document.getElementById("opened-lesson")?.scrollIntoView({behavior:"smooth",block:"nearest"});}}><span>{item.icon}</span><span><small>{isTe?`అధ్యాయం 0${index+1}`:`CHAPTER 0${index+1}`}</small><b>{isTe?item.title.te:item.title.en}</b></span><i>{index===chapterIndex?"●":"○"}</i></button>)}</div>
-        <div className="topic-panel"><div className="topic-panel-heading"><span className="topic-icon">{chapter.icon}</span><div><small>{isTe?`అధ్యాయం 0${chapterIndex+1}`:`CHAPTER 0${chapterIndex+1}`}</small><h3>{isTe?chapter.title.te:chapter.title.en}</h3></div></div><div className="topic-list">{chapter.topics.map((topic,index)=><button key={topic.en} className={completed(chapterIndex,index)?"topic-row topic-done":"topic-row"} onClick={()=>{setActiveTopic(index);document.getElementById("opened-lesson")?.scrollIntoView({behavior:"smooth",block:"nearest"});}} aria-current={activeTopic===index?"step":undefined} aria-expanded={activeTopic===index}><span className="topic-number">{completed(chapterIndex,index)?"✓":String(index+1).padStart(2,"0")}</span><span>{isTe?topic.te:topic.en}</span><b>{completed(chapterIndex,index)?(isTe?"మళ్లీ తెరవండి":"Reopen lesson"):(isTe?"పాఠం తెరవండి →":"Open lesson →")}</b></button>)}</div><div className="opened-lesson" id="opened-lesson" aria-live="polite">
+        <div className="chapter-list">{chapters.map((item,index)=><button key={item.title.en} className={chapterIndex===index?"chapter-button chapter-active":"chapter-button"} onClick={()=>{setChapterIndex(index);setActiveTopic(-1);}}><span>{item.icon}</span><span><small>{isTe?`అధ్యాయం 0${index+1}`:`CHAPTER 0${index+1}`}</small><b>{isTe?item.title.te:item.title.en}</b></span><i>{index===chapterIndex?"●":"○"}</i></button>)}</div>
+        <div className="topic-panel"><div className="topic-panel-heading"><span className="topic-icon">{chapter.icon}</span><div><small>{isTe?`అధ్యాయం 0${chapterIndex+1}`:`CHAPTER 0${chapterIndex+1}`}</small><h3>{isTe?chapter.title.te:chapter.title.en}</h3></div></div><div className="topic-list">{chapter.topics.map((topic,index)=><button key={topic.en} className={`${completed(chapterIndex,index)?"topic-row topic-done":"topic-row"} ${activeTopic===index?"topic-selected":""}`} onClick={()=>setActiveTopic(index)} aria-current={activeTopic===index?"step":undefined} aria-expanded={activeTopic===index}><span className="topic-number">{completed(chapterIndex,index)?"✓":String(index+1).padStart(2,"0")}</span><span>{isTe?topic.te:topic.en}</span><b>{completed(chapterIndex,index)?(isTe?"మళ్లీ తెరవండి":"Reopen lesson"):(isTe?"పాఠం తెరవండి →":"Open lesson →")}</b></button>)}</div>{activeTopic >= 0 && <div className="opened-lesson" id="opened-lesson" ref={lessonPanelRef} aria-live="polite">
           <div className="opened-lesson-top"><span>📖</span><div><small>{isTe?"ఇప్పుడు నేర్చుకుంటున్నారు":"NOW LEARNING"}</small><h4>{isTe?chapter.topics[activeTopic]?.te:chapter.topics[activeTopic]?.en}</h4></div><span className="lesson-step">{activeTopic+1}/{chapter.topics.length}</span></div>
           <p>{isTe?"ఈ అంశాన్ని మీ చుట్టూ ఉన్న ఉదాహరణలతో తెలుసుకుందాం. ముందుగా గమనించండి, తర్వాత ప్రయత్నించండి, చివరగా మీ మాటల్లో వివరించండి.":"Connect this topic to the world around you. First notice an example, then try it yourself, and finally explain what you discovered."}</p>
           <div className="lesson-steps"><div><b>1 · {isTe?"గమనించండి":"NOTICE"}</b><span>{isTe?"ఇంట్లో లేదా పాఠశాలలో దీనికి ఒక ఉదాహరణ కనుగొనండి.":"Find one real-life example at home or school."}</span></div><div><b>2 · {isTe?"ప్రయత్నించండి":"TRY"}</b><span>{isTe?"మీరు చూసిన ఉదాహరణను చిత్రంగా గీయండి లేదా ఒక వాక్యంలో రాయండి.":"Draw what you noticed or write one sentence about it."}</span></div><div><b>3 · {isTe?"వివరించండి":"EXPLAIN"}</b><span>{isTe?"ఇది ఎలా పనిచేస్తుందో కుటుంబ సభ్యునికి చెప్పండి.":"Tell a family member what you discovered and why it matters."}</span></div></div>
