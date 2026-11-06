@@ -301,3 +301,50 @@
 @media(prefers-reduced-motion:reduce){
   .auth-hero,.auth-hero::before,.auth-hero::after,.auth-hero .hero-copy,.auth-hero .hero-proof,.auth-hero .planet{animation:none!important}
 }
+
+
+/* Dedicated first-step sign-in screen */
+.auth-screen{min-height:100vh;max-width:1440px;margin:0 auto;padding:0 clamp(18px,5vw,72px);overflow:hidden;position:relative;background:radial-gradient(ellipse at 8% 18%,#eeeaff 0,transparent 36%),radial-gradient(ellipse at 92% 82%,#e5f8ef 0,transparent 34%),#fffdf9}
+.auth-nav{height:88px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:3}
+.auth-stage{min-height:calc(100vh - 110px);display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:clamp(28px,6vw,90px);padding:10px 0 54px}
+.auth-welcome{position:relative;min-height:570px;display:flex;flex-direction:column;justify-content:center;overflow:visible}
+.auth-welcome h1{font:900 clamp(38px,5vw,64px)/1.06 'Nunito',sans-serif;letter-spacing:-2.6px;max-width:650px;margin:24px 0 16px}
+.auth-welcome>p{max-width:510px;color:var(--muted);font-size:15px;line-height:1.85}
+.auth-feature-list{display:flex;flex-wrap:wrap;gap:9px;margin-top:17px}
+.auth-feature-list span{padding:10px 13px;border:1px solid #ebe7fb;border-radius:99px;background:#ffffffc9;color:#676184;font-size:10px;font-weight:800}
+.auth-floating-world{height:205px;position:relative;max-width:450px;margin:20px 0 0 22px}
+.auth-world{position:absolute;left:36%;top:14px;display:grid;place-items:center;width:145px;height:145px;border-radius:50%;font-size:85px;background:linear-gradient(145deg,#fff,#e7e1ff);box-shadow:0 20px 55px #6b5cbb22;animation:auth-world-float 5s ease-in-out infinite}
+.auth-orbit{position:absolute;left:23%;top:36px;width:220px;height:105px;border:1px dashed #aaa0e9;border-radius:50%;animation:auth-orbit-spin 16s linear infinite}
+.auth-orbit-b{left:17%;top:24px;width:250px;height:130px;border-color:#b9dfd1;animation-direction:reverse;animation-duration:22s}
+.auth-friend{position:absolute;z-index:2;display:grid;place-items:center;width:52px;height:52px;border-radius:17px;background:white;box-shadow:0 12px 30px #5044a022;font-size:30px;animation:auth-world-float 4s ease-in-out infinite}
+.auth-friend-a{left:9%;top:6px;animation-delay:-1s}.auth-friend-b{right:12%;top:22px;animation-delay:-2s}.auth-friend-c{left:43%;bottom:0;animation-delay:-.5s}
+.auth-spark{position:absolute;color:#efb94c;font-size:30px;animation:auth-sparkle 2.8s ease-in-out infinite}.auth-spark-a{left:4%;bottom:35px}.auth-spark-b{right:5%;bottom:52px;animation-delay:-1.2s}
+.auth-form-wrap{position:relative;z-index:2;max-width:500px;width:100%;justify-self:end;padding:clamp(20px,3vw,34px);border:1px solid #ece8f8;border-radius:28px;background:#ffffffdc;box-shadow:0 28px 80px #5140cc12;backdrop-filter:blur(16px);animation:auth-card-enter .7s ease-out both}
+.auth-form-heading h2{font:900 29px 'Nunito',sans-serif;margin:8px 0}.auth-form-heading p{font-size:12px;color:var(--muted);margin:0 0 18px}
+.auth-form-wrap .account-section{display:block;margin:0;padding:0;border:0;border-radius:0;background:transparent}
+.auth-form-wrap .account-intro{display:none}
+.auth-form-wrap .account-card{padding:0;border:0;box-shadow:none;background:transparent}
+.auth-form-wrap .account-form{gap:15px}
+.auth-form-wrap .account-form input{padding:14px;border-radius:12px}
+.auth-form-wrap .account-tabs button{flex:1;padding:11px}
+.auth-form-wrap .account-submit{padding:15px;border-radius:12px}
+.auth-form-wrap .account-footnote,.auth-form-wrap .account-privacy{font-size:10px}
+.auth-form-wrap .account-status{margin:12px 0}
+.auth-secure-note{font-size:10px;color:#81839b;margin:17px 0 0}
+@keyframes auth-world-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes auth-orbit-spin{from{transform:rotate(-18deg)}to{transform:rotate(342deg)}}
+@keyframes auth-sparkle{0%,100%{opacity:.45;transform:scale(.8) rotate(0)}50%{opacity:1;transform:scale(1.2) rotate(35deg)}}
+@keyframes auth-card-enter{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+/* The signed-in home gets its own flowing welcome animation. */
+.dashboard-flow{background:linear-gradient(115deg,#eeeaff,#f7f1ff,#e9f8f3,#eaf3ff);background-size:260% 260%;animation:dashboard-gradient-flow 18s ease-in-out infinite alternate}
+.dashboard-flow::before,.dashboard-flow::after{content:"";position:absolute;pointer-events:none;border-radius:50%;filter:blur(2px);animation:dashboard-light-drift 15s ease-in-out infinite alternate}
+.dashboard-flow::before{width:300px;height:300px;right:-70px;top:-120px;background:radial-gradient(circle,#fff9 0,transparent 70%)}
+.dashboard-flow::after{width:250px;height:250px;left:32%;bottom:-180px;background:radial-gradient(circle,#bdebd588 0,transparent 70%);animation-delay:-7s}
+.dashboard-flow .hero-copy,.dashboard-flow .hero-art{z-index:1}
+.dashboard-flow .hero-copy{animation:auth-copy-enter .85s ease-out both}
+.dashboard-flow .planet{animation:float 5s ease-in-out infinite,auth-planet-glow 4s ease-in-out infinite alternate}
+@keyframes dashboard-gradient-flow{0%{background-position:0% 50%}100%{background-position:100% 50%}}
+@keyframes dashboard-light-drift{from{transform:translate3d(-18px,12px,0) scale(.9)}to{transform:translate3d(28px,-22px,0) scale(1.12)}}
+@media(max-width:850px){.auth-stage{grid-template-columns:1fr;gap:20px;padding:20px 0 40px}.auth-welcome{min-height:auto;padding:24px 0 0}.auth-welcome h1{font-size:clamp(36px,8vw,52px);max-width:680px}.auth-floating-world{height:155px;margin-top:10px}.auth-world{width:115px;height:115px;font-size:68px}.auth-orbit{width:190px;height:90px;left:20%;top:22px}.auth-orbit-b{width:220px;height:110px;left:15%;top:14px}.auth-friend{width:43px;height:43px;font-size:25px}.auth-form-wrap{justify-self:center;max-width:560px}}
+@media(max-width:520px){.auth-screen{padding:0 16px}.auth-nav{height:68px}.auth-stage{padding-top:4px}.auth-welcome{padding-top:12px}.auth-welcome h1{font-size:36px;letter-spacing:-1.5px;margin:17px 0 10px}.auth-welcome>p{font-size:12px;line-height:1.65}.auth-feature-list{gap:6px}.auth-feature-list span{font-size:9px;padding:8px 10px}.auth-floating-world{height:126px;margin:4px auto 0;width:100%}.auth-world{left:39%;width:92px;height:92px;font-size:54px}.auth-orbit{left:26%;top:12px;width:165px;height:76px}.auth-orbit-b{left:20%;top:5px;width:190px;height:90px}.auth-friend{width:36px;height:36px;font-size:21px}.auth-friend-a{left:12%;top:0}.auth-friend-b{right:11%;top:8px}.auth-friend-c{left:46%;bottom:0}.auth-form-wrap{padding:20px;border-radius:22px}.auth-form-heading h2{font-size:25px}}
+@media(prefers-reduced-motion:reduce){.auth-world,.auth-orbit,.auth-friend,.auth-spark,.auth-form-wrap,.dashboard-flow,.dashboard-flow::before,.dashboard-flow::after,.dashboard-flow .hero-copy,.dashboard-flow .planet{animation:none!important}}
