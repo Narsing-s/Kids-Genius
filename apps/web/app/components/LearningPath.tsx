@@ -78,7 +78,7 @@ export default function LearningPath({ language, grade, subject }: { language: L
           <p>{isTe?"ఈ అంశాన్ని మీ చుట్టూ ఉన్న ఉదాహరణలతో తెలుసుకుందాం. ముందుగా గమనించండి, తర్వాత ప్రయత్నించండి, చివరగా మీ మాటల్లో వివరించండి.":"Connect this topic to the world around you. First notice an example, then try it yourself, and finally explain what you discovered."}</p>
           <div className="lesson-steps"><div><b>1 · {isTe?"గమనించండి":"NOTICE"}</b><span>{isTe?"ఇంట్లో లేదా పాఠశాలలో దీనికి ఒక ఉదాహరణ కనుగొనండి.":"Find one real-life example at home or school."}</span></div><div><b>2 · {isTe?"ప్రయత్నించండి":"TRY"}</b><span>{isTe?"మీరు చూసిన ఉదాహరణను చిత్రంగా గీయండి లేదా ఒక వాక్యంలో రాయండి.":"Draw what you noticed or write one sentence about it."}</span></div><div><b>3 · {isTe?"వివరించండి":"EXPLAIN"}</b><span>{isTe?"ఇది ఎలా పనిచేస్తుందో కుటుంబ సభ్యునికి చెప్పండి.":"Tell a family member what you discovered and why it matters."}</span></div></div>
           <button className={completed(chapterIndex,activeTopic)?"lesson-complete-button is-complete":"lesson-complete-button"} onClick={()=>setDone(old=>completed(chapterIndex,activeTopic)?old.filter(item=>item!==key(chapterIndex,activeTopic)):[...old,key(chapterIndex,activeTopic)])}>{completed(chapterIndex,activeTopic)?(isTe?"✓ పాఠం పూర్తయింది":"✓ Lesson completed"):(isTe?"ఈ పాఠాన్ని పూర్తి చేయండి":"Complete this lesson")}</button>
-        </div>
+        </div>}
         <p className="path-note">✨ {isTe?"ఇవి ప్రారంభ అభ్యాస సూచనలు మాత్రమే. పాఠ్యపుస్తకంతో కలిపి ఉపయోగించండి.":"Starter activities · Use alongside your school's textbook."}</p></div>
       </div>
     </section>
