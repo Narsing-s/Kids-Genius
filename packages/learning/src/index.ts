@@ -199,9 +199,10 @@ export function getQuestions(ageBandId:string, subjectId?:string, gradeId?:strin
  if (gradeExact.length) return gradeExact;
  const exact = questionBank.filter(q => q.ageBandId === ageBandId && (!subjectId || q.subjectId === subjectId));
  if (exact.length) return exact;
- const ageFallback = questionBank.filter(q => q.ageBandId === ageBandId);
- if (ageFallback.length) return ageFallback;
- return questionBank.filter(q => !subjectId || q.subjectId === subjectId);
+ // Never show an unrelated subject's questions when a selected subject has no age-band sample.
+ const subjectFallback = questionBank.filter(q => !subjectId || q.subjectId === subjectId);
+ if (subjectFallback.length) return subjectFallback;
+ return questionBank.filter(q => q.ageBandId === ageBandId);
 }
 export const isCorrect = (selected:number, answer:number) => selected === answer;
 export const canUseTimedQuiz = (age:number) => age >= 5;
