@@ -166,7 +166,7 @@ function generatedMathPractice(gradeId:string, gradeIndex:number):GradeMathSeed[
    if(kind===0){answer=a+b;promptEn=`Count and add: ${a} objects + ${b} objects = ?`;promptTe=`లెక్కించి కలపండి: ${a} + ${b} = ?`;whyEn=`${a} + ${b} = ${answer}.`;whyTe=`${a} + ${b} = ${answer}.`;}
    else if(kind===1){answer=a;promptEn=`Which number comes after ${a-1}?`;promptTe=`${a-1} తర్వాత వచ్చే సంఖ్య ఏది?`;whyEn=`The next number after ${a-1} is ${a}.`;whyTe=`${a-1} తర్వాత ${a} వస్తుంది.`;}
    else if(kind===2){answer=Math.max(0,a-b);promptEn=`You have ${a} toys and give away ${b}. How many remain?`;promptTe=`మీ దగ్గర ${a} బొమ్మలు ఉన్నాయి; ${b} ఇచ్చారు. ఎన్ని మిగిలాయి?`;whyEn=`${a} − ${b} = ${answer}.`;whyTe=`${a} − ${b} = ${answer}.`;}
-   else if(kind===3){answer=round%2===0?4:3;promptEn="How many sides does a square have?";promptTe="చతురస్రానికి ఎన్ని భుజాలు ఉంటాయి?";whyEn="A square has four sides.";whyTe="చతురస్రానికి నాలుగు భుజాలు ఉంటాయి.";}
+   else if(kind===3){answer=4;promptEn="How many sides does a square have?";promptTe="చతురస్రానికి ఎన్ని భుజాలు ఉంటాయి?";whyEn="A square has four sides.";whyTe="చతురస్రానికి నాలుగు భుజాలు ఉంటాయి.";}
    else {answer=round%2===0?3:5;promptEn="How many vowels are there in the English alphabet?";promptTe="ఆంగ్ల అక్షరమాలలో అచ్చులు ఎన్ని?";whyEn="The five vowels are A, E, I, O and U.";whyTe="A, E, I, O, U అనే ఐదు అచ్చులు ఉన్నాయి.";}
   } else {
    const a=base*3+round+2,b=base+1+(round%7);
