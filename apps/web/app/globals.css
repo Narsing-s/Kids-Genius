@@ -376,3 +376,70 @@
 @media(max-width:560px){.lesson-answer-grid{grid-template-columns:1fr}.lesson-toolbar{align-items:flex-start}.lesson-actions{display:grid;grid-template-columns:1fr 1fr}.lesson-actions .lesson-complete-button{grid-column:1/-1;grid-row:1}.lesson-actions .lesson-nav-button{width:100%}.advanced-lesson{padding:13px!important}.lesson-concept,.lesson-example,.lesson-how,.lesson-quick-check,.lesson-project{padding:13px}}
 
 .lesson-retry-button{margin-top:9px;border:1px solid #e7b4af;border-radius:9px;padding:8px 11px;background:#fff;color:#9a423b;font-size:11px;font-weight:900}
+
+
+/* Kids Genius — clean, calm visual polish (presentation only; learning logic unchanged) */
+:root{
+  --ink:#252544;
+  --muted:#74758d;
+  --purple:#6557d9;
+  --purple-dark:#5042bd;
+  --paper:#fbfbff;
+  --line:#ececf5;
+}
+body{background:#fbfbff;color:var(--ink);letter-spacing:.005em}
+button,a{ -webkit-tap-highlight-color:transparent }
+button{transition:background-color .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease}
+:focus-visible{outline:3px solid #8c80ed!important;outline-offset:3px}
+.site-shell{max-width:1240px}
+.nav{gap:18px}
+.brand{letter-spacing:-.8px}
+.hero,.auth-hero{box-shadow:0 18px 55px #36315d0a}
+.hero{border:1px solid #ebe8fa}
+.section-heading{gap:16px}
+.section-heading h2,.play-intro h2,.stats-section h2,.parent-section h2{letter-spacing:-.7px}
+.age-card,.subject-card,.quiz-card,.stat-card,.lesson-card,.achievement-section,.learning-sidebar,.learning-screen-panel{box-shadow:0 8px 26px #29234d08}
+.age-card{border-color:#efedf7}
+.age-card:hover,.age-card.selected{box-shadow:0 14px 28px #5140cc15}
+.subjects-section{border:1px solid #efedf8;background:#f8f8ff}
+.subject-card{border-color:#eeedf6}
+.quiz-card{border-color:#ecebf4;box-shadow:0 16px 42px #29234d0c}
+.quiz-option{min-height:46px}
+.quiz-option:focus-visible,.mission-options button:focus-visible,.learning-step-link:focus-visible,.lesson-answer-grid button:focus-visible{outline:3px solid #8c80ed;outline-offset:2px}
+.stat-card{min-height:124px;justify-content:center}
+.parent-section{border:1px solid #f4e7dc}
+.auth-screen{background-color:#fcfbff}
+.auth-form-wrap{box-shadow:0 22px 65px #5140cc10}
+.auth-form-wrap input{min-height:46px}
+.subject-dashboard{max-width:1240px}
+.subject-hero-panel{box-shadow:0 12px 32px #5140cc0b}
+.learning-sidebar{box-shadow:0 10px 30px #29234d08}
+.learning-step-link{min-height:66px}
+.learning-step-link.active{box-shadow:0 8px 22px #5140cc12}
+.learning-screen-panel{box-shadow:0 12px 34px #29234d09}
+.advanced-lesson{box-shadow:0 12px 34px #29234d08!important}
+.lesson-concept,.lesson-example,.lesson-how,.lesson-quick-check,.lesson-project{box-shadow:0 4px 14px #29234d05}
+.footer{border-top:1px solid #efedf6;padding-top:24px}
+@media(max-width:760px){
+  .nav{gap:10px}
+  .nav .brand{font-size:20px}
+  .hero{box-shadow:none}
+  .section-heading{align-items:flex-start}
+  .section-heading h2{font-size:25px}
+  .stat-card{min-height:108px}
+  .subject-dashboard{padding-left:14px;padding-right:14px}
+  .learning-step-nav{gap:6px}
+  .learning-step-link{min-height:88px}
+  .learning-screen-panel{padding:17px}
+  .lesson-studio,.achievement-section{border-radius:19px}
+}
+@media(max-width:420px){
+  .auth-feature-list span{line-height:1.35}
+  .auth-form-wrap{padding:17px}
+  .learning-step-copy b{font-size:11px}
+  .learning-step-copy small{font-size:7px}
+  .quiz-bottom{flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:reduce){
+  button,a{transition:none!important}
+}
