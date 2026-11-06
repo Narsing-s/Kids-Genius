@@ -39,7 +39,7 @@ export const subjects = [
 ] as const;
 
 export type LearningQuestion = {
- id:string; subjectId:string; ageBandId:string; prompt:BilingualText;
+ id:string; subjectId:string; ageBandId:string; gradeId?:string; prompt:BilingualText;
  choices:BilingualText[]; correctChoiceIndex:number; explanation:BilingualText;
 };
 
@@ -138,7 +138,9 @@ export const gradeQuestionBank: LearningQuestion[] = Object.entries(gradeMathSee
 );
 
 export const sampleQuestions = questionBank;
-export function getQuestions(ageBandId:string, subjectId?:string):LearningQuestion[] {
+export function getQuestions(ageBandId:string, subjectId?:string, gradeId?:string):LearningQuestion[] {
+ const gradeExact = gradeId ? gradeQuestionBank.filter(q => q.gradeId === gradeId && (!subjectId || q.subjectId === subjectId)) : [];
+ if (gradeExact.length) return gradeExact;
  const exact = questionBank.filter(q => q.ageBandId === ageBandId && (!subjectId || q.subjectId === subjectId));
  if (exact.length) return exact;
  const ageFallback = questionBank.filter(q => q.ageBandId === ageBandId);
