@@ -219,3 +219,5 @@
 .account-status{font-size:11px;color:var(--purple);font-weight:700}
 .account-privacy{grid-column:1/-1;margin:0}
 @media(max-width:760px){.account-section{grid-template-columns:1fr;padding:20px}.account-privacy{grid-column:auto}.signed-in-top{flex-wrap:wrap}.add-child-form{grid-template-columns:1fr}}
+
+.saved-progress{display:grid;gap:5px;margin-top:10px;padding:12px;border-radius:12px;background:#f8f7ff;font-size:10px;color:var(--muted)}.saved-progress b{color:var(--ink)}.save-progress{width:100%;margin-top:12px}
