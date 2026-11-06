@@ -65,14 +65,14 @@ export default function AccountPanel({ language, grade, subject, stars, complete
         const account = { id: crypto.randomUUID(), email: normalized, salt, hash: await digest(password, salt) };
         localStorage.setItem(PARENT, JSON.stringify(account));
         const session = { id: account.id, email: account.email };
-        localStorage.setItem(SESSION, JSON.stringify(session)); setUser(session);
+        localStorage.setItem(SESSION, JSON.stringify(session)); setUser(session); onAuthenticated?.();
         setMessage(te ? "తల్లిదండ్రుల ఖాతా సృష్టించబడింది." : "Parent account created on this device.");
       } else {
         if (!saved || saved.email !== normalized || saved.hash !== await digest(password, saved.salt)) {
           setMessage(te ? "ఇమెయిల్ లేదా పాస్‌వర్డ్ సరిపోలలేదు." : "Email or password is incorrect."); setBusy(false); return;
         }
         const session = { id: saved.id, email: saved.email };
-        localStorage.setItem(SESSION, JSON.stringify(session)); setUser(session);
+        localStorage.setItem(SESSION, JSON.stringify(session)); setUser(session); onAuthenticated?.();
         setMessage(te ? "లాగిన్ విజయవంతం." : "Signed in successfully.");
       }
     } catch { setMessage(te ? "ఈ బ్రౌజర్‌లో స్థానిక ఖాతా అందుబాటులో లేదు." : "Local account storage is unavailable in this browser."); }
