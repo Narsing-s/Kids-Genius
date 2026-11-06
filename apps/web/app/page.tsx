@@ -6,6 +6,7 @@ import LearningPath from "./components/LearningPath";
 import NumberQuest from "./components/NumberQuest";
 import AccountPanel from "./components/AccountPanel";
 import LearningHub from "./components/LearningHub";
+import StudyStudio from "./components/StudyStudio";
 
 type Lang = "en" | "te";
 
@@ -280,6 +281,8 @@ export default function Home() {
       <NumberQuest language={lang} />
 
       <LearningHub language={lang} grade={activeAge.label} />
+
+      <StudyStudio language={lang} grade={activeAge.label} subject={activeSubject.name.en} questions={questions} />
 
       <section className="play-section" id="quick-quiz">
         <div className="play-intro"><span className="section-kicker">READY, SET, THINK!</span><h2>{t.quiz}</h2><p>{t.choose}</p><div className="quiz-meta"><span>🧠 {activeSubject.name[lang]}</span><span>📚 {questions.length} practice questions available</span><span>⏱ No rush</span></div><div className="progress-label"><span>Little steps make big progress</span><b>{stars} ⭐</b></div><div className="progress-track"><span style={{width: `${Math.min(100, stars * 12)}%`}} /></div></div>
