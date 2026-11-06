@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { gradeLevels, subjects, getQuestions } from "@kids-genius/learning";
+import LearningPath from "./components/LearningPath";
 
 type Lang = "en" | "te";
 
@@ -171,6 +172,8 @@ export default function Home() {
         <div className="subject-grid">{subjects.map((subject, index) => <button key={subject.id} onClick={() => { setSubjectId(subject.id); setQuestionIndex(0); setAnswer(null); }} className={`subject-card subject-${index} ${subjectId === subject.id ? "subject-active" : ""}`}><span className="subject-emoji">{subject.emoji}</span><span><b>{subject.name[lang]}</b><small>{subject.description}</small></span><span className="subject-arrow">↗</span></button>)}</div>
       </section>
 
+
+      <LearningPath language={lang} grade={activeAge.label} subject={subjectId} />
 
       <section className="lesson-studio" id="lessons">
         <div className="lesson-heading"><div><span className="section-kicker">YOUR NEXT DISCOVERY</span><h2>{lang === "en" ? "Learning missions" : "అభ్యాస లక్ష్యాలు"}</h2><p>{lang === "en" ? `A gentle learning path for ${activeAge.label} · ${activeSubject.name.en}` : `${activeAge.label} · ${activeSubject.name.te} కోసం అభ్యాస మార్గం`}</p></div><div className="lesson-count">✨ {completedLessons.length} {lang === "en" ? "missions explored" : "లక్ష్యాలు పూర్తి"}</div></div>
