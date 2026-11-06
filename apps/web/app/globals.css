@@ -227,3 +227,16 @@
 .progress-history>small{font-size:10px;color:var(--muted)}
 .progress-history-row{display:grid;grid-template-columns:1fr auto;gap:3px 8px;padding:8px 0;border-top:1px solid #f0eef6;font-size:10px}
 .progress-history-row span{color:var(--ink);text-transform:capitalize}.progress-history-row b{color:#6456b5}.progress-history-row small{grid-column:1/-1;color:var(--muted);font-size:9px}
+
+.brand-button{border:0;background:transparent;cursor:pointer;font:inherit}.class-breadcrumb{font-size:12px;font-weight:800;color:var(--muted)}
+.class-dashboard{max-width:1180px;margin:0 auto;padding:34px 28px 70px}
+.class-welcome{display:grid;grid-template-columns:1fr 220px;align-items:center;gap:24px;padding:42px;border-radius:30px;background:linear-gradient(120deg,#f1efff,#fff5e9);border:1px solid #e9e3ff;overflow:hidden}
+.class-welcome h1{font:900 clamp(30px,4vw,46px) 'Nunito',sans-serif;letter-spacing:-1.5px;margin:9px 0;color:var(--ink)}.class-welcome p{max-width:650px;color:var(--muted);line-height:1.7;font-size:14px}
+.class-welcome-tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:22px}.class-welcome-tags span{padding:9px 12px;border:1px solid #e6e0fa;background:#ffffffb8;border-radius:99px;font-size:11px;font-weight:800;color:#625a8e}
+.class-mascot{font-size:66px;text-align:center;animation:class-float 4s ease-in-out infinite}@keyframes class-float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(2deg)}}
+.class-subject-heading{display:flex;justify-content:space-between;align-items:center;margin:34px 0 18px}.class-subject-heading h2{font:900 27px 'Nunito',sans-serif;margin:5px 0}.class-subject-heading p{font-size:12px;color:var(--muted)}
+.class-subject-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:28px}.class-subject-card{display:flex;align-items:flex-start;gap:14px;text-align:left;min-height:125px;padding:19px;border:1px solid #eeeaf8;border-radius:20px;background:#fff;cursor:pointer;transition:transform .2s,box-shadow .2s}.class-subject-card:hover{transform:translateY(-4px);box-shadow:0 14px 34px #5143a018}
+.class-subject-icon{display:grid;place-items:center;flex:0 0 48px;height:48px;border-radius:15px;background:#f2efff;font-size:27px}.class-subject-card>span:last-child{display:grid;gap:6px}.class-subject-card b{font-size:13px;color:var(--ink)}.class-subject-card small{font-size:10px;line-height:1.5;color:var(--muted)}.class-subject-card em{font-style:normal;font-size:10px;font-weight:900;color:var(--purple);margin-top:4px}
+.secondary-button{border:1px solid #e5e0f5;background:#fff;color:var(--purple);border-radius:12px;padding:11px 15px;font-size:12px;font-weight:900;cursor:pointer}
+@media(max-width:800px){.class-subject-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.class-welcome{grid-template-columns:1fr 140px;padding:28px}}
+@media(max-width:620px){.class-dashboard{padding:20px 16px 50px}.class-welcome{grid-template-columns:1fr;padding:24px}.class-mascot{text-align:left;font-size:45px}.class-subject-grid{grid-template-columns:1fr}.class-subject-card{min-height:100px}}
