@@ -130,3 +130,14 @@
 .quest-finish{display:flex;flex-direction:column;align-items:center;padding:27px 10px;text-align:center}.quest-finish>div{font-size:48px}.quest-finish h3{font:900 22px 'Nunito',sans-serif;margin:8px 0}.quest-finish p{color:var(--muted);font-size:12px}
 .quest-choices button:focus-visible,.quest-feedback button:focus-visible,.quest-finish button:focus-visible{outline:3px solid #8b7df3;outline-offset:3px}
 @media(max-width:700px){.quest-section{padding:0 15px;margin-bottom:54px}.quest-header h2{font-size:25px}.quest-header p{font-size:10px}.quest-best{padding:9px 11px}.quest-card{padding:16px}.quest-puzzle h3{font-size:16px}.quest-choices button{width:66px;height:58px}}
+
+
+/* Parent progress preview and clear selection actions */
+.parent-preview{margin-top:16px;padding:16px 18px;border-radius:16px;background:rgba(255,255,255,.78);border:1px solid #e8e2f7;max-width:620px}
+.parent-preview>b{display:block;color:#51458c;font:900 14px 'Nunito',sans-serif}
+.parent-preview p{margin:7px 0;color:#555875;font-size:12px;line-height:1.6}
+.parent-preview small{display:block;color:#85849b;font-size:10px;line-height:1.6}
+.selected-note .view-all{margin-left:10px;color:#6756c8;font-weight:900;text-decoration:none}
+.selected-note .view-all:hover{text-decoration:underline}
+.subject-card[aria-pressed="true"]{outline:2px solid #7968df;outline-offset:2px}
+.lesson-card:focus-visible,.mission-options button:focus-visible,.mission-complete:focus-visible,.quiz-option:focus-visible{outline:3px solid #7666df;outline-offset:3px}
