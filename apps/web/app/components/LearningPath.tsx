@@ -38,7 +38,7 @@ export default function LearningPath({ language, grade, subject }: { language: L
   const chapters = useMemo(() => paths[subject] ?? fallback, [subject]);
   const chapter = chapters[chapterIndex] ?? chapters[0];
   const total = chapters.reduce((sum, item) => sum + item.topics.length, 0);
-  const progress = done.length;
+  const progress = done.filter(item => item.startsWith(`${subject}-${grade}-`)).length;
   const isTe = language === "te";
   const key = (c: number, t: number) => `${subject}-${grade}-${c}-${t}`;
   const completed = (c: number, t: number) => done.includes(key(c,t));
