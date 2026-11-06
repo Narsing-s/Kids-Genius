@@ -17,6 +17,15 @@ A bilingual English + Telugu learning playground for learners from Nursery throu
 - Shared age bands, subjects and quiz data (packages/learning).
 - Supabase schema foundation and row-level security migration (supabase/migrations).
 
+## Parent login and learner progress
+
+1. Create a Supabase project and copy its Project URL and anon/public key into the web deployment environment as `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+2. Run `supabase/migrations/0001_initial_schema.sql` and then `supabase/migrations/0002_learning_progress_accounts.sql` in the Supabase SQL editor.
+3. Enable email/password authentication and configure the email confirmation redirect URLs for your deployed web domain.
+4. Deploy again. Parents can create an account, confirm their email, sign in, and create separate learner nicknames. Progress syncs per learner, class and subject.
+
+Never use a Supabase service-role key in the browser. Complete parental consent, privacy and child-safety review before public launch.
+
 ## Run locally
 Requirements: Node.js 20+ and npm.
 
