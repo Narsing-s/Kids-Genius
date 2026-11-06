@@ -5,7 +5,7 @@ import { createClient, type User } from "@supabase/supabase-js";
 import type { Language } from "@kids-genius/learning";
 
 type Child = { id: string; nickname: string };
-type SavedProgress = { stars_earned: number; lessons_completed: number; study_days: string[] };
+type SavedProgress = { subject_id: string; grade_id: string; stars_earned: number; lessons_completed: number; study_days: string[]; updated_at: string };
 type Props = { language: Language; grade: string; subject: string; stars: number; completedLessons: number; studyDays: string[] };
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -25,6 +25,7 @@ export default function AccountPanel({ language, grade, subject, stars, complete
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const [savedProgress, setSavedProgress] = useState<SavedProgress | null>(null);
+  const [progressHistory, setProgressHistory] = useState<SavedProgress[]>([]);
 
   useEffect(() => {
     if (!client) return;
@@ -53,12 +54,15 @@ export default function AccountPanel({ language, grade, subject, stars, complete
   }, [client, user]);
 
   useEffect(() => {
-    if (!client || !user || !childId) { setSavedProgress(null); return; }
-    client.from("learning_progress").select("stars_earned,lessons_completed,study_days")
-      .eq("child_id", childId).eq("subject_id", subject).eq("grade_id", grade).maybeSingle()
+    if (!client || !user || !childId) { setSavedProgress(null); setProgressHistory([]); return; }
+    client.from("learning_progress")
+      .select("subject_id,grade_id,stars_earned,lessons_completed,study_days,updated_at")
+      .eq("child_id", childId).order("updated_at", { ascending: false })
       .then(({ data, error }) => {
         if (error) { setMessage(te ? "పురోగతిని చదవలేకపోయాం. Supabase migration తనిఖీ చేయండి." : "Could not load saved progress. Check the Supabase migration."); return; }
-        setSavedProgress(data as SavedProgress | null);
+        const history = (data ?? []) as SavedProgress[];
+        setProgressHistory(history);
+        setSavedProgress(history.find(item => item.subject_id === subject && item.grade_id === grade) ?? null);
       });
   }, [client, user, childId, subject, grade, te]);
 
@@ -72,7 +76,8 @@ export default function AccountPanel({ language, grade, subject, stars, complete
     }, { onConflict: "child_id,subject_id,grade_id" });
     setBusy(false);
     if (error) { setMessage(error.message); return; }
-    setSavedProgress({ stars_earned: stars, lessons_completed: completedLessons, study_days: studyDays });
+    setSavedProgress({ subject_id: subject, grade_id: grade, stars_earned: stars, lessons_completed: completedLessons, study_days: studyDays, updated_at: new Date().toISOString() });
+    setProgressHistory(old => [{ subject_id: subject, grade_id: grade, stars_earned: stars, lessons_completed: completedLessons, study_days: studyDays, updated_at: new Date().toISOString() }, ...old.filter(item => !(item.subject_id === subject && item.grade_id === grade))]);
     setMessage(te ? "మీ అభ్యాస పురోగతి సేవ్ అయింది." : "Learning progress saved to this learner account.");
   }
 
@@ -123,7 +128,7 @@ export default function AccountPanel({ language, grade, subject, stars, complete
         <div className="signed-in-top"><span className="account-avatar">👨‍👩‍👧</span><div><b>{te?"తల్లిదండ్రుల ఖాతా కనెక్ట్ అయింది":"Parent account connected"}</b><small>{user.email}</small></div><button className="signout" onClick={()=>client.auth.signOut()}>{te?"లాగ్ అవుట్":"Sign out"}</button></div>
         <div className="learner-picker"><label>{te?"విద్యార్థి ప్రొఫైల్":"Learner profile"}<select value={childId} onChange={e=>setChildId(e.target.value)}><option value="">{te?"ప్రొఫైల్ ఎంచుకోండి":"Choose a learner"}</option>{children.map(child=><option key={child.id} value={child.id}>{child.nickname}</option>)}</select></label></div>
         <form className="add-child-form" onSubmit={addChild}><label>{te?"పిల్లవాడి పేరు / ముద్దుపేరు":"Learner nickname"}<input value={nickname} maxLength={24} required onChange={e=>setNickname(e.target.value)} placeholder={te?"ఉదా: చిన్నారి":"e.g. Little Star"} /></label><button disabled={busy}>{te?"ప్రొఫైల్ సృష్టించండి":"Create learner profile"}</button></form>
-        {childId && <><div className="account-progress"><span>⭐ <b>{savedProgress?.stars_earned ?? stars}</b><small>{te?"నక్షత్రాలు":"Saved stars"}</small></span><span>📚 <b>{savedProgress?.lessons_completed ?? completedLessons}</b><small>{te?"పూర్తి చేసిన పాఠాలు":"Saved lessons"}</small></span><span>🔥 <b>{savedProgress?.study_days?.length ?? studyDays.length}</b><small>{te?"అభ్యాస రోజులు":"Saved study days"}</small></span></div><button className="account-submit save-progress" onClick={saveProgress} disabled={busy}>{busy?(te?"సేవ్ అవుతోంది…":"Saving…"):(te?"పురోగతిని ఖాతాలో సేవ్ చేయండి":"Save progress to learner account")}</button><div className="saved-progress"><b>{te?"ఖాతాలో సేవ్ చేసిన పురోగతి":"Saved account progress"} · {grade} · {subject}</b><span>{savedProgress ? `⭐ ${savedProgress.stars_earned} · 📚 ${savedProgress.lessons_completed} · 🔥 ${savedProgress.study_days?.length ?? 0}` : (te?"ఇంకా సేవ్ చేసిన పురోగతి లేదు":"No saved snapshot yet")}</span></div></>}
+        {childId && <><div className="account-progress"><span>⭐ <b>{savedProgress?.stars_earned ?? stars}</b><small>{te?"నక్షత్రాలు":"Saved stars"}</small></span><span>📚 <b>{savedProgress?.lessons_completed ?? completedLessons}</b><small>{te?"పూర్తి చేసిన పాఠాలు":"Saved lessons"}</small></span><span>🔥 <b>{savedProgress?.study_days?.length ?? studyDays.length}</b><small>{te?"అభ్యాస రోజులు":"Saved study days"}</small></span></div><button className="account-submit save-progress" onClick={saveProgress} disabled={busy}>{busy?(te?"సేవ్ అవుతోంది…":"Saving…"):(te?"పురోగతిని ఖాతాలో సేవ్ చేయండి":"Save progress to learner account")}</button><div className="saved-progress"><b>{te?"ఖాతాలో సేవ్ చేసిన పురోగతి":"Saved account progress"} · {grade} · {subject}</b><span>{savedProgress ? `⭐ ${savedProgress.stars_earned} · 📚 ${savedProgress.lessons_completed} · 🔥 ${savedProgress.study_days?.length ?? 0}` : (te?"ఇంకా సేవ్ చేసిన పురోగతి లేదు":"No saved snapshot yet")}</span></div><div className="progress-history"><b>{te?"అన్ని తరగతులు & విషయాల పురోగతి":"Learning history by class & subject"}</b>{progressHistory.length===0?<small>{te?"ఇంకా పురోగతి సేవ్ కాలేదు.":"No saved learning history yet. Save a snapshot to start."}</small>:progressHistory.slice(0,6).map((item,index)=><div className="progress-history-row" key={item.grade_id+item.subject_id}><span>{item.grade_id} · {item.subject_id.replaceAll("-"," ")}</span><b>⭐ {item.stars_earned} · 📚 {item.lessons_completed}</b><small>{new Date(item.updated_at).toLocaleDateString()}</small></div>)}</div></>}
         <p className="account-footnote">{te?"పురోగతిని సేవ్ చేసిన తర్వాత అదే తల్లిదండ్రుల ఖాతాతో ఇతర పరికరాల్లో చూడవచ్చు.":"Save progress to your account, then view that saved snapshot on another device with the same parent login."}</p>
       </div>}
       {message && <p className="account-status" role="status">{message}</p>}
