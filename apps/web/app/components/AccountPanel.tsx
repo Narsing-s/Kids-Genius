@@ -82,7 +82,7 @@ export default function AccountPanel({ language, grade, subject, stars, complete
     event.preventDefault();
     if (!client || !nickname.trim()) return;
     setBusy(true); setMessage("");
-    const { data, error } = await client.from("child_profiles").insert({ nickname: nickname.trim() }).select("id,nickname").single();
+    const { data, error } = await client.from("child_profiles").insert({ parent_id: user.id, nickname: nickname.trim() }).select("id,nickname").single();
     setBusy(false);
     if (error) { setMessage(error.message); return; }
     const child = data as Child;
@@ -110,7 +110,7 @@ export default function AccountPanel({ language, grade, subject, stars, complete
       </div> : <div className="account-card signed-in">
         <div className="signed-in-top"><span className="account-avatar">👨‍👩‍👧</span><div><b>{te?"తల్లిదండ్రుల ఖాతా కనెక్ట్ అయింది":"Parent account connected"}</b><small>{user.email}</small></div><button className="signout" onClick={()=>client.auth.signOut()}>{te?"లాగ్ అవుట్":"Sign out"}</button></div>
         <div className="learner-picker"><label>{te?"విద్యార్థి ప్రొఫైల్":"Learner profile"}<select value={childId} onChange={e=>setChildId(e.target.value)}><option value="">{te?"ప్రొఫైల్ ఎంచుకోండి":"Choose a learner"}</option>{children.map(child=><option key={child.id} value={child.id}>{child.nickname}</option>)}</select></label></div>
-        {children.length===0 && <form className="add-child-form" onSubmit={addChild}><label>{te?"పిల్లవాడి పేరు / ముద్దుపేరు":"Learner nickname"}<input value={nickname} maxLength={24} required onChange={e=>setNickname(e.target.value)} placeholder={te?"ఉదా: చిన్నారి":"e.g. Little Star"} /></label><button disabled={busy}>{te?"ప్రొఫైల్ సృష్టించండి":"Create learner profile"}</button></form>}
+        <form className="add-child-form" onSubmit={addChild}><label>{te?"పిల్లవాడి పేరు / ముద్దుపేరు":"Learner nickname"}<input value={nickname} maxLength={24} required onChange={e=>setNickname(e.target.value)} placeholder={te?"ఉదా: చిన్నారి":"e.g. Little Star"} /></label><button disabled={busy}>{te?"ప్రొఫైల్ సృష్టించండి":"Create learner profile"}</button></form>
         {childId && <div className="account-progress"><span>⭐ <b>{stars}</b><small>{te?"నక్షత్రాలు":"Stars"}</small></span><span>📚 <b>{completedLessons}</b><small>{te?"పూర్తి చేసిన పాఠాలు":"Lessons completed"}</small></span><span>🔥 <b>{studyDays.length}</b><small>{te?"అభ్యాస రోజులు":"Study days"}</small></span></div>}
         <p className="account-footnote">{te?"ప్రస్తుత తరగతి మరియు విషయం ఆధారంగా పురోగతి మీ ఖాతాకు సమకాలీకరించబడుతుంది.":"Progress is synced for the selected learner, grade and subject. Use the same parent login on another device."}</p>
       </div>}
