@@ -56,6 +56,7 @@ const copy = {
 export default function Home() {
   const [lang, setLang] = useState<Lang>("en");
   const [classroomOpen, setClassroomOpen] = useState(false);
+  const [subjectOpen, setSubjectOpen] = useState(false);
   const [ageId, setAgeId] = useState<string>("class-1");
   const [subjectId, setSubjectId] = useState<string>("math");
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -134,6 +135,24 @@ export default function Home() {
     setAnswer(null);
   }
 
+  if (subjectOpen) {
+    return (
+      <main className="site-shell subject-screen">
+        <header className="nav"><button className="brand brand-button" onClick={() => {setSubjectOpen(false);setClassroomOpen(false);}}>✦ kids<span className="brand-accent">genius</span></button><div className="class-breadcrumb"><button onClick={() => setSubjectOpen(false)}>← {activeAge.label}</button> › {activeSubject.name[lang]}</div><button className="language-toggle" onClick={() => setLang(lang === "en" ? "te" : "en")}>{lang === "en" ? "తెలుగు" : "English"}</button></header>
+        <section className="subject-dashboard">
+          <button className="secondary-button" onClick={() => {setSubjectOpen(false);setClassroomOpen(true);}}>← {lang === "en" ? "All subjects" : "అన్ని విషయాలు"}</button>
+          <div className="subject-hero-panel"><span className="subject-hero-icon">{activeSubject.emoji}</span><div><span className="section-kicker">{activeAge.label.toUpperCase()} · LEARNING STUDIO</span><h1>{activeSubject.name[lang]}</h1><p>{lang === "en" ? "Explore your class lessons, open a topic, try the activity and finish with a quiz." : "మీ తరగతి పాఠాలను అన్వేషించండి, అంశాన్ని తెరిచి కార్యకలాపం చేసి క్విజ్ పూర్తి చేయండి."}</p></div><div className="subject-stats"><b>⭐ {stars}</b><small>{lang === "en" ? "Your stars" : "మీ నక్షత్రాలు"}</small></div></div>
+          <div className="subject-screen-section"><span className="section-kicker">STEP 1 · LEARN</span><h2>{lang === "en" ? "Your lessons" : "మీ పాఠాలు"}</h2><p>{lang === "en" ? "Choose a chapter and open any topic to see its learning activity." : "అధ్యాయాన్ని ఎంచుకుని పాఠ్య కార్యకలాపాన్ని తెరవండి."}</p><LearningPath language={lang} grade={activeAge.label} subject={subjectId}/></div>
+          <div className="subject-screen-section subject-practice"><span className="section-kicker">STEP 2 · PRACTISE</span><h2>{lang === "en" ? "Class quiz" : "తరగతి క్విజ్"}</h2><p>{lang === "en" ? activeAge.label + " · " + activeSubject.name.en + " · " + questions.length + " practice questions in this selected question bank." : activeAge.label + " · " + activeSubject.name.te + " · సాధన ప్రశ్నలు."}</p>
+            <div className="class-quiz-card"><div className="quiz-top"><span>{activeAge.label.toUpperCase()} · {activeSubject.name[lang].toUpperCase()} · {(questionIndex % questions.length)+1}/{questions.length}</span><span className="quiz-points">⭐ +1 star</span></div><div className="quiz-question">{questionText.prompt[lang]}</div><div className="quiz-options">{questionText.choices.map((choice,index)=><button key={index} disabled={answer!==null} onClick={chooseAnswer} className={"quiz-option "+(answer===index?(isRight?"answer-correct":"answer-wrong"):"")+(answer!==null&&index===questionText.correctChoiceIndex?" answer-reveal":"")}><span className="option-letter">{String.fromCharCode(65+index)}</span>{choice[lang]}<span className="option-check">{answer!==null&&index===questionText.correctChoiceIndex?"✓":"→"}</span></button>)}</div>{answer!==null&&<div className={"answer-feedback "+(isRight?"feedback-good":"feedback-try")}>{isRight?t.correct:t.wrong}<small className="answer-explanation">{questionText.explanation[lang]}</small></div>}<div className="quiz-bottom"><span>🌱 {lang === "en" ? "Every try helps you grow" : "ప్రతి ప్రయత్నం మీ ఎదుగుదలకు సహాయపడుతుంది"}</span><button disabled={answer===null} onClick={nextQuestion}>{t.next} →</button></div></div>
+          </div>
+          <div className="subject-screen-section"><span className="section-kicker">STEP 3 · PLAY</span><h2>{lang === "en" ? "Maths and thinking games" : "గణితం మరియు ఆలోచనా ఆటలు"}</h2><NumberQuest language={lang}/></div>
+          <button className="secondary-button" onClick={() => {setSubjectOpen(false);setClassroomOpen(true);}}>← {lang === "en" ? "Back to " + activeAge.label : activeAge.label + " తరగతికి తిరిగి"}</button>
+        </section>
+      </main>
+    );
+  }
+
   if (classroomOpen) {
     return (
       <main className="site-shell">
@@ -141,7 +160,7 @@ export default function Home() {
         <section className="class-dashboard">
           <div className="class-welcome"><div><span className="section-kicker">YOUR CLASSROOM · {activeAge.label.toUpperCase()}</span><h1>{lang === "en" ? "Welcome to " + activeAge.label + "!" : activeAge.label + " తరగతికి స్వాగతం!"}</h1><p>{activeAge.description}. {lang === "en" ? "Choose a subject to enter its learning space. Explore chapters, lessons and quizzes for your class." : "మీ తరగతి కోసం విషయాన్ని ఎంచుకుని అధ్యాయాలు, పాఠాలు మరియు క్విజ్‌లను ప్రారంభించండి."}</p><div className="class-welcome-tags"><span>📚 {subjects.length} subjects</span><span>⭐ {stars} stars</span><span>🌐 English + తెలుగు</span></div></div><div className="class-mascot">🦊 🎒 📚</div></div>
           <div className="class-subject-heading"><div><span className="section-kicker">YOUR LEARNING WORLDS</span><h2>{lang === "en" ? "Choose a subject" : "ఒక విషయాన్ని ఎంచుకోండి"}</h2><p>{lang === "en" ? "Open a subject to see its lessons and practice questions." : "పాఠాలు మరియు సాధన ప్రశ్నల కోసం విషయాన్ని తెరవండి."}</p></div></div>
-          <div className="class-subject-grid">{subjects.map((subject,index)=><button key={subject.id} className={"class-subject-card subject-"+index} onClick={()=>{setSubjectId(subject.id);setQuestionIndex(0);setAnswer(null);setActiveLesson(0);setClassroomOpen(false);document.getElementById("learning-path")?.scrollIntoView({behavior:"smooth",block:"start"});}}><span className="class-subject-icon">{subject.emoji}</span><span><b>{subject.name[lang]}</b><small>{subject.description}</small><em>{lang === "en" ? "Open lessons and quiz →" : "పాఠాలు, క్విజ్ తెరవండి →"}</em></span></button>)}</div>
+          <div className="class-subject-grid">{subjects.map((subject,index)=><button key={subject.id} className={"class-subject-card subject-"+index} onClick={()=>{setSubjectId(subject.id);setQuestionIndex(0);setAnswer(null);setActiveLesson(0);setSubjectOpen(true);}}><span className="class-subject-icon">{subject.emoji}</span><span><b>{subject.name[lang]}</b><small>{subject.description}</small><em>{lang === "en" ? "Open lessons and quiz →" : "పాఠాలు, క్విజ్ తెరవండి →"}</em></span></button>)}</div>
           <button className="secondary-button" onClick={() => setClassroomOpen(false)}>← {lang === "en" ? "Back to all classes" : "తరగతులకు తిరిగి"}</button>
         </section>
       </main>
