@@ -10,7 +10,7 @@ export default function Home() {
   const [answer, setAnswer] = useState<number | null>(null);
   const [stars, setStars] = useState(0);
   const activeAge = gradeLevels.find((a) => a.id === ageId) ?? gradeLevels[3];
-  const questions = getQuestions(activeAge.ageBandId, subjectId);
+  const questions = getQuestions(activeAge.ageBandId, subjectId, activeAge.id);
   const question = questions[questionIndex % questions.length];
   const labels = language === "en"
     ? { tagline: "A little learning. A lot of wonder.", hero: "Big dreams begin with curious minds.", intro: "A joyful world of stories, games and discoveries.", levels: "Choose your adventure", subjects: "Explore learning worlds", quiz: "Quick brain boost", next: "Next question", correct: "Brilliant! You got it! 🌟", wrong: "Good try! Keep growing!", parents: "A safe space for little learners" }
