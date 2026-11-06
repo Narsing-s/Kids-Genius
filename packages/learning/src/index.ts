@@ -292,9 +292,22 @@ const gradeAdditionalQuestions: LearningQuestion[] = gradeAdditionalRows.map(([g
  explanation: { en: why, te: whyTe }
 }));
 
+
+const gradePracticeRows: [string,string,string,string,string[],string[],number,string,string][] = [["nursery","language","Which letter starts the word Sun?","Sun అనే పదం ఏ అక్షరంతో మొదలవుతుంది?",["S","M","A"],["ఎస్","ఎమ్","ఏ"],0,"Sun starts with the letter S.","Sun అనే పదం S అక్షరంతో మొదలవుతుంది."],["lkg","math","You have 2 balloons and get 1 more. How many?","మీ దగ్గర 2 బెలూన్లు ఉన్నాయి. మరొకటి వస్తే మొత్తం ఎన్ని?",["2","3","4"],["2","3","4"],1,"2 plus 1 equals 3.","2కు 1 కలిపితే 3."],["ukg","science","Which part of a plant is usually green?","మొక్కలో సాధారణంగా ఆకుపచ్చగా ఉండే భాగం ఏది?",["Leaf","Root","Seed"],["ఆకు","వేరు","విత్తనం"],0,"Leaves contain chlorophyll, which gives them their green colour.","ఆకుల్లోని క్లోరోఫిల్ వాటికి ఆకుపచ్చ రంగును ఇస్తుంది."],["class-1","social","Which direction does the Sun appear to rise from?","సూర్యుడు ఏ దిశలో ఉదయిస్తున్నట్లు కనిపిస్తాడు?",["East","West","North"],["తూర్పు","పడమర","ఉత్తరం"],0,"The Sun appears to rise in the east.","సూర్యుడు తూర్పు దిశలో ఉదయిస్తున్నట్లు కనిపిస్తాడు."],["class-2","language","Choose the opposite of 'happy'.","'సంతోషం' అనే పదానికి వ్యతిరేక పదం ఏది?",["Sad","Glad","Kind"],["దుఃఖం","ఆనందం","దయ"],0,"Sad is an opposite of happy.","సంతోషానికి వ్యతిరేక పదం దుఃఖం."],["class-3","math","What is 8 multiplied by 4?","8ను 4తో గుణిస్తే ఎంత?",["24","32","36"],["24","32","36"],1,"8 × 4 = 32.","8 × 4 = 32."],["class-4","science","Which organ pumps blood around the body?","శరీరమంతా రక్తాన్ని పంపే అవయవం ఏది?",["Heart","Lungs","Stomach"],["గుండె","ఊపిరితిత్తులు","కడుపు"],0,"The heart pumps blood through the circulatory system.","గుండె రక్త ప్రసరణ వ్యవస్థ ద్వారా రక్తాన్ని పంపుతుంది."],["class-5","social","Which is the largest ocean on Earth?","భూమిపై అతిపెద్ద మహాసముద్రం ఏది?",["Pacific Ocean","Indian Ocean","Arctic Ocean"],["పసిఫిక్ మహాసముద్రం","హిందూ మహాసముద్రం","ఆర్కిటిక్ మహాసముద్రం"],0,"The Pacific Ocean is the largest ocean.","పసిఫిక్ మహాసముద్రం అతిపెద్దది."],["class-6","math","What is 15% of 200?","200లో 15 శాతం ఎంత?",["20","30","40"],["20","30","40"],1,"10% of 200 is 20 and 5% is 10, so 15% is 30.","200లో 10% 20, 5% 10; కాబట్టి 15% 30."],["class-7","science","What is the process by which liquid water changes into vapour?","ద్రవ నీరు ఆవిరిగా మారే ప్రక్రియను ఏమంటారు?",["Evaporation","Condensation","Freezing"],["ఆవిరీకరణ","సంగ్రహణం","గడ్డకట్టడం"],0,"Evaporation changes liquid water into water vapour.","ఆవిరీకరణలో ద్రవ నీరు నీటి ఆవిరిగా మారుతుంది."],["class-8","social","What is the supreme law of India?","భారతదేశ అత్యున్నత చట్టం ఏది?",["The Constitution","A state rule","A city bylaw"],["రాజ్యాంగం","రాష్ట్ర నియమం","నగర ఉపనియమం"],0,"The Constitution is the supreme law of India.","భారత రాజ్యాంగం దేశ అత్యున్నత చట్టం."],["class-9","math","Factorise x² − 9.","x² − 9 ను కారణ రూపంలో రాయండి.",["(x − 3)(x + 3)","(x − 9)(x + 1)","(x − 3)²"],["(x − 3)(x + 3)","(x − 9)(x + 1)","(x − 3)²"],0,"This is a difference of squares: a² − b² = (a − b)(a + b).","ఇది వర్గాల భేదం: a² − b² = (a − b)(a + b)."],["class-10","science","Which cell structure contains most of the genetic material?","ఎక్కువ జన్యు సమాచారాన్ని కలిగి ఉండే కణ నిర్మాణం ఏది?",["Nucleus","Cell wall","Vacuole"],["కేంద్రకం","కణ గోడ","రసధాని"],0,"The nucleus contains most of a eukaryotic cell's DNA.","కేంద్రకంలో యూకారియోటిక్ కణంలోని ఎక్కువ DNA ఉంటుంది."]];
+const gradePracticeQuestions: LearningQuestion[] = gradePracticeRows.map(([gradeId, subjectId, en, te, optionsEn, optionsTe, answer, why, whyTe], index) => ({
+ id: `${gradeId}-practice-${index+1}`,
+ gradeId,
+ subjectId,
+ ageBandId: gradeLevels.find((grade) => grade.id === gradeId)?.ageBandId ?? "young-champions",
+ prompt: { en, te },
+ choices: optionsEn.map((value, optionIndex) => ({ en: value, te: optionsTe[optionIndex] ?? value })),
+ correctChoiceIndex: answer,
+ explanation: { en: why, te: whyTe }
+}));
+
 export const gradeQuestionBank: LearningQuestion[] = [...Object.entries(gradeMathSeeds).flatMap(([gradeId, seeds]) =>
  seeds.map((seed, index) => ({ id: `${gradeId}-math-${index+1}`, gradeId, subjectId: "math", ageBandId: gradeLevels.find((grade) => grade.id === gradeId)?.ageBandId ?? "young-champions", prompt: seed.prompt, choices: seed.choices, correctChoiceIndex: seed.answer, explanation: seed.explanation }))
-), ...gradeCoreQuestions, ...gradeExtensionQuestions, ...gradeAdditionalQuestions];
+), ...gradeCoreQuestions, ...gradeExtensionQuestions, ...gradeAdditionalQuestions, ...gradePracticeQuestions];
 
 
 export const sampleQuestions = questionBank;
