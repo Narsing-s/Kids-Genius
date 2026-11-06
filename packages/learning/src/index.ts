@@ -133,6 +133,27 @@ const gradeMathSeeds: Record<string, GradeMathSeed[]> = {
   {prompt:{en:"Find the 10th term of the AP 2, 5, 8, …",te:"2, 5, 8, … సమాంతర శ్రేఢిలో 10వ పదం కనుగొనండి."},choices:[{en:"27",te:"27"},{en:"29",te:"29"},{en:"30",te:"30"}],answer:1,explanation:{en:"aₙ = a + (n−1)d = 2 + 9×3 = 29.",te:"aₙ = a + (n−1)d = 2 + 9×3 = 29."}}
  ]
 };
+
+const extraMath = (en:string,te:string,opts:[string,string,string],answer:number,why:string,whyTe:string):GradeMathSeed => ({
+ prompt:{en,te}, choices:opts.map(value=>({en:value,te:value})), answer, explanation:{en:why,te:whyTe}
+});
+const extraMathByGrade: Record<string, GradeMathSeed[]> = {
+ nursery:[extraMath("Count the balloons: 🎈🎈🎈🎈","బెలూన్లను లెక్కించండి: 🎈🎈🎈🎈",["3","4","5"],1,"There are four balloons.","నాలుగు బెలూన్లు ఉన్నాయి."),extraMath("You have 1 toy and get 1 more. How many?","మీ దగ్గర 1 బొమ్మ ఉంది; మరో 1 వచ్చింది. మొత్తం ఎన్ని?",["1","2","3"],1,"1 + 1 = 2 toys.","1 + 1 = 2 బొమ్మలు.")],
+ lkg:[extraMath("What is 3 + 2?","3 + 2 ఎంత?",["4","5","6"],1,"3 + 2 = 5.","3 + 2 = 5."),extraMath("What is 6 − 2?","6 − 2 ఎంత?",["3","4","5"],1,"6 − 2 = 4.","6 − 2 = 4.")],
+ ukg:[extraMath("What is 7 + 5?","7 + 5 ఎంత?",["11","12","13"],1,"7 + 5 = 12.","7 + 5 = 12."),extraMath("What is 9 − 4?","9 − 4 ఎంత?",["4","5","6"],1,"9 − 4 = 5.","9 − 4 = 5.")],
+ "class-1":[extraMath("What is 24 + 18?","24 + 18 ఎంత?",["40","42","44"],1,"24 + 18 = 42.","24 + 18 = 42."),extraMath("What is 35 − 17?","35 − 17 ఎంత?",["16","18","20"],1,"35 − 17 = 18.","35 − 17 = 18.")],
+ "class-2":[extraMath("What is 7 × 6?","7 × 6 ఎంత?",["40","42","48"],1,"7 groups of 6 make 42.","6 ను 7 సార్లు కలిపితే 42."),extraMath("What is 56 ÷ 8?","56 ÷ 8 ఎంత?",["6","7","8"],1,"56 divided into 8 equal groups gives 7.","56 ను 8 సమాన భాగాలుగా చేస్తే 7.")],
+ "class-3":[extraMath("What is 145 + 276?","145 + 276 ఎంత?",["411","421","431"],1,"145 + 276 = 421.","145 + 276 = 421."),extraMath("What is 8 × 9?","8 × 9 ఎంత?",["63","72","81"],1,"Eight times nine is 72.","ఎనిమిది సార్లు తొమ్మిది 72.")],
+ "class-4":[extraMath("What is 245 + 138?","245 + 138 ఎంత?",["373","383","393"],1,"245 + 138 = 383.","245 + 138 = 383."),extraMath("What is 24 × 12?","24 × 12 ఎంత?",["268","288","298"],1,"24 × 12 = 288.","24 × 12 = 288.")],
+ "class-5":[extraMath("What is 3/8 + 2/8?","3/8 + 2/8 ఎంత?",["4/8","5/8","6/8"],1,"With equal denominators, add the numerators: 5/8.","హారాలు సమానంగా ఉన్నప్పుడు లవాలను కలపాలి: 5/8."),extraMath("What is 4.5 + 2.25?","4.5 + 2.25 ఎంత?",["6.25","6.75","7.25"],1,"Align decimal places: the sum is 6.75.","దశాంశ స్థానాలను సరిపెడితే మొత్తం 6.75.")],
+ "class-6":[extraMath("Solve: 2x + 3 = 11.","పరిష్కరించండి: 2x + 3 = 11.",["x = 3","x = 4","x = 5"],1,"2x = 8, so x = 4.","2x = 8, కాబట్టి x = 4."),extraMath("What is −7 + 12?","−7 + 12 ఎంత?",["3","5","7"],1,"Moving 12 units right from −7 gives 5.","−7 నుంచి 12 యూనిట్లు కుడివైపు వెళ్తే 5.")],
+ "class-7":[extraMath("Simplify: 3a + 4a.","సరళీకరించండి: 3a + 4a.",["7a","12a","7a²"],0,"Add like terms: 3a + 4a = 7a.","సమాన పదాలను కలిపితే 3a + 4a = 7a."),extraMath("What is 25% of 80?","80 లో 25% ఎంత?",["15","20","25"],1,"25% is one quarter; 80 ÷ 4 = 20.","25% అంటే పావు వంతు; 80 ÷ 4 = 20.")],
+ "class-8":[extraMath("Solve: 4x − 9 = 19.","పరిష్కరించండి: 4x − 9 = 19.",["x = 6","x = 7","x = 8"],1,"4x = 28, so x = 7.","4x = 28, కాబట్టి x = 7."),extraMath("What is the square root of 225?","225 యొక్క వర్గమూలం ఎంత?",["13","15","17"],1,"15 × 15 = 225.","15 × 15 = 225.")],
+ "class-9":[extraMath("If 3x + 4 = 19, what is x?","3x + 4 = 19 అయితే x ఎంత?",["4","5","6"],1,"3x = 15, so x = 5.","3x = 15, కాబట్టి x = 5."),extraMath("Two angles of a triangle are 65° and 55°. Find the third.","త్రిభుజంలోని రెండు కోణాలు 65°, 55°. మూడవ కోణం ఎంత?",["50°","60°","70°"],1,"180° − 65° − 55° = 60°.","180° − 65° − 55° = 60°.")],
+ "class-10":[extraMath("What are the roots of x² − 7x + 12 = 0?","x² − 7x + 12 = 0 యొక్క మూలాలు ఏమిటి?",["2 and 6","3 and 4","1 and 12"],1,"Factor: (x − 3)(x − 4) = 0.","విభజిస్తే: (x − 3)(x − 4) = 0."),extraMath("Find the 12th term of AP 4, 7, 10, …","4, 7, 10, … సమాంతర శ్రేఢిలో 12వ పదం కనుగొనండి.",["34","37","40"],1,"a₁₂ = 4 + 11 × 3 = 37.","a₁₂ = 4 + 11 × 3 = 37.")]
+};
+Object.entries(extraMathByGrade).forEach(([gradeId,seeds]) => gradeMathSeeds[gradeId].push(...seeds));
+
 export const gradeQuestionBank: LearningQuestion[] = Object.entries(gradeMathSeeds).flatMap(([gradeId, seeds]) =>
  seeds.map((seed, index) => ({ id: `${gradeId}-math-${index+1}`, gradeId, subjectId: "math", ageBandId: gradeLevels.find((grade) => grade.id === gradeId)?.ageBandId ?? "young-champions", prompt: seed.prompt, choices: seed.choices, correctChoiceIndex: seed.answer, explanation: seed.explanation }))
 );
