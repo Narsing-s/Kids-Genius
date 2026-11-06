@@ -137,14 +137,12 @@ export default function Home() {
     <main className="site-shell">
       <header className="nav">
         <a className="brand" href="#" aria-label="Kids Genius home"><span className="brand-mark">✦</span><span>kids<span className="brand-accent">genius</span></span></a>
-        <nav className="nav-links"><a href="#adventures">Adventures</a><a href="#subjects">Subjects</a><a href="#parents">Parents</a></nav>
+        <nav className="nav-links"><a href="#adventures">Adventures</a><a href="#subjects">Subjects</a><a href="#account">Parents</a></nav>
         <div className="nav-actions">
           <button className="language-toggle" onClick={() => setLang(lang === "en" ? "te" : "en")} aria-label="Switch language">{lang === "en" ? "తెలుగు" : "English"} <span>⌄</span></button>
-          <a className="parent-link" href="#parents">For parents ↗</a>
+          <a className="parent-link" href="#account">For parents ↗</a>
         </div>
       </header>
-
-      <AccountPanel language={lang} grade={activeAge.label} subject={subjectId} stars={stars} completedLessons={completedLessons.length} studyDays={studyDays} />
 
       <section className="hero">
         <div className="hero-copy">
@@ -199,7 +197,9 @@ export default function Home() {
         <div className="achievement-grid">{unlockedBadges.map((badge) => <div key={badge.id} className={`achievement-card ${badge.unlocked ? "badge-unlocked" : "badge-locked"}`}><span>{badge.icon}</span><b>{badge.title}</b><small>{badge.unlocked ? (lang === "en" ? "Unlocked!" : "సాధించారు!") : badge.detail}</small></div>)}</div>
       </section>
 
-      <section className="parent-section" id="parents"><div className="parent-illustration">🧑‍🚀<span>🛡️</span></div><div><span className="section-kicker">A LITTLE PEACE OF MIND</span><h2>{t.parent}</h2><p>{t.parentText}</p><div className="parent-preview"><b>{lang === "en" ? "Parent preview" : "తల్లిదండ్రుల వీక్షణ"}</b><p>{lang === "en" ? `This device currently records ${stars} stars, ${completedLessons.length} completed missions and a ${studyStreak}-day learning streak.` : `ఈ పరికరంలో ${stars} నక్షత్రాలు, ${completedLessons.length} పూర్తయిన లక్ష్యాలు, ${studyStreak} రోజుల అభ్యాస పరంపర నమోదు అయ్యాయి.`}</p><small>{lang === "en" ? "Progress is saved only in this browser. Parent accounts and cross-device sync are not connected yet." : "పురోగతి ఈ బ్రౌజర్‌లో మాత్రమే సేవ్ అవుతుంది. తల్లిదండ్రుల ఖాతాలు, పరికరాల మధ్య సమకాలీకరణ ఇంకా అనుసంధానించలేదు."}</small></div></div><div className="parent-badge">🛡️ <b>Kid-first</b><small>Always</small></div></section>
+      <AccountPanel language={lang} grade={activeAge.label} subject={subjectId} stars={stars} completedLessons={completedLessons.length} studyDays={studyDays} />
+
+      <section className="parent-section" id="parents"><div className="parent-illustration">🧑‍🚀<span>🛡️</span></div><div><span className="section-kicker">A LITTLE PEACE OF MIND</span><h2>{t.parent}</h2><p>{t.parentText}</p><div className="parent-preview"><b>{lang === "en" ? "Parent preview" : "తల్లిదండ్రుల వీక్షణ"}</b><p>{lang === "en" ? `This device currently records ${stars} stars, ${completedLessons.length} completed missions and a ${studyStreak}-day learning streak.` : `ఈ పరికరంలో ${stars} నక్షత్రాలు, ${completedLessons.length} పూర్తయిన లక్ష్యాలు, ${studyStreak} రోజుల అభ్యాస పరంపర నమోదు అయ్యాయి.`}</p><small>{lang === "en" ? "Parents can sign in, manage learner profiles and save progress snapshots by class and subject." : "పురోగతి ఈ బ్రౌజర్‌లో మాత్రమే సేవ్ అవుతుంది. తల్లిదండ్రుల ఖాతాలు, పరికరాల మధ్య సమకాలీకరణ ఇంకా అనుసంధానించలేదు."}</small></div></div><div className="parent-badge">🛡️ <b>Kid-first</b><small>Always</small></div></section>
 
       <footer className="footer"><a className="brand" href="#"><span className="brand-mark">✦</span><span>kids<span className="brand-accent">genius</span></span></a><p>{t.footer}</p><div className="safety-line">🔒 {t.safe} — {t.safeText}</div><small>© {new Date().getFullYear()} Kids Genius. Made for growing minds.</small></footer>
     </main>
