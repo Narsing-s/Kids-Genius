@@ -17,9 +17,9 @@ async function digest(password: string, salt: string) {
   return Array.from(new Uint8Array(bits), value => value.toString(16).padStart(2, "0")).join("");
 }
 
-type Props = { language: Language; grade: string; subject: string; stars: number; completedLessons: number; studyDays: string[] };
+type Props = { language: Language; grade: string; subject: string; stars: number; completedLessons: number; studyDays: string[]; onAuthenticated?: () => void; onSignedOut?: () => void };
 
-export default function AccountPanel({ language, grade, subject, stars, completedLessons, studyDays }: Props) {
+export default function AccountPanel({ language, grade, subject, stars, completedLessons, studyDays, onAuthenticated, onSignedOut }: Props) {
   const te = language === "te";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -79,7 +79,7 @@ export default function AccountPanel({ language, grade, subject, stars, complete
     setBusy(false);
   }
 
-  function signOut() { localStorage.removeItem(SESSION); setUser(null); setMessage(te ? "లాగ్ అవుట్ అయ్యారు." : "Signed out."); }
+  function signOut() { localStorage.removeItem(SESSION); setUser(null); onSignedOut?.(); setMessage(te ? "లాగ్ అవుట్ అయ్యారు." : "Signed out."); }
 
   function addChild(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
