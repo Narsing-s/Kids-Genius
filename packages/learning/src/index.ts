@@ -237,7 +237,7 @@ export function getQuestions(ageBandId:string, subjectId?:string, gradeId?:strin
  const exact = questionBank.filter(q => q.ageBandId === ageBandId && (!subjectId || q.subjectId === subjectId));
  if (exact.length) return exact;
  // Never show an unrelated subject's questions when a selected subject has no age-band sample.
- const subjectFallback = questionBank.filter(q => !subjectId || q.subjectId === subjectId);
+ const subjectFallback = [...questionBank, ...gradeQuestionBank].filter(q => !subjectId || q.subjectId === subjectId);
  if (subjectFallback.length) return subjectFallback;
  return [];
 }
