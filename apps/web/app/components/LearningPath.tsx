@@ -34,12 +34,14 @@ const fallback: Chapter[] = [
 
 export default function LearningPath({ language, grade, subject }: { language: Language; grade: string; subject: string }) {
   const [chapterIndex, setChapterIndex] = useState(0);
+  const [activeTopic, setActiveTopic] = useState(0);
   const [done, setDone] = useState<string[]>([]);
   const [loadedFor, setLoadedFor] = useState<string | null>(null);
   const storageKey = `kids-genius-path-v1:${subject}:${grade}`;
   useEffect(() => {
     setLoadedFor(null);
     setChapterIndex(0);
+    setActiveTopic(0);
     try {
       const saved = window.localStorage.getItem(storageKey);
       const parsed: unknown = saved ? JSON.parse(saved) : [];
@@ -65,8 +67,14 @@ export default function LearningPath({ language, grade, subject }: { language: L
       <div className="path-heading"><div><span className="section-kicker">{isTe ? "మీ అభ్యాస మ్యాప్" : "YOUR LEARNING MAP"}</span><h2>{isTe ? "ఒక్కో అడుగుతో ముందుకు!" : "A new adventure in every chapter"}</h2><p>{isTe ? `${grade} కోసం రూపొందించిన ప్రారంభ అభ్యాస మార్గం` : `A starter pathway for ${grade} · ${total} bite-sized topics to explore`}</p></div><div className="path-progress"><b>{progress}/{total}</b><small>{isTe ? "విషయాలు చూశారు" : "topics explored"}</small></div></div>
       <div className="path-progress-track"><span style={{width:`${progress/total*100}%`}} /></div>
       <div className="path-layout">
-        <div className="chapter-list">{chapters.map((item,index)=><button key={item.title.en} className={chapterIndex===index?"chapter-button chapter-active":"chapter-button"} onClick={()=>setChapterIndex(index)}><span>{item.icon}</span><span><small>{isTe?`అధ్యాయం 0${index+1}`:`CHAPTER 0${index+1}`}</small><b>{isTe?item.title.te:item.title.en}</b></span><i>{index===chapterIndex?"●":"○"}</i></button>)}</div>
-        <div className="topic-panel"><div className="topic-panel-heading"><span className="topic-icon">{chapter.icon}</span><div><small>{isTe?`అధ్యాయం 0${chapterIndex+1}`:`CHAPTER 0${chapterIndex+1}`}</small><h3>{isTe?chapter.title.te:chapter.title.en}</h3></div></div><div className="topic-list">{chapter.topics.map((topic,index)=><button key={topic.en} className={completed(chapterIndex,index)?"topic-row topic-done":"topic-row"} onClick={()=>setDone(old=>completed(chapterIndex,index)?old.filter(item=>item!==key(chapterIndex,index)):[...old,key(chapterIndex,index)])}><span className="topic-number">{completed(chapterIndex,index)?"✓":String(index+1).padStart(2,"0")}</span><span>{isTe?topic.te:topic.en}</span><b>{completed(chapterIndex,index)?(isTe?"చూశారు":"Explored"):(isTe?"పూర్తి చేయండి":"Mark explored")}</b></button>)}</div><p className="path-note">✨ {isTe?"ఇవి నమూనా అభ్యాస అంశాలు. పాఠ్యపుస్తకంతో కలిపి ఉపయోగించండి.":"Sample learning topics · Use alongside your school's textbook."}</p></div>
+        <div className="chapter-list">{chapters.map((item,index)=><button key={item.title.en} className={chapterIndex===index?"chapter-button chapter-active":"chapter-button"} onClick={()=>{setChapterIndex(index);setActiveTopic(0);}}><span>{item.icon}</span><span><small>{isTe?`అధ్యాయం 0${index+1}`:`CHAPTER 0${index+1}`}</small><b>{isTe?item.title.te:item.title.en}</b></span><i>{index===chapterIndex?"●":"○"}</i></button>)}</div>
+        <div className="topic-panel"><div className="topic-panel-heading"><span className="topic-icon">{chapter.icon}</span><div><small>{isTe?`అధ్యాయం 0${chapterIndex+1}`:`CHAPTER 0${chapterIndex+1}`}</small><h3>{isTe?chapter.title.te:chapter.title.en}</h3></div></div><div className="topic-list">{chapter.topics.map((topic,index)=><button key={topic.en} className={completed(chapterIndex,index)?"topic-row topic-done":"topic-row"} onClick={()=>setActiveTopic(index)} aria-current={activeTopic===index?"step":undefined}><span className="topic-number">{completed(chapterIndex,index)?"✓":String(index+1).padStart(2,"0")}</span><span>{isTe?topic.te:topic.en}</span><b>{completed(chapterIndex,index)?(isTe?"చూశారు":"Explored"):(isTe?"పూర్తి చేయండి":"Mark explored")}</b></button>)}</div><div className="opened-lesson" aria-live="polite">
+          <div className="opened-lesson-top"><span>📖</span><div><small>{isTe?"ఇప్పుడు నేర్చుకుంటున్నారు":"NOW LEARNING"}</small><h4>{isTe?chapter.topics[activeTopic]?.te:chapter.topics[activeTopic]?.en}</h4></div><span className="lesson-step">{activeTopic+1}/{chapter.topics.length}</span></div>
+          <p>{isTe?"ఈ అంశాన్ని మీ చుట్టూ ఉన్న ఉదాహరణలతో తెలుసుకుందాం. ముందుగా గమనించండి, తర్వాత ప్రయత్నించండి, చివరగా మీ మాటల్లో వివరించండి.":"Connect this topic to the world around you. First notice an example, then try it yourself, and finally explain what you discovered."}</p>
+          <div className="lesson-steps"><div><b>1 · {isTe?"గమనించండి":"NOTICE"}</b><span>{isTe?"ఇంట్లో లేదా పాఠశాలలో దీనికి ఒక ఉదాహరణ కనుగొనండి.":"Find one real-life example at home or school."}</span></div><div><b>2 · {isTe?"ప్రయత్నించండి":"TRY"}</b><span>{isTe?"మీరు చూసిన ఉదాహరణను చిత్రంగా గీయండి లేదా ఒక వాక్యంలో రాయండి.":"Draw what you noticed or write one sentence about it."}</span></div><div><b>3 · {isTe?"వివరించండి":"EXPLAIN"}</b><span>{isTe?"ఇది ఎలా పనిచేస్తుందో కుటుంబ సభ్యునికి చెప్పండి.":"Tell a family member what you discovered and why it matters."}</span></div></div>
+          <button className={completed(chapterIndex,activeTopic)?"lesson-complete-button is-complete":"lesson-complete-button"} onClick={()=>setDone(old=>completed(chapterIndex,activeTopic)?old.filter(item=>item!==key(chapterIndex,activeTopic)):[...old,key(chapterIndex,activeTopic)])}>{completed(chapterIndex,activeTopic)?(isTe?"✓ పాఠం పూర్తయింది":"✓ Lesson completed"):(isTe?"ఈ పాఠాన్ని పూర్తి చేయండి":"Complete this lesson")}</button>
+        </div>
+        <p className="path-note">✨ {isTe?"ఇవి ప్రారంభ అభ్యాస సూచనలు మాత్రమే. పాఠ్యపుస్తకంతో కలిపి ఉపయోగించండి.":"Starter activities · Use alongside your school's textbook."}</p></div>
       </div>
     </section>
   );
