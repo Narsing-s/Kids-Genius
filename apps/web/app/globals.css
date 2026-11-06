@@ -160,3 +160,30 @@
 .lesson-complete-button{margin-top:13px;padding:10px 15px;border:0;border-radius:10px;background:#7465d7;color:white;font-size:10px;font-weight:900;cursor:pointer}
 .lesson-complete-button.is-complete{background:#e4f5eb;color:#277b4d}
 @media(max-width:600px){.lesson-steps{grid-template-columns:1fr}.opened-lesson{padding:14px}.opened-lesson-top h4{font-size:14px}}
+
+
+/* Animated learning-world artwork and lively, accessible interactions */
+.hero-art{isolation:isolate}
+.hero-creature{position:absolute;z-index:3;display:grid;place-items:center;width:54px;height:54px;border:3px solid #fff;border-radius:19px;background:linear-gradient(145deg,#fff,#f5f1ff);font-size:31px;box-shadow:0 12px 25px #5140cc20;will-change:transform}
+.creature-fox{left:3%;top:21%;animation:character-bob 3.8s ease-in-out infinite}
+.creature-panda{right:1%;top:22%;animation:character-bob 4.4s ease-in-out -1.1s infinite}
+.creature-frog{left:17%;bottom:13%;animation:character-bob 3.5s ease-in-out -.6s infinite}
+.card-star{animation:card-drift 4.3s ease-in-out infinite}
+.card-book{animation:card-drift 5s ease-in-out -1.5s infinite}
+.card-rocket{animation:rocket-float 3.4s ease-in-out infinite}
+.orbit-one{animation:orbit-glow 8s linear infinite}
+.orbit-two{animation:orbit-glow 11s linear reverse infinite}
+.spark{animation:sparkle 2.2s ease-in-out infinite}
+.spark-b{animation-delay:1.1s}
+.avatar-stack span{animation:avatar-hop 2.8s ease-in-out infinite}
+.avatar-stack span:nth-child(2){animation-delay:.25s}.avatar-stack span:nth-child(3){animation-delay:.5s}
+.age-card:hover .age-emoji,.subject-card:hover .subject-emoji,.lesson-card:hover .lesson-icon{animation:icon-pop .55s ease both}
+@keyframes character-bob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-13px) rotate(5deg)}}
+@keyframes card-drift{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(2deg)}}
+@keyframes rocket-float{0%,100%{transform:translateY(0) rotate(-9deg)}50%{transform:translateY(-15px) rotate(9deg)}}
+@keyframes orbit-glow{0%{opacity:.65}50%{opacity:1}100%{opacity:.65}}
+@keyframes sparkle{0%,100%{transform:scale(.75) rotate(0);opacity:.55}50%{transform:scale(1.2) rotate(35deg);opacity:1}}
+@keyframes avatar-hop{0%,85%,100%{transform:translateY(0)}92%{transform:translateY(-5px)}}
+@keyframes icon-pop{0%{transform:scale(1)}55%{transform:scale(1.22) rotate(-8deg)}100%{transform:scale(1.05)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@media(max-width:620px){.hero-creature{width:43px;height:43px;border-radius:15px;font-size:25px}.creature-fox{left:0;top:17%}.creature-panda{right:0;top:16%}.creature-frog{left:8%;bottom:9%}}
