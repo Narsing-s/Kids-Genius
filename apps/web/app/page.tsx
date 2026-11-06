@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { gradeLevels, subjects, getQuestions } from "@kids-genius/learning";
 import LearningPath from "./components/LearningPath";
 import NumberQuest from "./components/NumberQuest";
+import AccountPanel from "./components/AccountPanel";
 
 type Lang = "en" | "te";
 
@@ -142,6 +143,8 @@ export default function Home() {
           <a className="parent-link" href="#parents">For parents ↗</a>
         </div>
       </header>
+
+      <AccountPanel language={lang} grade={activeAge.label} subject={subjectId} stars={stars} completedLessons={completedLessons.length} studyDays={studyDays} />
 
       <section className="hero">
         <div className="hero-copy">
