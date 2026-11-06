@@ -187,3 +187,35 @@
 @keyframes icon-pop{0%{transform:scale(1)}55%{transform:scale(1.22) rotate(-8deg)}100%{transform:scale(1.05)}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 @media(max-width:620px){.hero-creature{width:43px;height:43px;border-radius:15px;font-size:25px}.creature-fox{left:0;top:17%}.creature-panda{right:0;top:16%}.creature-frog{left:8%;bottom:9%}}
+
+
+.account-section{display:grid;grid-template-columns:.85fr 1.15fr;gap:24px;align-items:center;margin:0 0 54px;padding:28px;border:1px solid #ece9fa;border-radius:24px;background:linear-gradient(120deg,#fff 0%,#f5f2ff 100%)}
+.account-intro h2{font:900 26px 'Nunito',sans-serif;letter-spacing:-.8px;margin:8px 0}
+.account-intro p,.account-footnote,.account-privacy{font-size:12px;line-height:1.65;color:var(--muted)}
+.account-card{background:#fff;border:1px solid #eeebf7;border-radius:18px;padding:20px;box-shadow:0 10px 30px #5044a00a}
+.account-tabs{display:flex;gap:8px;margin-bottom:16px}
+.account-tabs button,.signout{border:1px solid #eeeaf8;background:#faf9ff;color:#777b98;padding:9px 13px;border-radius:10px;font-size:11px;font-weight:800}
+.account-tabs button.active{background:#eeeaff;color:var(--purple);border-color:#dcd6ff}
+.account-form,.add-child-form{display:grid;gap:12px}
+.account-form label,.add-child-form label,.learner-picker label{display:grid;gap:6px;font-size:11px;font-weight:800;color:var(--ink)}
+.account-form input,.add-child-form input,.learner-picker select{width:100%;border:1px solid #e9e6f3;border-radius:10px;padding:12px;background:#fff;color:var(--ink);font:inherit;font-size:12px}
+.consent-row{display:flex!important;grid-template-columns:auto 1fr;align-items:start;gap:9px!important;font-weight:500!important;line-height:1.5}
+.consent-row input{width:auto;margin-top:2px}
+.account-submit,.add-child-form button{border:0;border-radius:11px;background:var(--purple);color:#fff;padding:13px;font-size:12px;font-weight:800}
+.account-submit:disabled,.add-child-form button:disabled{opacity:.6}
+.account-footnote{display:block;margin:13px 0 0}
+.account-message{padding:18px;border-radius:15px;background:#fff;font-size:12px;line-height:1.7;color:#656987}
+.account-message code{display:block;margin-top:8px;color:var(--purple);font-size:10px}
+.signed-in-top{display:flex;align-items:center;gap:12px;margin-bottom:17px}
+.signed-in-top>div{display:grid;gap:4px;flex:1;min-width:0}
+.signed-in-top b{font-size:12px}.signed-in-top small{font-size:10px;color:var(--muted);overflow-wrap:anywhere}
+.account-avatar{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:#f0edff;font-size:23px}
+.signout{white-space:nowrap}
+.learner-picker{margin:12px 0}
+.add-child-form{grid-template-columns:1fr auto;align-items:end}
+.account-progress{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:15px}
+.account-progress span{display:grid;gap:4px;padding:12px;background:#f8f7ff;border-radius:12px;font-size:15px}
+.account-progress b{font:900 19px 'Nunito',sans-serif}.account-progress small{font-size:9px;color:var(--muted)}
+.account-status{font-size:11px;color:var(--purple);font-weight:700}
+.account-privacy{grid-column:1/-1;margin:0}
+@media(max-width:760px){.account-section{grid-template-columns:1fr;padding:20px}.account-privacy{grid-column:auto}.signed-in-top{flex-wrap:wrap}.add-child-form{grid-template-columns:1fr}}
