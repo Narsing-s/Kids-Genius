@@ -225,9 +225,49 @@ const gradeExtensionQuestions: LearningQuestion[] = gradeExtensionRows.map(([gra
 }));
 
 
+
+const gradeAdditionalRows: [string,string,string,string,string[],string[],number,string,string][] = [
+ ["nursery","language","Which letter starts the word Apple?","Apple అనే పదం ఏ అక్షరంతో మొదలవుతుంది?",["A","B","C"],["ఏ","బీ","సీ"],0,"Apple begins with the letter A.","Apple అనే పదం A అక్షరంతో ప్రారంభమవుతుంది."],
+ ["nursery","science","Which animal says “meow”?","“మ్యావ్” అని ఏ జంతువు అంటుంది?",["Cat","Dog","Cow"],["పిల్లి","కుక్క","ఆవు"],0,"A cat says meow.","పిల్లి మ్యావ్ అని అంటుంది."],
+ ["lkg","language","Which word begins with the letter B?","B అక్షరంతో ప్రారంభమయ్యే పదం ఏది?",["Ball","Cat","Sun"],["బంతి","పిల్లి","సూర్యుడు"],0,"Ball begins with B.","Ball అనే పదం B తో ప్రారంభమవుతుంది."],
+ ["lkg","science","Which one is a fruit?","వీటిలో పండు ఏది?",["Mango","Chair","Shoe"],["మామిడి","కుర్చీ","చెప్పు"],0,"A mango is a fruit.","మామిడి ఒక పండు."],
+ ["ukg","language","Which word rhymes with “sun”?","“sun” అనే పదంతో ప్రాస కలిగిన పదం ఏది?",["Fun","Pen","Cat"],["Fun","Pen","Cat"],0,"Sun and fun rhyme because they share the ending sound.","Sun, fun పదాల చివరి శబ్దం ఒకేలా ఉంటుంది."],
+ ["ukg","science","Which body part helps us hear sounds?","శబ్దాలను వినడానికి ఏ శరీర భాగం సహాయపడుతుంది?",["Ears","Eyes","Nose"],["చెవులు","కళ్ళు","ముక్కు"],0,"We hear sounds with our ears.","మనము చెవులతో శబ్దాలను వింటాము."],
+ ["class-1","language","What is the plural of “book”?","“Book” అనే పదానికి బహువచనం ఏది?",["Books","Book","Booking"],["పుస్తకాలు","పుస్తకం","బుకింగ్"],0,"Add s to book to make books.","Book కు s చేరిస్తే Books అవుతుంది."],
+ ["class-1","science","Which plant part usually makes food using sunlight?","సూర్యకాంతిని ఉపయోగించి సాధారణంగా ఆహారం తయారు చేసే మొక్క భాగం ఏది?",["Leaves","Roots","Flowers"],["ఆకులు","వేర్లు","పూలు"],0,"Leaves use sunlight to make food by photosynthesis.","ఆకులు కిరణజన్య సంయోగక్రియ ద్వారా ఆహారం తయారు చేస్తాయి."],
+ ["class-2","language","What is the opposite of “hot”?","“వేడి” అనే పదానికి వ్యతిరేక పదం ఏది?",["Cold","Warm","Bright"],["చల్లని","వెచ్చని","ప్రకాశవంతమైన"],0,"Cold is the opposite of hot.","వేడి అనే పదానికి వ్యతిరేక పదం చల్లని."],
+ ["class-2","social","What is the capital of India?","భారతదేశ రాజధాని ఏది?",["New Delhi","Mumbai","Chennai"],["న్యూఢిల్లీ","ముంబై","చెన్నై"],0,"New Delhi is the capital of India.","న్యూఢిల్లీ భారతదేశ రాజధాని."],
+ ["class-3","language","What is the past tense of “go”?","“Go” అనే క్రియ యొక్క భూతకాల రూపం ఏది?",["Went","Goed","Going"],["Went","Goed","Going"],0,"The past tense of go is went.","Go యొక్క భూతకాల రూపం Went."],
+ ["class-3","science","In which forms can water be found on Earth?","భూమిపై నీరు ఏ రూపాల్లో కనిపిస్తుంది?",["Solid, liquid and gas","Only liquid","Only gas"],["ఘన, ద్రవ, వాయు","ద్రవం మాత్రమే","వాయువు మాత్రమే"],0,"Water exists as ice, liquid water and water vapour.","నీరు మంచు, ద్రవ నీరు, నీటి ఆవిరి రూపాల్లో ఉంటుంది."],
+ ["class-4","language","Which word is the adjective in “The bright sun shines”?","“The bright sun shines” వాక్యంలో విశేషణం ఏది?",["Bright","Sun","Shines"],["ప్రకాశవంతమైన","సూర్యుడు","ప్రకాశిస్తుంది"],0,"Bright describes the noun sun.","Bright అనే పదం Sun ను వివరిస్తుంది."],
+ ["class-4","social","In which direction does the Sun appear to rise?","సూర్యుడు ఏ దిశలో ఉదయించినట్లు కనిపిస్తాడు?",["East","West","North"],["తూర్పు","పడమర","ఉత్తరం"],0,"The Sun appears to rise in the east.","సూర్యుడు తూర్పు దిశలో ఉదయించినట్లు కనిపిస్తాడు."],
+ ["class-5","language","Which word is closest in meaning to “rapid”?","“Rapid” అనే పదానికి దగ్గర అర్థం ఉన్న పదం ఏది?",["Fast","Quiet","Late"],["వేగమైన","నిశ్శబ్దమైన","ఆలస్యమైన"],0,"Rapid means fast or quick.","Rapid అంటే వేగంగా లేదా త్వరగా."],
+ ["class-5","science","What is the change from liquid water to water vapour called?","ద్రవ నీరు నీటి ఆవిరిగా మారే ప్రక్రియను ఏమంటారు?",["Evaporation","Freezing","Melting"],["బాష్పీభవనం","గడ్డకట్టడం","కరగడం"],0,"Evaporation changes liquid water into water vapour.","బాష్పీభవనంలో ద్రవ నీరు నీటి ఆవిరిగా మారుతుంది."],
+ ["class-6","language","Which pronoun can replace the name “Ravi” in a sentence?","వాక్యంలో “రవి” అనే పేరుకు బదులుగా ఏ సర్వనామం వాడవచ్చు?",["He","They","It"],["అతడు","వారు","అది"],0,"He is a singular pronoun commonly used for Ravi.","రవి అనే వ్యక్తికి He అనే ఏకవచన సర్వనామం వాడవచ్చు."],
+ ["class-6","science","Which material is a good conductor of electricity?","విద్యుత్‌ను బాగా ప్రసారం చేసే పదార్థం ఏది?",["Copper","Rubber","Wood"],["రాగి","రబ్బరు","చెక్క"],0,"Copper allows electric current to pass through easily.","రాగి ద్వారా విద్యుత్ ప్రవాహం సులభంగా జరుగుతుంది."],
+ ["class-7","language","Which tense is used in “She has finished her homework”?","“She has finished her homework” వాక్యంలో ఏ కాలం ఉపయోగించారు?",["Present perfect","Simple past","Future"],["వర్తమాన సంపూర్ణ కాలం","సాధారణ భూతకాలం","భవిష్యత్ కాలం"],0,"Has finished is in the present perfect tense.","Has finished అనేది వర్తమాన సంపూర్ణ కాలం."],
+ ["class-7","social","Which idea is central to democracy?","ప్రజాస్వామ్యంలో ప్రధానమైన భావన ఏది?",["People choose their representatives","One person inherits all power","Citizens cannot vote"],["ప్రజలు తమ ప్రతినిధులను ఎన్నుకుంటారు","ఒకరికి వారసత్వంగా అధికారం వస్తుంది","పౌరులు ఓటు వేయలేరు"],0,"In a democracy, people choose representatives through elections.","ప్రజాస్వామ్యంలో ప్రజలు ఎన్నికల ద్వారా ప్రతినిధులను ఎన్నుకుంటారు."],
+ ["class-8","computer","Which two digits are used in the binary number system?","ద్విమానం సంఖ్యా విధానంలో ఉపయోగించే రెండు అంకెలు ఏవి?",["0 and 1","1 and 2","0 and 9"],["0 మరియు 1","1 మరియు 2","0 మరియు 9"],0,"Binary uses only the digits 0 and 1.","ద్విమానం సంఖ్యా విధానంలో 0, 1 మాత్రమే ఉంటాయి."],
+ ["class-8","science","Which process do green plants use to make food?","ఆకుపచ్చ మొక్కలు ఆహారం తయారు చేయడానికి ఉపయోగించే ప్రక్రియ ఏది?",["Photosynthesis","Respiration only","Fermentation"],["కిరణజన్య సంయోగక్రియ","శ్వాసక్రియ మాత్రమే","కిణ్వ ప్రక్రియ"],0,"Photosynthesis uses light energy to make food from carbon dioxide and water.","కిరణజన్య సంయోగక్రియలో కాంతి శక్తితో కార్బన్ డయాక్సైడ్, నీటి నుంచి ఆహారం తయారవుతుంది."],
+ ["class-9","science","Which cell structure contains most of the cell’s genetic material?","కణంలోని జన్యు పదార్థంలో ఎక్కువ భాగం ఏ నిర్మాణంలో ఉంటుంది?",["Nucleus","Cell wall","Vacuole"],["కేంద్రకం","కణ గోడ","రసధాని"],0,"The nucleus contains most of a eukaryotic cell’s DNA.","యూకారియోటిక్ కణంలోని DNA లో ఎక్కువ భాగం కేంద్రకంలో ఉంటుంది."],
+ ["class-9","social","On which date was the Constitution of India adopted?","భారత రాజ్యాంగాన్ని ఏ తేదీన ఆమోదించారు?",["26 November 1949","15 August 1947","26 January 1950"],["26 నవంబర్ 1949","15 ఆగస్టు 1947","26 జనవరి 1950"],0,"The Constituent Assembly adopted the Constitution on 26 November 1949.","రాజ్యాంగ సభ 26 నవంబర్ 1949న రాజ్యాంగాన్ని ఆమోదించింది."],
+ ["class-10","computer","What is HTML mainly used for?","HTML ప్రధానంగా దేనికి ఉపయోగిస్తారు?",["Structuring web pages","Editing photos","Compressing videos"],["వెబ్ పేజీల నిర్మాణం","ఫోటోలను సవరించడం","వీడియోలను కుదించడం"],0,"HTML describes the structure and content of web pages.","HTML వెబ్ పేజీల నిర్మాణం మరియు కంటెంట్‌ను నిర్వచిస్తుంది."],
+ ["class-10","social","Which part of the Indian Constitution guarantees Fundamental Rights?","భారత రాజ్యాంగంలో ప్రాథమిక హక్కులకు సంబంధించిన భాగం ఏది?",["Part III","Part I","Part IV"],["భాగం III","భాగం I","భాగం IV"],0,"Fundamental Rights are listed in Part III of the Constitution.","రాజ్యాంగంలోని భాగం IIIలో ప్రాథమిక హక్కులు పొందుపరిచారు."]
+];
+const gradeAdditionalQuestions: LearningQuestion[] = gradeAdditionalRows.map(([gradeId, subjectId, en, te, optionsEn, optionsTe, answer, why, whyTe], index) => ({
+ id: `${gradeId}-${subjectId}-additional-${index+1}`,
+ gradeId,
+ subjectId,
+ ageBandId: gradeLevels.find((grade) => grade.id === gradeId)?.ageBandId ?? "young-champions",
+ prompt: { en, te },
+ choices: optionsEn.map((value, optionIndex) => ({ en: value, te: optionsTe[optionIndex] ?? value })),
+ correctChoiceIndex: answer,
+ explanation: { en: why, te: whyTe }
+}));
+
 export const gradeQuestionBank: LearningQuestion[] = [...Object.entries(gradeMathSeeds).flatMap(([gradeId, seeds]) =>
  seeds.map((seed, index) => ({ id: `${gradeId}-math-${index+1}`, gradeId, subjectId: "math", ageBandId: gradeLevels.find((grade) => grade.id === gradeId)?.ageBandId ?? "young-champions", prompt: seed.prompt, choices: seed.choices, correctChoiceIndex: seed.answer, explanation: seed.explanation }))
-), ...gradeCoreQuestions, ...gradeExtensionQuestions];
+), ...gradeCoreQuestions, ...gradeExtensionQuestions, ...gradeAdditionalQuestions];
 
 
 export const sampleQuestions = questionBank;
