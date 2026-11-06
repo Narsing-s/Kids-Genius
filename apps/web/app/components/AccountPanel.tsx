@@ -5,6 +5,7 @@ import { createClient, type User } from "@supabase/supabase-js";
 import type { Language } from "@kids-genius/learning";
 
 type Child = { id: string; nickname: string };
+type SavedProgress = { stars_earned: number; lessons_completed: number; study_days: string[] };
 type Props = { language: Language; grade: string; subject: string; stars: number; completedLessons: number; studyDays: string[] };
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -23,7 +24,7 @@ export default function AccountPanel({ language, grade, subject, stars, complete
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  const [savedProgress, setSavedProgress] = useState<SavedProgress | null>(null);
 
   useEffect(() => {
     if (!client) return;
@@ -47,22 +48,28 @@ export default function AccountPanel({ language, grade, subject, stars, complete
   }, [client, user]);
 
   useEffect(() => {
+    if (!client || !user || !childId) { setSavedProgress(null); return; }
+    client.from("learning_progress").select("stars_earned,lessons_completed,study_days")
+      .eq("child_id", childId).eq("subject_id", subject).eq("grade_id", grade).maybeSingle()
+      .then(({ data, error }) => {
+        if (error) { setMessage(te ? "పురోగతిని చదవలేకపోయాం. Supabase migration తనిఖీ చేయండి." : "Could not load saved progress. Check the Supabase migration."); return; }
+        setSavedProgress(data as SavedProgress | null);
+      });
+  }, [client, user, childId, subject, grade, te]);
+
+  async function saveProgress() {
     if (!client || !user || !childId) return;
-    const completedDays = studyDays.length;
-    client.from("learning_progress").upsert({
-      child_id: childId,
-      subject_id: subject,
-      grade_id: grade,
-      stars_earned: stars,
-      lessons_completed: completedLessons,
-      study_days: studyDays,
-      questions_answered: 0,
-      correct_answers: 0,
+    setBusy(true); setMessage("");
+    const { error } = await client.from("learning_progress").upsert({
+      child_id: childId, subject_id: subject, grade_id: grade,
+      stars_earned: stars, lessons_completed: completedLessons, study_days: studyDays,
       updated_at: new Date().toISOString()
-    }, { onConflict: "child_id,subject_id" }).then(({ error }) => {
-      if (error) setMessage(te ? "పురోగతి సమకాలీకరణ కాలేదు. డేటాబేస్ మైగ్రేషన్ అమలు చేయండి." : "Progress could not sync yet. Apply the account migration in Supabase.");
-    });
-  }, [client, user, childId, subject, grade, stars, completedLessons, studyDays, te]);
+    }, { onConflict: "child_id,subject_id,grade_id" });
+    setBusy(false);
+    if (error) { setMessage(error.message); return; }
+    setSavedProgress({ stars_earned: stars, lessons_completed: completedLessons, study_days: studyDays });
+    setMessage(te ? "మీ అభ్యాస పురోగతి సేవ్ అయింది." : "Learning progress saved to this learner account.");
+  }
 
   async function submitAuth(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -111,8 +118,8 @@ export default function AccountPanel({ language, grade, subject, stars, complete
         <div className="signed-in-top"><span className="account-avatar">👨‍👩‍👧</span><div><b>{te?"తల్లిదండ్రుల ఖాతా కనెక్ట్ అయింది":"Parent account connected"}</b><small>{user.email}</small></div><button className="signout" onClick={()=>client.auth.signOut()}>{te?"లాగ్ అవుట్":"Sign out"}</button></div>
         <div className="learner-picker"><label>{te?"విద్యార్థి ప్రొఫైల్":"Learner profile"}<select value={childId} onChange={e=>setChildId(e.target.value)}><option value="">{te?"ప్రొఫైల్ ఎంచుకోండి":"Choose a learner"}</option>{children.map(child=><option key={child.id} value={child.id}>{child.nickname}</option>)}</select></label></div>
         <form className="add-child-form" onSubmit={addChild}><label>{te?"పిల్లవాడి పేరు / ముద్దుపేరు":"Learner nickname"}<input value={nickname} maxLength={24} required onChange={e=>setNickname(e.target.value)} placeholder={te?"ఉదా: చిన్నారి":"e.g. Little Star"} /></label><button disabled={busy}>{te?"ప్రొఫైల్ సృష్టించండి":"Create learner profile"}</button></form>
-        {childId && <div className="account-progress"><span>⭐ <b>{stars}</b><small>{te?"నక్షత్రాలు":"Stars"}</small></span><span>📚 <b>{completedLessons}</b><small>{te?"పూర్తి చేసిన పాఠాలు":"Lessons completed"}</small></span><span>🔥 <b>{studyDays.length}</b><small>{te?"అభ్యాస రోజులు":"Study days"}</small></span></div>}
-        <p className="account-footnote">{te?"ప్రస్తుత తరగతి మరియు విషయం ఆధారంగా పురోగతి మీ ఖాతాకు సమకాలీకరించబడుతుంది.":"Progress is synced for the selected learner, grade and subject. Use the same parent login on another device."}</p>
+        {childId && <><div className="account-progress"><span>⭐ <b>{stars}</b><small>{te?"నక్షత్రాలు":"Current stars"}</small></span><span>📚 <b>{completedLessons}</b><small>{te?"పూర్తి చేసిన పాఠాలు":"Current lessons"}</small></span><span>🔥 <b>{studyDays.length}</b><small>{te?"అభ్యాస రోజులు":"Current study days"}</small></span></div><button className="account-submit save-progress" onClick={saveProgress} disabled={busy}>{busy?(te?"సేవ్ అవుతోంది…":"Saving…"):(te?"పురోగతిని ఖాతాలో సేవ్ చేయండి":"Save progress to learner account")}</button><div className="saved-progress"><b>{te?"ఖాతాలో సేవ్ చేసిన పురోగతి":"Saved account progress"} · {grade} · {subject}</b><span>{savedProgress ? `⭐ ${savedProgress.stars_earned} · 📚 ${savedProgress.lessons_completed} · 🔥 ${savedProgress.study_days?.length ?? 0}` : (te?"ఇంకా సేవ్ చేసిన పురోగతి లేదు":"No saved snapshot yet")}</span></div></>}
+        <p className="account-footnote">{te?"పురోగతిని సేవ్ చేసిన తర్వాత అదే తల్లిదండ్రుల ఖాతాతో ఇతర పరికరాల్లో చూడవచ్చు.":"Save progress to your account, then view that saved snapshot on another device with the same parent login."}</p>
       </div>}
       {message && <p className="account-status" role="status">{message}</p>}
       <p className="account-privacy">{te?"పిల్లల వ్యక్తిగత వివరాలు కనిష్ఠంగా సేకరించండి. పబ్లిక్ ప్రొఫైల్‌లు లేదా చాట్ లేదు.":"Privacy-first: collect minimal learner information. No public child profiles or public chat."}</p>
