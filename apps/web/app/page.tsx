@@ -165,10 +165,16 @@ export default function Home() {
     setAnswer(null);
   }
 
+  function openParentAccount() {
+    setSubjectOpen(false);
+    setClassroomOpen(false);
+    window.setTimeout(() => document.getElementById("account")?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
+  }
+
   if (subjectOpen) {
     return (
       <main className="site-shell subject-screen">
-        <header className="nav"><button className="brand brand-button" onClick={() => {setSubjectOpen(false);setClassroomOpen(false);}}>✦ kids<span className="brand-accent">genius</span></button><div className="class-breadcrumb"><button onClick={() => setSubjectOpen(false)}>← {activeAge.label}</button> › {activeSubject.name[lang]}</div><a className="parent-link" href="/#account">{lang === "en" ? "Parent login ↗" : "తల్లిదండ్రుల లాగిన్ ↗"}</a><button className="language-toggle" onClick={() => setLang(lang === "en" ? "te" : "en")}>{lang === "en" ? "తెలుగు" : "English"}</button></header>
+        <header className="nav"><button className="brand brand-button" onClick={() => {setSubjectOpen(false);setClassroomOpen(false);}}>✦ kids<span className="brand-accent">genius</span></button><div className="class-breadcrumb"><button onClick={() => setSubjectOpen(false)}>← {activeAge.label}</button> › {activeSubject.name[lang]}</div><button type="button" className="parent-link parent-nav-button" onClick={openParentAccount}>{lang === "en" ? "Parent account ↗" : "తల్లిదండ్రుల ఖాతా ↗"}</button><button className="language-toggle" onClick={() => setLang(lang === "en" ? "te" : "en")}>{lang === "en" ? "తెలుగు" : "English"}</button></header>
         <section className="subject-dashboard">
           <button className="secondary-button" onClick={() => {setSubjectOpen(false);setClassroomOpen(true);}}>← {lang === "en" ? "All subjects" : "అన్ని విషయాలు"}</button>
           <div className="subject-hero-panel"><span className="subject-hero-icon">{activeSubject.emoji}</span><div><span className="section-kicker">{activeAge.label.toUpperCase()} · LEARNING STUDIO</span><h1>{activeSubject.name[lang]}</h1><p>{lang === "en" ? "Explore your class lessons, open a topic, try the activity and finish with a quiz." : "మీ తరగతి పాఠాలను అన్వేషించండి, అంశాన్ని తెరిచి కార్యకలాపం చేసి క్విజ్ పూర్తి చేయండి."}</p></div><div className="subject-stats"><b>⭐ {stars}</b><small>{lang === "en" ? "Your stars" : "మీ నక్షత్రాలు"}</small></div></div>
@@ -186,7 +192,7 @@ export default function Home() {
   if (classroomOpen) {
     return (
       <main className="site-shell">
-        <header className="nav"><button className="brand brand-button" onClick={() => setClassroomOpen(false)}>✦ kids<span className="brand-accent">genius</span></button><span className="class-breadcrumb">Home › {activeAge.label}</span><button className="language-toggle" onClick={() => setLang(lang === "en" ? "te" : "en")}>{lang === "en" ? "తెలుగు" : "English"}</button></header>
+        <header className="nav"><button className="brand brand-button" onClick={() => setClassroomOpen(false)}>✦ kids<span className="brand-accent">genius</span></button><span className="class-breadcrumb">Home › {activeAge.label}</span><button type="button" className="parent-link parent-nav-button" onClick={openParentAccount}>{lang === "en" ? "Parent account ↗" : "తల్లిదండ్రుల ఖాతా ↗"}</button><button className="language-toggle" onClick={() => setLang(lang === "en" ? "te" : "en")}>{lang === "en" ? "తెలుగు" : "English"}</button></header>
         <section className="class-dashboard">
           <div className="class-welcome"><div><span className="section-kicker">YOUR CLASSROOM · {activeAge.label.toUpperCase()}</span><h1>{lang === "en" ? "Welcome to " + activeAge.label + "!" : activeAge.label + " తరగతికి స్వాగతం!"}</h1><p>{activeAge.description}. {lang === "en" ? "Choose a subject to enter its learning space. Explore chapters, lessons and quizzes for your class." : "మీ తరగతి కోసం విషయాన్ని ఎంచుకుని అధ్యాయాలు, పాఠాలు మరియు క్విజ్‌లను ప్రారంభించండి."}</p><div className="class-welcome-tags"><span>📚 {subjects.length} subjects</span><span>⭐ {stars} stars</span><span>🌐 English + తెలుగు</span></div></div><div className="class-mascot">🦊 🎒 📚</div></div>
           <div className="class-subject-heading"><div><span className="section-kicker">YOUR LEARNING WORLDS</span><h2>{lang === "en" ? "Choose a subject" : "ఒక విషయాన్ని ఎంచుకోండి"}</h2><p>{lang === "en" ? "Open a subject to see its lessons and practice questions." : "పాఠాలు మరియు సాధన ప్రశ్నల కోసం విషయాన్ని తెరవండి."}</p></div></div>
@@ -204,7 +210,7 @@ export default function Home() {
         <nav className="nav-links"><a href="#adventures">Adventures</a><a href="#subjects">Subjects</a><a href="#account">Parents</a></nav>
         <div className="nav-actions">
           <button className="language-toggle" onClick={() => setLang(lang === "en" ? "te" : "en")} aria-label="Switch language">{lang === "en" ? "తెలుగు" : "English"} <span>⌄</span></button>
-          <a className="parent-link" href="#account">For parents ↗</a>
+          <button type="button" className="parent-link parent-nav-button" onClick={openParentAccount}>{lang === "en" ? "Parent account ↗" : "తల్లిదండ్రుల ఖాతా ↗"}</button>
         </div>
       </header>
 
