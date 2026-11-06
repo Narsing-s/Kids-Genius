@@ -5,6 +5,7 @@ import { gradeLevels, subjects, getQuestions } from "@kids-genius/learning";
 import LearningPath from "./components/LearningPath";
 import NumberQuest from "./components/NumberQuest";
 import AccountPanel from "./components/AccountPanel";
+import LearningHub from "./components/LearningHub";
 
 type Lang = "en" | "te";
 
@@ -277,6 +278,8 @@ export default function Home() {
       </section>
 
       <NumberQuest language={lang} />
+
+      <LearningHub language={lang} grade={activeAge.label} />
 
       <section className="play-section" id="quick-quiz">
         <div className="play-intro"><span className="section-kicker">READY, SET, THINK!</span><h2>{t.quiz}</h2><p>{t.choose}</p><div className="quiz-meta"><span>🧠 {activeSubject.name[lang]}</span><span>📚 {questions.length} practice questions available</span><span>⏱ No rush</span></div><div className="progress-label"><span>Little steps make big progress</span><b>{stars} ⭐</b></div><div className="progress-track"><span style={{width: `${Math.min(100, stars * 12)}%`}} /></div></div>
