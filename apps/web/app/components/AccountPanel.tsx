@@ -146,6 +146,38 @@ export default function AccountPanel({ language, grade, subject, stars, complete
   const childHistory = history.filter((item) => item.child_id === childId);
   const current = childHistory.find((item) => item.subject_id === subject && item.grade_id === grade);
 
+  // Automatically sync this learner's current class/subject progress. Merge counters
+  // with saved values so a fresh browser session cannot accidentally lower progress.
+  useEffect(() => {
+    if (!supabase || !user || !childId) return;
+    let cancelled = false;
+    const timer = window.setTimeout(async () => {
+      const { data: saved, error: readError } = await supabase
+        .from("learning_progress")
+        .select("stars_earned,lessons_completed,study_days")
+        .eq("child_id", childId)
+        .eq("subject_id", subject)
+        .eq("grade_id", grade)
+        .maybeSingle();
+      if (cancelled || readError) return;
+      const savedDays = Array.isArray(saved?.study_days) ? saved.study_days as string[] : [];
+      const merged = {
+        child_id: childId,
+        subject_id: subject,
+        grade_id: grade,
+        stars_earned: Math.max(stars, saved?.stars_earned ?? 0),
+        lessons_completed: Math.max(completedLessons, saved?.lessons_completed ?? 0),
+        study_days: Array.from(new Set([...savedDays, ...studyDays])),
+        updated_at: new Date().toISOString(),
+      };
+      const { error } = await supabase.from("learning_progress").upsert(merged, { onConflict: "child_id,subject_id,grade_id" });
+      if (!cancelled && !error) {
+        setHistory((items) => [merged, ...items.filter((item) => !(item.child_id === childId && item.subject_id === subject && item.grade_id === grade))]);
+      }
+    }, 900);
+    return () => { cancelled = true; window.clearTimeout(timer); };
+  }, [supabase, user, childId, grade, subject, stars, completedLessons, studyDays]);
+
   return (
     <section className="account-section" id="account">
       <div className="account-intro">
