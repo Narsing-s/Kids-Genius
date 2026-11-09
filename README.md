@@ -20,11 +20,11 @@ A bilingual English + Telugu learning playground for learners from Nursery throu
 ## Parent login and learner progress
 
 1. Create a Supabase project and copy its Project URL and anon/public key into the web deployment environment as `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
-2. Run `supabase/migrations/0001_initial_schema.sql` and then `supabase/migrations/0002_learning_progress_accounts.sql` in the Supabase SQL editor.
-3. Enable email/password authentication and configure the email confirmation redirect URLs for your deployed web domain.
-4. Deploy again. Parents can create an account, confirm their email, sign in, and create separate learner nicknames. Progress syncs per learner, class and subject.
+2. Run `supabase/migrations/0001_initial_schema.sql`, `0002_learning_progress_accounts.sql`, and `0003_parent_auth_and_age_ranges.sql` in order in the Supabase SQL editor.
+3. Enable email/password authentication and configure the Site URL plus allowed redirect URLs for your deployed web domain. Keep email confirmation enabled for parent sign-up.
+4. Deploy again. Parents can create an account, confirm their email, sign in, and create separate learner nicknames. The app uses Supabase Auth sessions; progress can be saved to the selected learner, class and subject from the parent dashboard. Existing local-only accounts are not migrated automatically.
 
-Never use a Supabase service-role key in the browser. Complete parental consent, privacy and child-safety review before public launch.
+The third migration creates parent profile rows from Supabase Auth sign-ups, records the consent checkbox/version submitted during registration, and extends content age ranges to support the full school-level catalogue. Review the stored consent record and provide an appropriate privacy notice and consent withdrawal process before launch. A checkbox alone is not a legal compliance guarantee.\n\nNever use a Supabase service-role key in the browser. Complete parental consent, privacy and child-safety review before public launch.
 
 ## Run locally
 Requirements: Node.js 20+ and npm.
