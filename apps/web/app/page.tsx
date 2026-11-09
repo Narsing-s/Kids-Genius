@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createSupabaseBrowserClient } from "../lib/supabase";
 import { gradeLevels, subjects, getQuestions } from "@kids-genius/learning";
 import LearningPath from "./components/LearningPath";
 import NumberQuest from "./components/NumberQuest";
@@ -73,10 +74,28 @@ export default function Home() {
   const [progressLoaded, setProgressLoaded] = useState(false);
   const [studyDays, setStudyDays] = useState<string[]>([]);
 
+  const supabase = createSupabaseBrowserClient();
+
   useEffect(() => {
-    try { setAuthenticated(Boolean(window.localStorage.getItem("kids-genius-local-session-v1"))); } catch { setAuthenticated(false); }
-    setAuthReady(true);
-  }, []);
+    if (!supabase) {
+      setAuthenticated(false);
+      setAuthReady(true);
+      return;
+    }
+    let active = true;
+    void supabase.auth.getSession().then(({ data, error }) => {
+      if (!active) return;
+      setAuthenticated(!error && Boolean(data.session));
+      setAuthReady(true);
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (active) setAuthenticated(Boolean(session));
+    });
+    return () => {
+      active = false;
+      listener.subscription.unsubscribe();
+    };
+  }, [supabase]);
 
   useEffect(() => {
     try {
@@ -119,7 +138,7 @@ export default function Home() {
         </div>
         <div className="auth-form-wrap">
           <div className="auth-form-heading"><span className="section-kicker">{lang === "en" ? "YOUR JOURNEY STARTS HERE" : "మీ ప్రయాణం ఇక్కడ మొదలవుతుంది"}</span><h2>{lang === "en" ? "Parent sign in" : "తల్లిదండ్రుల లాగిన్"}</h2><p>{lang === "en" ? "Sign in or create a parent account to continue." : "కొనసాగించడానికి లాగిన్ అవ్వండి లేదా ఖాతా సృష్టించండి."}</p></div>
-          <AccountPanel language={lang} grade="Class 1" subject="math" stars={0} completedLessons={0} studyDays={[]} onAuthenticated={() => setAuthenticated(true)} />
+          <AccountPanel language={lang} grade="Class 1" subject="math" stars={0} completedLessons={0} studyDays={[]} onAuthenticated={() => setAuthenticated(true)} onSignedOut={() => setAuthenticated(false)} />
           <p className="auth-secure-note">🔒 {lang === "en" ? "A parent-managed learning space for children." : "పిల్లల కోసం తల్లిదండ్రుల నిర్వహణలోని అభ్యాస స్థలం."}</p>
         </div>
       </section>
