@@ -146,37 +146,6 @@ export default function AccountPanel({ language, grade, subject, stars, complete
   const childHistory = history.filter((item) => item.child_id === childId);
   const current = childHistory.find((item) => item.subject_id === subject && item.grade_id === grade);
 
-  // Automatically sync this learner's current class/subject progress. Merge counters
-  // with saved values so a fresh browser session cannot accidentally lower progress.
-  useEffect(() => {
-    if (!supabase || !user || !childId) return;
-    let cancelled = false;
-    const timer = window.setTimeout(async () => {
-      const { data: saved, error: readError } = await supabase
-        .from("learning_progress")
-        .select("stars_earned,lessons_completed,study_days")
-        .eq("child_id", childId)
-        .eq("subject_id", subject)
-        .eq("grade_id", grade)
-        .maybeSingle();
-      if (cancelled || readError) return;
-      const savedDays = Array.isArray(saved?.study_days) ? saved.study_days as string[] : [];
-      const merged = {
-        child_id: childId,
-        subject_id: subject,
-        grade_id: grade,
-        stars_earned: Math.max(stars, saved?.stars_earned ?? 0),
-        lessons_completed: Math.max(completedLessons, saved?.lessons_completed ?? 0),
-        study_days: Array.from(new Set([...savedDays, ...studyDays])),
-        updated_at: new Date().toISOString(),
-      };
-      const { error } = await supabase.from("learning_progress").upsert(merged, { onConflict: "child_id,subject_id,grade_id" });
-      if (!cancelled && !error) {
-        setHistory((items) => [merged, ...items.filter((item) => !(item.child_id === childId && item.subject_id === subject && item.grade_id === grade))]);
-      }
-    }, 900);
-    return () => { cancelled = true; window.clearTimeout(timer); };
-  }, [supabase, user, childId, grade, subject, stars, completedLessons, studyDays]);
 
   return (
     <section className="account-section" id="account">
@@ -209,7 +178,7 @@ export default function AccountPanel({ language, grade, subject, stars, complete
           <div className="account-progress"><span>⭐ <b>{current?.stars_earned ?? stars}</b><small>{te ? "నక్షత్రాలు" : "Stars"}</small></span><span>📚 <b>{current?.lessons_completed ?? completedLessons}</b><small>{te ? "పాఠాలు" : "Lessons"}</small></span><span>🔥 <b>{current?.study_days.length ?? studyDays.length}</b><small>{te ? "అభ్యాస రోజులు" : "Study days"}</small></span></div>
           <button type="button" className="account-submit save-progress" onClick={saveProgress} disabled={busy || !childId}>{te ? "పురోగతిని సేవ్ చేయండి" : "Save progress to learner account"}</button>
           <div className="progress-history"><b>{te ? "అభ్యాస చరిత్ర" : "Learning history by class & subject"}</b>{childHistory.length === 0 ? <small>{te ? "ఇంకా పురోగతి సేవ్ కాలేదు." : "No saved learning history yet."}</small> : childHistory.slice(0, 12).map((item) => <div className="progress-history-row" key={item.grade_id + item.subject_id}><span>{item.grade_id} · {item.subject_id.replace(/-/g, " ")}</span><b>⭐ {item.stars_earned} · 📚 {item.lessons_completed}</b><small>{new Date(item.updated_at).toLocaleDateString()}</small></div>)}</div>
-          <p className="account-footnote">{te ? "పురోగతి మీ తల్లిదండ్రుల ఖాతాలో సమకాలీకరించబడుతుంది." : "Progress is stored in your Supabase account and follows your sign-in across devices."}</p>
+          <p className="account-footnote">{te ? "పురోగతి మీ తల్లిదండ్రుల ఖాతాలో సమకాలీకరించబడుతుంది." : "Use Save progress to sync this learner's selected class and subject across devices."}</p>
         </div>
       )}
       {message && <p className="account-status" role="status">{message}</p>}
